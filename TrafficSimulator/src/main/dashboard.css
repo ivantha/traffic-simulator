@@ -1,0 +1,14 @@
+#canvasAnchorPane {
+    -fx-background-color: #464646;
+}
+
+.borderLine{
+    -fx-stroke-width: 2;
+    -fx-stroke: #00000;
+}
+
+.midLine {
+    -fx-stroke-width: 2;
+    -fx-stroke: #FFFFFF;
+    -fx-stroke-dash-array: 2 12 12 2;
+}
