@@ -12,7 +12,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("dashboard.fxml"));
-        Scene scene = new Scene(root, 1200, 700);
+        Scene scene = new Scene(root);
         scene.setOnKeyReleased(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
                 System.exit(0);

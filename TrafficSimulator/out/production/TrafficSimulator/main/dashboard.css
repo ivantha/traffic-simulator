@@ -1,5 +1,9 @@
 #canvasAnchorPane {
-    -fx-background-color: #464646;
+    -fx-background-color: #d2d2d2;
+}
+
+.roadSurface{
+    -fx-fill: rgb(158, 158, 158);
 }
 
 .borderLine{

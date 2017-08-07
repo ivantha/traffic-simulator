@@ -1,56 +1,72 @@
 package main;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Group;
-import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Polyline;
+import javafx.util.Duration;
+import model.Road;
+import model.RoadMap;
+import model.Vehicle;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 
-public class DashboardController implements Initializable{
+public class DashboardController implements Initializable {
+    @FXML
+    private Button startButton;
     @FXML
     private AnchorPane canvasAnchorPane;
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        double d = 350.0;
-        double r = 40.0;
+        RoadMap roadMap = new RoadMap();
 
-        Group g = new Group();
+        Road nRoad = roadMap.getJunction().getnRoad();
+        Road eRoad = roadMap.getJunction().geteRoad();
+        Road sRoad = roadMap.getJunction().getsRoad();
+        Road wRoad = roadMap.getJunction().getwRoad();
 
-        Polyline p = new Polyline();
-        p.getPoints().addAll(new Double[]{
-                d + r, 0.0,
-                d + r, d - r,
-                2 * d, d - r,
-                2 * d, d + r,
-                d + r, d + r,
-                d + r, 2 * d,
-                d - r, 2 * d,
-                d - r, d + r,
-                0.0, d + r,
-                0.0, d - r,
-                d - r, d - r,
-                d - r, 0.0
+        Draw.drawMap(roadMap, canvasAnchorPane);
+
+        startButton.setOnAction(event -> {
+            Timeline uiUpdater = new Timeline(new KeyFrame(Duration.millis(10), event1 -> {
+                Draw.refreshMap(roadMap, canvasAnchorPane);
+            }));
+            uiUpdater.setCycleCount(Timeline.INDEFINITE);
+            uiUpdater.play();
+
+            nRoad.generateInVehicle();
+            eRoad.generateInVehicle();
+            sRoad.generateInVehicle();
+            wRoad.generateInVehicle();
+
+            new Timer().schedule(
+                    new TimerTask() {
+                        @Override
+                        public void run() {
+                            for(Vehicle v: nRoad.getInLane().getVehicles()){
+                                v.setLocation(v.getLocation() + v.getBaseSpeed());
+                            }
+
+                            for(Vehicle v: eRoad.getInLane().getVehicles()){
+
+                            }
+
+                            for(Vehicle v: sRoad.getInLane().getVehicles()){
+
+                            }
+
+                            for(Vehicle v: wRoad.getInLane().getVehicles()){
+
+                            }
+                        }
+                    }, 0, 10);
         });
-        p.getStyleClass().add("borderLine");
-        g.getChildren().add(p);
-
-        Line l1 = new Line(d, 0, d, 2 * d);
-        l1.getStyleClass().add("midLine");
-        g.getChildren().add(l1);
-
-        Line l2 = new Line(0, d, 2 * d, d);
-        l2.getStyleClass().add("midLine");
-        g.getChildren().add(l2);
-
-        canvasAnchorPane.getChildren().add(g);
     }
 }
