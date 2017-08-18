@@ -1,18 +1,18 @@
 #canvasAnchorPane {
-    -fx-background-color: #d2d2d2;
+    -fx-background-color: rgba(78, 141, 29, 0.84);
 }
 
 .roadSurface{
-    -fx-fill: rgb(158, 158, 158);
-}
-
-.borderLine{
-    -fx-stroke-width: 2;
-    -fx-stroke: #00000;
+    -fx-fill: #2e3436;
 }
 
 .midLine {
     -fx-stroke-width: 2;
-    -fx-stroke: #FFFFFF;
-    -fx-stroke-dash-array: 2 12 12 2;
+    -fx-stroke: #dbdbd9;
+}
+
+.markLine {
+    -fx-stroke-width: 2;
+    -fx-stroke: #dbdbd9;
+    -fx-stroke-dash-array: 10 10 10 10;
 }

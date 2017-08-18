@@ -24,4 +24,17 @@ public class Lane {
     public void addVehicleToQueue(Vehicle vehicle){
         vehicles.add(vehicle);
     }
+
+    public Vehicle getFrontVehicle(Vehicle vehicle){
+        Vehicle frontVehicle = null;
+        for (Vehicle v: vehicles){
+            if(vehicle == v){
+                break;
+            }else{
+                frontVehicle = v;
+            }
+        }
+
+        return frontVehicle;
+    }
 }

@@ -25,6 +25,14 @@ public class Road {
 
     public void generateInVehicle(){
         Vehicle vehicle = new Vehicle(inLane.getVehicles().size() + 1, id, id + 1);
+
+        if(inLane.getVehicles().size() > 0) {
+            Vehicle frontVehicle = inLane.getVehicles().get(inLane.getVehicles().size() - 1);
+            if (vehicle.getLocation() >= frontVehicle.getLocation() - frontVehicle.getLength()) {
+                vehicle.setLocation(frontVehicle.getLocation() - frontVehicle.getLength() - 5);
+            }
+        }
+
         inLane.addVehicleToQueue(vehicle);
     }
 

@@ -3,20 +3,27 @@ package model;
 public class Vehicle {
     private int id;
     private int length;
-    private int width;
-    private double baseSpeed;
+    private int width = 10;
+
     private int origin;
     private int destination;
-    private double location;
+    private double location = 0.0;
+    private int time = 0;
+    private double velocity = 0;
+
+    private double desiredVelocity;
+    private double maxAcceleration = 0.5;
+    private double minimumSpacing = 20;
+    private double breakingDecleration = 20;
 
     public Vehicle(int id, int origin, int destination) {
         this.id = id;
-        this.length = 10;
-        this.width = 10;
-        this.baseSpeed = 0.3;
         this.origin = origin;
         this.destination = destination;
-        this.location = 0.0;
+
+        this.length = (int) (Math.random() * 10) + 15;
+        this.desiredVelocity = Math.random() * 2;
+        this.velocity = this.desiredVelocity / 4;
     }
 
     public int getId() {
@@ -43,12 +50,12 @@ public class Vehicle {
         this.width = width;
     }
 
-    public double getBaseSpeed() {
-        return baseSpeed;
+    public double getDesiredVelocity() {
+        return desiredVelocity;
     }
 
-    public void setBaseSpeed(double baseSpeed) {
-        this.baseSpeed = baseSpeed;
+    public void setDesiredVelocity(double desiredVelocity) {
+        this.desiredVelocity = desiredVelocity;
     }
 
     public int getOrigin() {
@@ -73,5 +80,45 @@ public class Vehicle {
 
     public void setLocation(double location) {
         this.location = location;
+    }
+
+    public double getMinimumSpacing() {
+        return minimumSpacing;
+    }
+
+    public void setMinimumSpacing(double minimumSpacing) {
+        this.minimumSpacing = minimumSpacing;
+    }
+
+    public double getBreakingDecleration() {
+        return breakingDecleration;
+    }
+
+    public void setBreakingDecleration(double breakingDecleration) {
+        this.breakingDecleration = breakingDecleration;
+    }
+
+    public double getVelocity() {
+        return velocity;
+    }
+
+    public void setVelocity(double velocity) {
+        this.velocity = velocity;
+    }
+
+    public int getTime() {
+        return time;
+    }
+
+    public void setTime(int time) {
+        this.time = time;
+    }
+
+    public double getMaxAcceleration() {
+        return maxAcceleration;
+    }
+
+    public void setMaxAcceleration(double maxAcceleration) {
+        this.maxAcceleration = maxAcceleration;
     }
 }

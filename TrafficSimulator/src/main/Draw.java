@@ -8,9 +8,12 @@ import javafx.scene.shape.Rectangle;
 import model.RoadMap;
 import model.Vehicle;
 
+import java.util.Iterator;
+
+import static main.Global.canvasRadius;
+import static main.Global.roadRadius;
+
 public class Draw {
-    private static final double canvasRadius = 350.0;
-    private static final double roadRadius = 40.0;
 
     public static void drawMap(RoadMap roadMap, AnchorPane canvas){
         Group g = new Group();
@@ -24,8 +27,7 @@ public class Draw {
         g.getChildren().add(hRect);
 
         Polyline p = new Polyline();
-        p.getPoints().addAll(new Double[]{
-                canvasRadius + roadRadius, 0.0,
+        p.getPoints().addAll(canvasRadius + roadRadius, 0.0,
                 canvasRadius + roadRadius, canvasRadius - roadRadius,
                 2 * canvasRadius, canvasRadius - roadRadius,
                 2 * canvasRadius, canvasRadius + roadRadius,
@@ -36,18 +38,32 @@ public class Draw {
                 0.0, canvasRadius + roadRadius,
                 0.0, canvasRadius - roadRadius,
                 canvasRadius - roadRadius, canvasRadius - roadRadius,
-                canvasRadius - roadRadius, 0.0
-        });
-        p.getStyleClass().add("borderLine");
+                canvasRadius - roadRadius, 0.0);
         g.getChildren().add(p);
 
-        Line l1 = new Line(canvasRadius, 0, canvasRadius, 2 * canvasRadius);
-        l1.getStyleClass().add("midLine");
-        g.getChildren().add(l1);
+        Line lVerticle = new Line(canvasRadius, 0, canvasRadius, 2 * canvasRadius);
+        lVerticle.getStyleClass().add("midLine");
+        g.getChildren().add(lVerticle);
 
-        Line l2 = new Line(0, canvasRadius, 2 * canvasRadius, canvasRadius);
-        l2.getStyleClass().add("midLine");
-        g.getChildren().add(l2);
+        Line lHorizontal = new Line(0, canvasRadius, 2 * canvasRadius, canvasRadius);
+        lHorizontal.getStyleClass().add("midLine");
+        g.getChildren().add(lHorizontal);
+
+        Line markLeft = new Line(canvasRadius - roadRadius, canvasRadius - roadRadius, canvasRadius - roadRadius, canvasRadius + roadRadius);
+        markLeft.getStyleClass().add("markLine");
+        g.getChildren().add(markLeft);
+
+        Line markRight = new Line(canvasRadius + roadRadius, canvasRadius - roadRadius, canvasRadius + roadRadius, canvasRadius + roadRadius);
+        markRight.getStyleClass().add("markLine");
+        g.getChildren().add(markRight);
+
+        Line markTop = new Line(canvasRadius - roadRadius, canvasRadius - roadRadius, canvasRadius + roadRadius, canvasRadius - roadRadius);
+        markTop.getStyleClass().add("markLine");
+        g.getChildren().add(markTop);
+
+        Line markBottom = new Line(canvasRadius - roadRadius, canvasRadius + roadRadius, canvasRadius + roadRadius, canvasRadius + roadRadius);
+        markBottom.getStyleClass().add("markLine");
+        g.getChildren().add(markBottom);
 
         canvas.getChildren().add(g);
     }
@@ -57,26 +73,30 @@ public class Draw {
 
         drawMap(roadMap, canvas);
 
-        for(Vehicle vehicle: roadMap.getJunction().getnRoad().getInLane().getVehicles()){
+        Iterator<Vehicle> vehicleIterator = roadMap.getJunction().getnRoad().getInLane().getVehicles().iterator();
+        while (vehicleIterator.hasNext()){
+            Vehicle vehicle = vehicleIterator.next();
+            if(vehicle.getLocation() >= 0) {
+                Rectangle rect = new Rectangle();
+                rect.setHeight(vehicle.getLength());
+                rect.setWidth(vehicle.getWidth());
+                rect.setX(canvasRadius - roadRadius / 2);
+                rect.setY(vehicle.getLocation());
+
+                canvas.getChildren().add(rect);
+            }
+        }
+
+        vehicleIterator = roadMap.getJunction().geteRoad().getOutLane().getVehicles().iterator();
+        while (vehicleIterator.hasNext()){
+            Vehicle vehicle = vehicleIterator.next();
             Rectangle rect = new Rectangle();
-            rect.setHeight(vehicle.getLength());
-            rect.setWidth(vehicle.getWidth());
-            rect.setX(canvasRadius - roadRadius / 2);
-            rect.setY(vehicle.getLocation());
+            rect.setHeight(vehicle.getWidth());
+            rect.setWidth(vehicle.getLength());
+            rect.setX(2 * canvasRadius - vehicle.getLocation());
+            rect.setY(canvasRadius);
 
             canvas.getChildren().add(rect);
         }
-
-//        for(Vehicle vehicle: roadMap.getJunction().geteRoad().getInLane().getVehicles()){
-//
-//        }
-//
-//        for(Vehicle vehicle: roadMap.getJunction().getsRoad().getInLane().getVehicles()){
-//
-//        }
-//
-//        for(Vehicle vehicle: roadMap.getJunction().getwRoad().getInLane().getVehicles()){
-//
-//        }
     }
 }
