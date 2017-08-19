@@ -1,8 +1,6 @@
-package model;
+package a;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 
 public class Lane {
     private final LaneType laneType;
@@ -22,19 +20,8 @@ public class Lane {
     }
 
     public void addVehicleToQueue(Vehicle vehicle){
-        vehicles.add(vehicle);
-    }
-
-    public Vehicle getFrontVehicle(Vehicle vehicle){
-        Vehicle frontVehicle = null;
-        for (Vehicle v: vehicles){
-            if(vehicle == v){
-                break;
-            }else{
-                frontVehicle = v;
-            }
-        }
-
-        return frontVehicle;
+        getVehicles().add(vehicle);
+        vehicle.getTrajectory().setLane(this);
+        vehicle.getTrajectory().setLaneIndex(getVehicles().size() - 1);
     }
 }

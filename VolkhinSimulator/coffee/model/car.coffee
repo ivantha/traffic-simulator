@@ -70,6 +70,7 @@ class Car
         @trajectory.changeLane preferedLane
 
     step = @speed * delta + 0.5 * acceleration * delta ** 2
+
     # TODO: hacks, should have changed speed
     console.log 'bad IDM' if @trajectory.nextCarDistance.distance < step
 
