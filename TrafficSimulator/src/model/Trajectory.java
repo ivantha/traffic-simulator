@@ -1,60 +1,45 @@
-package a;
+package model;
 
 import main.Global;
 
 public class Trajectory {
-    private int origin;
-    private int destination;
-    private double location = 0.0;
+    private final int origin;
+    private final int destination;
+    private double location;
 
     private int laneIndex;
     private Lane lane;
 
-    public Trajectory(int origin, int destination) {
+    public Trajectory(int origin, int destination, int vehicleLength) {
         this.origin = origin;
         this.destination = destination;
+        this.location = vehicleLength;
     }
 
     public int getOrigin() {
         return origin;
     }
-
-    public void setOrigin(int origin) {
-        this.origin = origin;
-    }
-
     public int getDestination() {
         return destination;
     }
-
-    public void setDestination(int destination) {
-        this.destination = destination;
-    }
-
     public double getLocation() {
         return location;
     }
-
     public void setLocation(double location) {
         this.location = location;
     }
-
     public int getLaneIndex() {
         return laneIndex;
     }
-
     public void setLaneIndex(int laneIndex) {
         this.laneIndex = laneIndex;
     }
-
     public Lane getLane() {
         return lane;
     }
-
     public void setLane(Lane lane) {
         this.lane = lane;
     }
-
     public boolean isAtFront() {
         return laneIndex == 0;
     }

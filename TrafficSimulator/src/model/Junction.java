@@ -1,7 +1,5 @@
 package model;
 
-import model.Road;
-
 public class Junction {
     private final Road nRoad;
     private final Road eRoad;

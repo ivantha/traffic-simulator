@@ -1,6 +1,8 @@
-package a;
+package model;
 
 import main.Global;
+
+import static main.Global.VEHICLE_HASH_MAP;
 
 public class Vehicle {
     private int length = (int) (15 + (Math.random() * 10));
@@ -17,7 +19,11 @@ public class Vehicle {
     private Trajectory trajectory;
 
     public Vehicle(int origin, int destination) {
-        this.trajectory = new Trajectory(origin, destination);
+        if(!VEHICLE_HASH_MAP.containsKey(this.toString())){
+            VEHICLE_HASH_MAP.put(this.toString(), VEHICLE_HASH_MAP.size() + 1);
+        }
+
+        this.trajectory = new Trajectory(origin, destination, length);
     }
 
     public int getLength() {
@@ -68,19 +74,16 @@ public class Vehicle {
     public void setVelocity(double velocity) {
         this.velocity = velocity;
     }
-
     public double getMaxAcceleration() {
         return maxAcceleration;
     }
-
     public void setMaxAcceleration(double maxAcceleration) {
         this.maxAcceleration = maxAcceleration;
     }
 
-
     public double getAcceleration() {
         double distanceToNextCar = Global.CANVAS_RADIUS;
-        if(!getTrajectory().isAtFront()){
+        if (!getTrajectory().isAtFront()) {
             Vehicle frontVehicle = trajectory.getFrontVehicle();
             distanceToNextCar = frontVehicle.getTrajectory().getLocation() - getTrajectory().getLocation() - frontVehicle.getLength();
         }
@@ -104,8 +107,8 @@ public class Vehicle {
         double intersectionCoeff = Math.pow(safeIntersectionDistance / getTrajectory().getDistanceToStopLine(), 2);
         double coeff = 1 - freeRoadCoeff - busyRoadCoeff - intersectionCoeff;
 
-        //Print ----------------------------------------------------------------------------------------
         System.out.println("________________________________________");
+        System.out.println("vehicle                 :" + VEHICLE_HASH_MAP.get(this.toString()));
         System.out.println("laneIndex               :" + trajectory.getLaneIndex());
         System.out.println("speed                   :" + speed);
         System.out.println("freeRoadCoeff           :" + freeRoadCoeff);
@@ -117,13 +120,14 @@ public class Vehicle {
         System.out.println("intersectionCoeff       :" + intersectionCoeff);
         System.out.println("coeff                   :" + coeff);
 
+
         return maxAcceleration * coeff;
     }
 
-    public double getDeltaSpeed(){
-        if(getTrajectory().isAtFront()){
+    public double getDeltaSpeed() {
+        if (getTrajectory().isAtFront()) {
             return getVelocity();
-        }else{
+        } else {
             return getVelocity() - getTrajectory().getFrontVehicle().getVelocity();
         }
     }
@@ -132,36 +136,32 @@ public class Vehicle {
         double delta = 1;
         double acceleration = getAcceleration();
 
-        double speed = getVelocity();
-        speed += acceleration * delta;
-        double step = (speed * delta) + (0.5 * acceleration * Math.pow(delta, 2));
+        velocity += acceleration * delta;
+        double step = (velocity * delta) + (0.5 * acceleration * Math.pow(delta, 2));
 
-        setVelocity(speed);
         getTrajectory().setLocation(getTrajectory().getLocation() + step);
 
-        //Print ----------------------------------------------------------------------------------------
         System.out.println("");
-        System.out.println("speed2                  :" + speed);
+        System.out.println("velocity                :" + velocity);
         System.out.println("step                    :" + step);
 
-        for(int i = 0; i < trajectory.getLocation() / 5; i++){
+        for (int i = 0; i < trajectory.getLocation() / 2; i++) {
             System.out.print(".");
         }
         System.out.println(" : " + trajectory.getLocation());
 
-//        if(step < 0){
-//            System.out.println(">>>> step is less than 0");
-//            System.out.println(speed * delta);
-//            System.out.println(0.5 * acceleration * Math.pow(delta, 2));
+        if (step < 0) {
+            System.out.println(">>>> step is less than 0");
+            System.out.println("v-delta             :" + velocity * delta);
+            System.out.println("1/2a(t^2)           :" + 0.5 * acceleration * Math.pow(delta, 2));
 //            System.exit(0);
-//        }
+        }
 
-//        if(!trajectory.isAtFront() &&
-//                step > getTrajectory().getFrontVehicle().getTrajectory().getLocation()
-//                        - getTrajectory().getLocation() - getTrajectory().getFrontVehicle().getLength()){
-//            System.out.println(">>>> Overlapping cars");
+        if (!trajectory.isAtFront() &&
+                step > getTrajectory().getFrontVehicle().getTrajectory().getLocation()
+                        - getTrajectory().getLocation() - getTrajectory().getFrontVehicle().getLength()) {
+            System.out.println(">>>> Overlapping cars");
 //            System.exit(0);
-//        }
-
+        }
     }
 }

@@ -1,9 +1,5 @@
 package model;
 
-import a.Lane;
-import a.LaneType;
-import a.Vehicle;
-
 import static main.Global.NORMAL_LANE_POPULATION;
 import static main.Global.NORMAL_VEHICLE_SPACING;
 
@@ -35,6 +31,7 @@ public class Road {
     }
 
     public void generateInVehicle(){
+        ///To fix
         Vehicle vehicle = new Vehicle(roadId, roadId + 1);
         appendVehicleToInLane(vehicle);
     }
@@ -42,11 +39,21 @@ public class Road {
     public void appendVehicleToInLane(Vehicle vehicle){
         if(inLane.getVehicles().size() > 0) {
             Vehicle frontVehicle = inLane.getVehicles().get(inLane.getVehicles().size() - 1);
-            if (vehicle.getTrajectory().getLocation() >= frontVehicle.getTrajectory().getLocation() - frontVehicle.getLength()- NORMAL_VEHICLE_SPACING) {
-                vehicle.getTrajectory().setLocation(frontVehicle.getTrajectory().getLocation() - frontVehicle.getLength() - NORMAL_VEHICLE_SPACING);
+            if (vehicle.getTrajectory().getLocation() < frontVehicle.getTrajectory().getLocation() - frontVehicle.getLength()- NORMAL_VEHICLE_SPACING) {
+                vehicle.getTrajectory().setLocation(vehicle.getLength());
+                vehicle.setVelocity(0.0);
+                inLane.addVehicleToQueue(vehicle);
             }
+        }else{
+            vehicle.getTrajectory().setLocation(vehicle.getLength());
+            vehicle.setVelocity(0.0);
+            inLane.addVehicleToQueue(vehicle);
         }
+    }
 
-        inLane.addVehicleToQueue(vehicle);
+    public void appendVehicleToOutLane(Vehicle vehicle){
+        vehicle.getTrajectory().setLocation(vehicle.getLength());
+        vehicle.setVelocity(0.0);
+        outLane.addVehicleToQueue(vehicle);
     }
 }

@@ -1,4 +1,4 @@
-package a;
+package model;
 
 public enum LaneType {
     IN_LANE,
