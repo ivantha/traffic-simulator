@@ -73,6 +73,7 @@ public class DashboardController implements Initializable {
                                 Vehicle v = vehicleIterator.next();
                                 v.move();
 
+                                /////////////////////////////FIX VEHICLE REMOVAL CONDITION
                                 if(v.getTrajectory().getLocation() + v.getLength() >= Global.ROAD_LENGTH){
                                     vehicleIterator.remove();
                                     isRemoved = true;
@@ -92,21 +93,19 @@ public class DashboardController implements Initializable {
                         public void changeRoad(Vehicle vehicle){
                             switch (vehicle.getTrajectory().getDestination()){
                                 case 1:
-//                                    nRoad.getOutLane().addVehicleToQueue(vehicle);
                                     nRoad.appendVehicleToOutLane(vehicle);
                                     break;
                                 case 2:
-//                                    eRoad.getOutLane().addVehicleToQueue(vehicle);
                                     eRoad.appendVehicleToOutLane(vehicle);
                                     break;
                                 case 3:
-//                                    sRoad.getOutLane().addVehicleToQueue(vehicle);
                                     sRoad.appendVehicleToOutLane(vehicle);
                                     break;
                                 case 4:
-//                                    wRoad.getOutLane().addVehicleToQueue(vehicle);
                                     wRoad.appendVehicleToOutLane(vehicle);
                                     break;
+                                default:
+                                    System.out.println(vehicle.getTrajectory().getDestination());
                             }
                         }
                     }, 0, REFRESH_INTERVAL);

@@ -31,8 +31,13 @@ public class Road {
     }
 
     public void generateInVehicle(){
-        ///To fix
-        Vehicle vehicle = new Vehicle(roadId, roadId + 1);
+        ////////////////////////////////////////////////////FIX ROAD DESTINATIONS - RANDOMIZE
+        int origin = roadId;
+        int destination = roadId + 1;
+        if(destination == 5){
+            destination = 1;
+        }
+        Vehicle vehicle = new Vehicle(origin, destination);
         appendVehicleToInLane(vehicle);
     }
 

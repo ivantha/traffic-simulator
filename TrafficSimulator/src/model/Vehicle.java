@@ -1,12 +1,17 @@
 package model;
 
+import javafx.scene.paint.Color;
 import main.Global;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 import static main.Global.VEHICLE_HASH_MAP;
 
 public class Vehicle {
-    private int length = (int) (15 + (Math.random() * 10));
+    private int length = (int) (15 + (Math.random() * 15));
     private int width = 10;
+    private Color color;
 
     private double velocity = 0;
     private double desiredVelocity = Math.random();
@@ -18,12 +23,15 @@ public class Vehicle {
 
     private Trajectory trajectory;
 
+    private boolean isDebug = true;
+
     public Vehicle(int origin, int destination) {
         if(!VEHICLE_HASH_MAP.containsKey(this.toString())){
             VEHICLE_HASH_MAP.put(this.toString(), VEHICLE_HASH_MAP.size() + 1);
         }
 
         this.trajectory = new Trajectory(origin, destination, length);
+        this.color = getRandomColor();
     }
 
     public int getLength() {
@@ -80,6 +88,31 @@ public class Vehicle {
     public void setMaxAcceleration(double maxAcceleration) {
         this.maxAcceleration = maxAcceleration;
     }
+    public Color getColor() {
+        return color;
+    }
+    public void setColor(Color color) {
+        this.color = color;
+    }
+    public boolean isDebug() {
+        return isDebug;
+    }
+
+    public void setDebug(boolean debug) {
+        isDebug = debug;
+    }
+
+    private Color getRandomColor(){
+        ArrayList<Color> colors = new ArrayList<>();
+        colors.add(Color.web("#1976D2"));
+        colors.add(Color.web("#C2185B"));
+        colors.add(Color.web("#00796B"));
+        colors.add(Color.web("#F57C00"));
+        colors.add(Color.web("#AFB42B"));
+
+        Random randomizer = new Random();
+        return colors.get(randomizer.nextInt(colors.size()));
+    }
 
     public double getAcceleration() {
         double distanceToNextCar = Global.CANVAS_RADIUS;
@@ -107,19 +140,21 @@ public class Vehicle {
         double intersectionCoeff = Math.pow(safeIntersectionDistance / getTrajectory().getDistanceToStopLine(), 2);
         double coeff = 1 - freeRoadCoeff - busyRoadCoeff - intersectionCoeff;
 
-        System.out.println("________________________________________");
-        System.out.println("vehicle                 :" + VEHICLE_HASH_MAP.get(this.toString()));
-        System.out.println("laneIndex               :" + trajectory.getLaneIndex());
-        System.out.println("speed                   :" + speed);
-        System.out.println("freeRoadCoeff           :" + freeRoadCoeff);
-        System.out.println("timeGap                 :" + timeGap);
-        System.out.println("breakGap                :" + breakGap);
-        System.out.println("safeDistance            :" + safeDistance);
-        System.out.println("busyRoadCoeff           :" + busyRoadCoeff);
-        System.out.println("safeIntersectionDistance:" + safeIntersectionDistance);
-        System.out.println("intersectionCoeff       :" + intersectionCoeff);
-        System.out.println("coeff                   :" + coeff);
+        if(isDebug){
+            System.out.println("________________________________________");
+            System.out.println("vehicle                 :" + VEHICLE_HASH_MAP.get(this.toString()));
+            System.out.println("laneIndex               :" + trajectory.getLaneIndex());
+            System.out.println("speed                   :" + speed);
+            System.out.println("freeRoadCoeff           :" + freeRoadCoeff);
+            System.out.println("timeGap                 :" + timeGap);
+            System.out.println("breakGap                :" + breakGap);
+            System.out.println("safeDistance            :" + safeDistance);
+            System.out.println("busyRoadCoeff           :" + busyRoadCoeff);
+            System.out.println("safeIntersectionDistance:" + safeIntersectionDistance);
+            System.out.println("intersectionCoeff       :" + intersectionCoeff);
+            System.out.println("coeff                   :" + coeff);
 
+        }
 
         return maxAcceleration * coeff;
     }
@@ -141,27 +176,29 @@ public class Vehicle {
 
         getTrajectory().setLocation(getTrajectory().getLocation() + step);
 
-        System.out.println("");
-        System.out.println("velocity                :" + velocity);
-        System.out.println("step                    :" + step);
+        if(isDebug){
+            System.out.println("");
+            System.out.println("velocity                :" + velocity);
+            System.out.println("step                    :" + step);
 
-        for (int i = 0; i < trajectory.getLocation() / 2; i++) {
-            System.out.print(".");
-        }
-        System.out.println(" : " + trajectory.getLocation());
+            for (int i = 0; i < trajectory.getLocation() / 2; i++) {
+                System.out.print(".");
+            }
+            System.out.println(" : " + trajectory.getLocation());
 
-        if (step < 0) {
-            System.out.println(">>>> step is less than 0");
-            System.out.println("v-delta             :" + velocity * delta);
-            System.out.println("1/2a(t^2)           :" + 0.5 * acceleration * Math.pow(delta, 2));
-//            System.exit(0);
-        }
+            if (step < 0) {
+                System.out.println(">>>> step is less than 0");
+                System.out.println("v-delta             :" + velocity * delta);
+                System.out.println("1/2a(t^2)           :" + 0.5 * acceleration * Math.pow(delta, 2));
+//                System.exit(0);
+            }
 
-        if (!trajectory.isAtFront() &&
-                step > getTrajectory().getFrontVehicle().getTrajectory().getLocation()
-                        - getTrajectory().getLocation() - getTrajectory().getFrontVehicle().getLength()) {
-            System.out.println(">>>> Overlapping cars");
-//            System.exit(0);
+            if (!trajectory.isAtFront() &&
+                    step > getTrajectory().getFrontVehicle().getTrajectory().getLocation()
+                            - getTrajectory().getLocation() - getTrajectory().getFrontVehicle().getLength()) {
+                System.out.println(">>>> Overlapping cars");
+//                System.exit(0);
+            }
         }
     }
 }
