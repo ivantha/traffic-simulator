@@ -1,21 +1,25 @@
 package model;
 
-import javafx.scene.paint.Color;
 import main.Global;
+import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.Random;
 
+import static java.lang.Double.isInfinite;
+import static java.lang.Double.isNaN;
+import static main.Global.AVERAGE_SPACING;
+import static main.Global.AVERAGE_SPEED;
 import static main.Global.VEHICLE_HASH_MAP;
 
 public class Vehicle {
-    private int length = (int) (15 + (Math.random() * 15));
-    private int width = 10;
+    private int length = (int) (15 + (Math.random() * 10));
+    private int width = 8;
     private Color color;
 
     private double velocity = 0;
-    private double desiredVelocity = Math.random();
-    private double maxAcceleration = 0.05;
+    private double desiredVelocity = Math.random() + 0.1 + (AVERAGE_SPEED.get() * 0.3);
+    private double maxAcceleration = 0.02;
     private double breakingDeceleration = 0.15;
 
     private double timeHeadway = 0.1;
@@ -24,6 +28,8 @@ public class Vehicle {
     private Trajectory trajectory;
 
     private boolean isDebug = true;
+    private boolean isOverlapping = false;
+    private boolean hasInfiniteSpeed = false;
 
     public Vehicle(int origin, int destination) {
         if(!VEHICLE_HASH_MAP.containsKey(this.toString())){
@@ -97,9 +103,20 @@ public class Vehicle {
     public boolean isDebug() {
         return isDebug;
     }
-
     public void setDebug(boolean debug) {
         isDebug = debug;
+    }
+    public boolean isOverlapping() {
+        return isOverlapping;
+    }
+    public void setOverlapping(boolean overlapping) {
+        isOverlapping = overlapping;
+    }
+    public boolean isHasInfiniteSpeed() {
+        return hasInfiniteSpeed;
+    }
+    public void setHasInfiniteSpeed(boolean hasInfiniteSpeed) {
+        this.hasInfiniteSpeed = hasInfiniteSpeed;
     }
 
     private Color getRandomColor(){
@@ -109,6 +126,18 @@ public class Vehicle {
         colors.add(Color.web("#00796B"));
         colors.add(Color.web("#F57C00"));
         colors.add(Color.web("#AFB42B"));
+        colors.add(Color.web("#E64A19"));
+        colors.add(Color.web("#03A9F4"));
+        colors.add(Color.web("#d32f2f"));
+        colors.add(Color.web("#512DA8"));
+        colors.add(Color.web("#FBC02D"));
+        colors.add(Color.web("#5D4037"));
+        colors.add(Color.web("#388E3C"));
+        colors.add(Color.web("#7986CB"));
+        colors.add(Color.web("#4DB6AC"));
+        colors.add(Color.web("#2196F3"));
+        colors.add(Color.web("#00695C"));
+        colors.add(Color.web("#8E24AA"));
 
         Random randomizer = new Random();
         return colors.get(randomizer.nextInt(colors.size()));
@@ -154,6 +183,32 @@ public class Vehicle {
             System.out.println("intersectionCoeff       :" + intersectionCoeff);
             System.out.println("coeff                   :" + coeff);
 
+            if(maxAcceleration * coeff > 1000 || maxAcceleration * coeff < -1000){
+                System.out.println("Incorrect acceleration");
+//                System.exit(0);
+            }
+
+            if(speed > 1000 || speed < -1000){
+                System.out.println("Incorrect speed");
+//                System.exit(0);
+            }
+
+            if(isInfinite(speed) || isInfinite(freeRoadCoeff) || isInfinite(timeGap) || isInfinite(breakGap) || isInfinite(safeDistance) || isInfinite(busyRoadCoeff)
+                    || isInfinite(safeIntersectionDistance) || isInfinite(intersectionCoeff) || isInfinite(coeff)){
+                System.out.println(">>>> Infinite value");
+                hasInfiniteSpeed = true;
+
+                System.out.println(speed);
+                System.out.println(maxSpeed);
+                System.out.println(speed / maxSpeed);
+                System.out.println(Math.pow(speed/ maxSpeed, 4));
+//                System.exit(0);
+            }
+
+            if(isNaN(speed) || isNaN(freeRoadCoeff) || isNaN(timeGap) || isNaN(breakGap) || isNaN(safeDistance) || isNaN(busyRoadCoeff)
+                    || isNaN(safeIntersectionDistance) || isNaN(intersectionCoeff) || isNaN(coeff)){
+                System.out.println(">>>> NaN value");
+            }
         }
 
         return maxAcceleration * coeff;
@@ -168,36 +223,45 @@ public class Vehicle {
     }
 
     public void move() {
-        double delta = 1;
+        double delta = 0.5;
         double acceleration = getAcceleration();
 
-        velocity += acceleration * delta;
-        double step = (velocity * delta) + (0.5 * acceleration * Math.pow(delta, 2));
+        double temp_velocity = velocity;
+        temp_velocity += acceleration * delta;
+        double temp_step = (temp_velocity * delta) + (0.5 * acceleration * Math.pow(delta, 2));
 
-        getTrajectory().setLocation(getTrajectory().getLocation() + step);
+        // I am not sure if we need this condition. >> Just a way to stop negative steps and over steps
+        if(temp_step >= 0
+                && (getTrajectory().getFrontVehicle() == null
+                    || getTrajectory().getLocation() + AVERAGE_SPACING.get() + temp_step < getTrajectory().getFrontVehicle().getTrajectory().getLocation())) {
+            velocity += acceleration * delta;
+            double step = (velocity * delta) + (0.5 * acceleration * Math.pow(delta, 2));
 
-        if(isDebug){
-            System.out.println("");
-            System.out.println("velocity                :" + velocity);
-            System.out.println("step                    :" + step);
+            getTrajectory().setLocation(getTrajectory().getLocation() + step);
 
-            for (int i = 0; i < trajectory.getLocation() / 2; i++) {
-                System.out.print(".");
-            }
-            System.out.println(" : " + trajectory.getLocation());
+            if(isDebug){
+                System.out.println("");
+                System.out.println("velocity                :" + velocity);
+                System.out.println("step                    :" + step);
 
-            if (step < 0) {
-                System.out.println(">>>> step is less than 0");
-                System.out.println("v-delta             :" + velocity * delta);
-                System.out.println("1/2a(t^2)           :" + 0.5 * acceleration * Math.pow(delta, 2));
-//                System.exit(0);
-            }
+                for (int i = 0; i < trajectory.getLocation() / 2; i++) {
+                    System.out.print(".");
+                }
+                System.out.println(" : " + trajectory.getLocation());
 
-            if (!trajectory.isAtFront() &&
-                    step > getTrajectory().getFrontVehicle().getTrajectory().getLocation()
-                            - getTrajectory().getLocation() - getTrajectory().getFrontVehicle().getLength()) {
-                System.out.println(">>>> Overlapping cars");
-//                System.exit(0);
+                if (step < 0) {
+                    System.out.println(">>>> step is less than 0");
+                    System.out.println("v-delta             :" + velocity * delta);
+                    System.out.println("1/2a(t^2)           :" + 0.5 * acceleration * Math.pow(delta, 2));
+                }
+
+                if (!trajectory.isAtFront() &&
+                        step > getTrajectory().getFrontVehicle().getTrajectory().getLocation()
+                                - getTrajectory().getLocation() - getTrajectory().getFrontVehicle().getLength()) {
+                    System.out.println(">>>> Overlapping cars");
+                    isOverlapping = true;
+//                    System.exit(0);
+                }
             }
         }
     }

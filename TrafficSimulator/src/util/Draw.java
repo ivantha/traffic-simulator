@@ -1,11 +1,11 @@
-package ui;
+package util;
 
 import javafx.scene.Group;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polyline;
 import javafx.scene.shape.Rectangle;
-import main.Global;
 import model.Direction;
 import model.LaneType;
 import model.RoadMap;
@@ -77,6 +77,38 @@ public class Draw {
         markBottom.getStyleClass().add("markLine");
         g.getChildren().add(markBottom);
 
+        Line lMidVerticle1 = new Line(CANVAS_RADIUS - ROAD_RADIUS / 3, 0, CANVAS_RADIUS - ROAD_RADIUS / 3, 2 * CANVAS_RADIUS);
+        lMidVerticle1.getStyleClass().add("markLine");
+        g.getChildren().add(lMidVerticle1);
+
+        Line lMidVerticle2 = new Line(CANVAS_RADIUS - ROAD_RADIUS / 3 * 2, 0, CANVAS_RADIUS - ROAD_RADIUS / 3 * 2, 2 * CANVAS_RADIUS);
+        lMidVerticle2.getStyleClass().add("markLine");
+        g.getChildren().add(lMidVerticle2);
+
+        Line rMidVerticle1 = new Line(CANVAS_RADIUS + ROAD_RADIUS / 3, 0, CANVAS_RADIUS + ROAD_RADIUS / 3, 2 * CANVAS_RADIUS);
+        rMidVerticle1.getStyleClass().add("markLine");
+        g.getChildren().add(rMidVerticle1);
+
+        Line rMidVerticle2 = new Line(CANVAS_RADIUS + ROAD_RADIUS / 3 * 2, 0, CANVAS_RADIUS + ROAD_RADIUS / 3 * 2, 2 * CANVAS_RADIUS);
+        rMidVerticle2.getStyleClass().add("markLine");
+        g.getChildren().add(rMidVerticle2);
+
+        Line topMidHorizontal1 = new Line(0, CANVAS_RADIUS - ROAD_RADIUS / 3, 2 * CANVAS_RADIUS, CANVAS_RADIUS - ROAD_RADIUS / 3);
+        topMidHorizontal1.getStyleClass().add("markLine");
+        g.getChildren().add(topMidHorizontal1);
+
+        Line topMidHorizontal2 = new Line(0, CANVAS_RADIUS - ROAD_RADIUS / 3 * 2, 2 * CANVAS_RADIUS, CANVAS_RADIUS - ROAD_RADIUS / 3 * 2);
+        topMidHorizontal2.getStyleClass().add("markLine");
+        g.getChildren().add(topMidHorizontal2);
+
+        Line downMidHorizontal1 = new Line(0, CANVAS_RADIUS + ROAD_RADIUS / 3, 2 * CANVAS_RADIUS, CANVAS_RADIUS + ROAD_RADIUS / 3);
+        downMidHorizontal1.getStyleClass().add("markLine");
+        g.getChildren().add(downMidHorizontal1);
+
+        Line downMidHorizontal2 = new Line(0, CANVAS_RADIUS + ROAD_RADIUS / 3 * 2, 2 * CANVAS_RADIUS, CANVAS_RADIUS + ROAD_RADIUS / 3 * 2);
+        downMidHorizontal2.getStyleClass().add("markLine");
+        g.getChildren().add(downMidHorizontal2);
+
         canvas.getChildren().add(g);
     }
 
@@ -85,15 +117,31 @@ public class Draw {
 
         drawMap(roadMap, canvas);
 
-        drawVehicles(canvas, roadMap.getJunction().getnRoad().getInLane().getVehicles(), NORTH, IN_LANE, ROAD_RADIUS / 2);
-        drawVehicles(canvas, roadMap.getJunction().geteRoad().getInLane().getVehicles(), EAST, IN_LANE, ROAD_RADIUS / 2);
-        drawVehicles(canvas, roadMap.getJunction().getsRoad().getInLane().getVehicles(), SOUTH, IN_LANE, (-1) * ROAD_RADIUS / 2);
-        drawVehicles(canvas, roadMap.getJunction().getwRoad().getInLane().getVehicles(), WEST, IN_LANE, (-1) * ROAD_RADIUS / 2);
-
-        drawVehicles(canvas, roadMap.getJunction().getnRoad().getOutLane().getVehicles(), NORTH, OUT_LANE, (-1) * ROAD_RADIUS / 2);
-        drawVehicles(canvas, roadMap.getJunction().geteRoad().getOutLane().getVehicles(), EAST, OUT_LANE, (-1) * ROAD_RADIUS / 2);
-        drawVehicles(canvas, roadMap.getJunction().getsRoad().getOutLane().getVehicles(), SOUTH, OUT_LANE,  ROAD_RADIUS / 2);
-        drawVehicles(canvas, roadMap.getJunction().getwRoad().getOutLane().getVehicles(), WEST, OUT_LANE, ROAD_RADIUS / 2);
+        drawVehicles(canvas, roadMap.getJunction().getnRoad().getInLane1().getVehicles(), NORTH, IN_LANE, ROAD_RADIUS / 6 * 5);
+        drawVehicles(canvas, roadMap.getJunction().getnRoad().getInLane2().getVehicles(), NORTH, IN_LANE, ROAD_RADIUS / 6 * 3);
+        drawVehicles(canvas, roadMap.getJunction().getnRoad().getInLane3().getVehicles(), NORTH, IN_LANE, ROAD_RADIUS / 6 * 1);
+        drawVehicles(canvas, roadMap.getJunction().geteRoad().getInLane1().getVehicles(), EAST, IN_LANE, ROAD_RADIUS / 6 * 5);
+        drawVehicles(canvas, roadMap.getJunction().geteRoad().getInLane2().getVehicles(), EAST, IN_LANE, ROAD_RADIUS / 6 * 3);
+        drawVehicles(canvas, roadMap.getJunction().geteRoad().getInLane3().getVehicles(), EAST, IN_LANE, ROAD_RADIUS / 6 * 1);
+        drawVehicles(canvas, roadMap.getJunction().getsRoad().getInLane1().getVehicles(), SOUTH, IN_LANE, (-1) * ROAD_RADIUS / 6 * 5);
+        drawVehicles(canvas, roadMap.getJunction().getsRoad().getInLane2().getVehicles(), SOUTH, IN_LANE, (-1) * ROAD_RADIUS / 6 * 3);
+        drawVehicles(canvas, roadMap.getJunction().getsRoad().getInLane3().getVehicles(), SOUTH, IN_LANE, (-1) * ROAD_RADIUS / 6 * 1);
+        drawVehicles(canvas, roadMap.getJunction().getwRoad().getInLane1().getVehicles(), WEST, IN_LANE, (-1) * ROAD_RADIUS / 6 * 5);
+        drawVehicles(canvas, roadMap.getJunction().getwRoad().getInLane2().getVehicles(), WEST, IN_LANE, (-1) * ROAD_RADIUS / 6 * 3);
+        drawVehicles(canvas, roadMap.getJunction().getwRoad().getInLane3().getVehicles(), WEST, IN_LANE, (-1) * ROAD_RADIUS / 6 * 1);
+//
+        drawVehicles(canvas, roadMap.getJunction().getnRoad().getOutLane1().getVehicles(), NORTH, OUT_LANE, (-1) * ROAD_RADIUS / 6 * 5);
+        drawVehicles(canvas, roadMap.getJunction().getnRoad().getOutLane2().getVehicles(), NORTH, OUT_LANE, (-1) * ROAD_RADIUS / 6 * 3);
+        drawVehicles(canvas, roadMap.getJunction().getnRoad().getOutLane2().getVehicles(), NORTH, OUT_LANE, (-1) * ROAD_RADIUS / 6 * 1);
+        drawVehicles(canvas, roadMap.getJunction().geteRoad().getOutLane1().getVehicles(), EAST, OUT_LANE, (-1) * ROAD_RADIUS / 6 * 5);
+        drawVehicles(canvas, roadMap.getJunction().geteRoad().getOutLane2().getVehicles(), EAST, OUT_LANE, (-1) * ROAD_RADIUS / 6 * 3);
+        drawVehicles(canvas, roadMap.getJunction().geteRoad().getOutLane2().getVehicles(), EAST, OUT_LANE, (-1) * ROAD_RADIUS / 6 * 1);
+        drawVehicles(canvas, roadMap.getJunction().getsRoad().getOutLane1().getVehicles(), SOUTH, OUT_LANE,  ROAD_RADIUS / 6 * 5);
+        drawVehicles(canvas, roadMap.getJunction().getsRoad().getOutLane2().getVehicles(), SOUTH, OUT_LANE,  ROAD_RADIUS / 6 * 3);
+        drawVehicles(canvas, roadMap.getJunction().getsRoad().getOutLane2().getVehicles(), SOUTH, OUT_LANE,  ROAD_RADIUS / 6 * 1);
+        drawVehicles(canvas, roadMap.getJunction().getwRoad().getOutLane1().getVehicles(), WEST, OUT_LANE, ROAD_RADIUS / 6 * 5);
+        drawVehicles(canvas, roadMap.getJunction().getwRoad().getOutLane2().getVehicles(), WEST, OUT_LANE, ROAD_RADIUS / 6 * 3);
+        drawVehicles(canvas, roadMap.getJunction().getwRoad().getOutLane2().getVehicles(), WEST, OUT_LANE, ROAD_RADIUS / 6 * 1);
     }
 
     private static void drawVehicles(AnchorPane canvas, Collection<Vehicle> vehicles, Direction direction, LaneType laneType, double offset){
@@ -103,6 +151,12 @@ public class Draw {
 
             Rectangle rect = new Rectangle();
             rect.setFill(vehicle.getColor());
+
+
+            ///////////////////////////////////////////
+            if(vehicle.isOverlapping()){
+                rect.setFill(Color.WHITE);
+            }
 
             double adjustedOffset = offset - vehicle.getWidth() / 2;
 

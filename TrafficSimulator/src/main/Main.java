@@ -11,7 +11,7 @@ import javafx.stage.StageStyle;
 public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("../view/dashboard.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("../ui/view/dashboard.fxml"));
         Scene scene = new Scene(root);
         scene.setOnKeyReleased(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {

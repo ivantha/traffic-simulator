@@ -1,6 +1,6 @@
 package model;
 
-public class Junction {
+    public class Junction {
     private final Road nRoad;
     private final Road eRoad;
     private final Road sRoad;
