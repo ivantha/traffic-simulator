@@ -17,7 +17,7 @@ public class Vehicle {
 
     private double velocity = 0;
     private double desiredVelocity = Math.random() * 3.5 + (AVERAGE_SPEED.get() * 0.5);
-    private double maxAcceleration = 0.4;
+    private double maxAcceleration = 1;
     private double breakingDeceleration = 1.2;
 
     private double timeHeadway = 0.1;

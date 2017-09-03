@@ -96,10 +96,10 @@ public class DashboardController implements Initializable {
     private void reset() {
         roadMap = new RoadMap();
 
-        nRoad = roadMap.getJunction().getnRoad();
-        eRoad = roadMap.getJunction().geteRoad();
-        sRoad = roadMap.getJunction().getsRoad();
-        wRoad = roadMap.getJunction().getwRoad();
+        nRoad = roadMap.getJunction().getRoad(1);
+        eRoad = roadMap.getJunction().getRoad(2);
+        sRoad = roadMap.getJunction().getRoad(3);
+        wRoad = roadMap.getJunction().getRoad(4);
     }
 
     class CustomerTimerTask extends TimerTask {
@@ -107,31 +107,31 @@ public class DashboardController implements Initializable {
         public void run() {
             roadMap.populateRoadMap();
 
-            moveVehicles(nRoad.getInLane1().getVehicles(), IN_LANE);
-            moveVehicles(nRoad.getInLane2().getVehicles(), IN_LANE);
-            moveVehicles(nRoad.getInLane3().getVehicles(), IN_LANE);
-            moveVehicles(eRoad.getInLane1().getVehicles(), IN_LANE);
-            moveVehicles(eRoad.getInLane2().getVehicles(), IN_LANE);
-            moveVehicles(eRoad.getInLane3().getVehicles(), IN_LANE);
-            moveVehicles(sRoad.getInLane1().getVehicles(), IN_LANE);
-            moveVehicles(sRoad.getInLane2().getVehicles(), IN_LANE);
-            moveVehicles(sRoad.getInLane3().getVehicles(), IN_LANE);
-            moveVehicles(wRoad.getInLane1().getVehicles(), IN_LANE);
-            moveVehicles(wRoad.getInLane2().getVehicles(), IN_LANE);
-            moveVehicles(wRoad.getInLane3().getVehicles(), IN_LANE);
+            moveVehicles(nRoad.getLane(1).getVehicles(), IN_LANE);
+            moveVehicles(nRoad.getLane(2).getVehicles(), IN_LANE);
+            moveVehicles(nRoad.getLane(3).getVehicles(), IN_LANE);
+            moveVehicles(eRoad.getLane(1).getVehicles(), IN_LANE);
+            moveVehicles(eRoad.getLane(2).getVehicles(), IN_LANE);
+            moveVehicles(eRoad.getLane(3).getVehicles(), IN_LANE);
+            moveVehicles(sRoad.getLane(1).getVehicles(), IN_LANE);
+            moveVehicles(sRoad.getLane(2).getVehicles(), IN_LANE);
+            moveVehicles(sRoad.getLane(3).getVehicles(), IN_LANE);
+            moveVehicles(wRoad.getLane(1).getVehicles(), IN_LANE);
+            moveVehicles(wRoad.getLane(2).getVehicles(), IN_LANE);
+            moveVehicles(wRoad.getLane(3).getVehicles(), IN_LANE);
 
-            moveVehicles(nRoad.getOutLane6().getVehicles(), OUT_LANE);
-            moveVehicles(nRoad.getOutLane5().getVehicles(), OUT_LANE);
-            moveVehicles(nRoad.getOutLane4().getVehicles(), OUT_LANE);
-            moveVehicles(eRoad.getOutLane6().getVehicles(), OUT_LANE);
-            moveVehicles(eRoad.getOutLane5().getVehicles(), OUT_LANE);
-            moveVehicles(eRoad.getOutLane4().getVehicles(), OUT_LANE);
-            moveVehicles(sRoad.getOutLane6().getVehicles(), OUT_LANE);
-            moveVehicles(sRoad.getOutLane5().getVehicles(), OUT_LANE);
-            moveVehicles(sRoad.getOutLane4().getVehicles(), OUT_LANE);
-            moveVehicles(wRoad.getOutLane6().getVehicles(), OUT_LANE);
-            moveVehicles(wRoad.getOutLane5().getVehicles(), OUT_LANE);
-            moveVehicles(wRoad.getOutLane4().getVehicles(), OUT_LANE);
+            moveVehicles(nRoad.getLane(6).getVehicles(), OUT_LANE);
+            moveVehicles(nRoad.getLane(5).getVehicles(), OUT_LANE);
+            moveVehicles(nRoad.getLane(4).getVehicles(), OUT_LANE);
+            moveVehicles(eRoad.getLane(6).getVehicles(), OUT_LANE);
+            moveVehicles(eRoad.getLane(5).getVehicles(), OUT_LANE);
+            moveVehicles(eRoad.getLane(4).getVehicles(), OUT_LANE);
+            moveVehicles(sRoad.getLane(6).getVehicles(), OUT_LANE);
+            moveVehicles(sRoad.getLane(5).getVehicles(), OUT_LANE);
+            moveVehicles(sRoad.getLane(4).getVehicles(), OUT_LANE);
+            moveVehicles(wRoad.getLane(6).getVehicles(), OUT_LANE);
+            moveVehicles(wRoad.getLane(5).getVehicles(), OUT_LANE);
+            moveVehicles(wRoad.getLane(4).getVehicles(), OUT_LANE);
         }
 
         public void moveVehicles(ArrayList<Vehicle> vehicles, LaneType laneType) {
@@ -157,26 +157,12 @@ public class DashboardController implements Initializable {
             int destination = vehicle.getTrajectory().getDestination();
             Road destinationRoad = roadMap.getJunction().getRoad(destination);
 
-            Rectangle rect = new Rectangle();
-
             if (destinationRoad.isOutLaneFree(6, vehicle)) {
-                Platform.runLater(() -> Draw.animateIntersection(topCanvasAnchorPane, rect, vehicle, vehicle.getTrajectory().getOrigin(),
-                        vehicle.getTrajectory().getLane().getLaneId(), vehicle.getTrajectory().getDestination(), 6, event -> {
-                            topCanvasAnchorPane.getChildren().remove(rect);
-                            destinationRoad.appendVehicleToOutLane(vehicle, 6);
-                        }));
+                destinationRoad.appendVehicleToOutIntLane(vehicle, 6);
             } else if (destinationRoad.isOutLaneFree(5, vehicle)) {
-                Platform.runLater(() -> Draw.animateIntersection(topCanvasAnchorPane, rect, vehicle, vehicle.getTrajectory().getOrigin(),
-                        vehicle.getTrajectory().getLane().getLaneId(), vehicle.getTrajectory().getDestination(), 5, event -> {
-                            topCanvasAnchorPane.getChildren().remove(rect);
-                            destinationRoad.appendVehicleToOutLane(vehicle, 5);
-                        }));
+                destinationRoad.appendVehicleToOutIntLane(vehicle, 5);
             } else if (destinationRoad.isOutLaneFree(4, vehicle)) {
-                Platform.runLater(() -> Draw.animateIntersection(topCanvasAnchorPane, rect, vehicle, vehicle.getTrajectory().getOrigin(),
-                        vehicle.getTrajectory().getLane().getLaneId(), vehicle.getTrajectory().getDestination(), 4, event -> {
-                            topCanvasAnchorPane.getChildren().remove(rect);
-                            destinationRoad.appendVehicleToOutLane(vehicle, 4);
-                        }));
+                destinationRoad.appendVehicleToOutIntLane(vehicle, 4);
             }
         }
     }

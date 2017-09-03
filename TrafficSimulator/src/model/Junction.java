@@ -1,43 +1,18 @@
 package model;
 
-    public class Junction {
-        private final Road nRoad;
-        private final Road eRoad;
-        private final Road sRoad;
-        private final Road wRoad;
+import java.util.HashMap;
+
+public class Junction {
+        private final HashMap<Integer, Road> roadHashMap = new HashMap<>();
 
         public Junction() {
-            nRoad = new Road(1);
-            eRoad = new Road(2);
-            sRoad = new Road(3);
-            wRoad = new Road(4);
-        }
-
-        public Road getnRoad() {
-            return nRoad;
-        }
-        public Road geteRoad() {
-            return eRoad;
-        }
-        public Road getsRoad() {
-            return sRoad;
-        }
-        public Road getwRoad() {
-            return wRoad;
+            roadHashMap.put(1, new Road(1));        //North
+            roadHashMap.put(2, new Road(2));        //East
+            roadHashMap.put(3, new Road(3));        //South
+            roadHashMap.put(4, new Road(4));        //West
         }
 
         public Road getRoad(int roadId){
-            switch (roadId){
-                case 1:
-                    return nRoad;
-                case 2:
-                    return eRoad;
-                case 3:
-                    return sRoad;
-                case 4:
-                    return wRoad;
-                default:
-                    return null;
-            }
+            return roadHashMap.get(roadId);
         }
     }

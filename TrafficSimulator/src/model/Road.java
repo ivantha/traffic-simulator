@@ -1,89 +1,60 @@
 package model;
 
+import java.util.HashMap;
+
 import static main.Global.AVERAGE_SPACING;
 import static main.Global.LANE_POPULATION;
 
 public class Road {
     private final int roadId;
 
-    private final Lane inLane1;
-    private final Lane inLane2;
-    private final Lane inLane3;
-
-    private final Lane outLane4;
-    private final Lane outLane5;
-    private final Lane outLane6;
+    private final HashMap<Integer, Lane> laneHashMap = new HashMap<>();
+    private final HashMap<Integer, Lane> laneIntHashMap = new HashMap<>();
 
     public Road(int roadId) {
         this.roadId = roadId;
 
-        inLane1 = new Lane(1);
-        inLane2 = new Lane(2);
-        inLane3 = new Lane(3);
+        laneHashMap.put(1, new Lane(1));            //In-lane 1
+        laneHashMap.put(2, new Lane(2));            //In-lane 2
+        laneHashMap.put(3, new Lane(3));            //In-lane 3
+        laneHashMap.put(4, new Lane(4));            //Out-lane 1
+        laneHashMap.put(5, new Lane(5));            //Out-lane 2
+        laneHashMap.put(6, new Lane(6));            //Out-lane 3
 
-        outLane4 = new Lane(4);
-        outLane5 = new Lane(5);
-        outLane6 = new Lane(6);
+        laneIntHashMap.put(4, new Lane(4));         //Out-lane-int 4
+        laneIntHashMap.put(5, new Lane(5));         //Out-lane-int 5
+        laneIntHashMap.put(6, new Lane(6));         //Out-lane-int 6
     }
 
     public int getRoadId() {
         return roadId;
     }
-    public Lane getInLane1() {
-        return inLane1;
+    public Lane getLane(int laneId){
+        return laneHashMap.get(laneId);
     }
-    public Lane getInLane2() {
-        return inLane2;
-    }
-    public Lane getInLane3() {
-        return inLane3;
-    }
-    public Lane getOutLane4() {
-        return outLane4;
-    }
-    public Lane getOutLane5() {
-        return outLane5;
-    }
-    public Lane getOutLane6() {
-        return outLane6;
+    public Lane getIntLane(int laneId){
+        return laneIntHashMap.get(laneId);
     }
 
     public void populateRoad(){
-        if(inLane1.getVehicles().size() + inLane2.getVehicles().size() < LANE_POPULATION.get()){
+        if(laneHashMap.get(1).getVehicles().size() + laneHashMap.get(2).getVehicles().size() +
+                laneHashMap.get(3).getVehicles().size() < LANE_POPULATION.get()){
             generateInVehicle();
         }
     }
 
     public void generateInVehicle(){
         int origin = roadId;
-        int destination = origin + 1 + (int)((Math.random() + 0.4) * 2);
-        destination = origin + 1;
+        int preDestination = origin + 1 + (int)((Math.random() + 0.4) * 2);
+
+        int destination = preDestination;
         if(destination > 4){
             destination = destination - 4;
         }
 
         Vehicle vehicle = new Vehicle(origin, destination);
 
-        int des1 = origin + 1;
-        if(des1 > 4){
-            des1 = des1 - 4;
-        }
-        int des2 = origin + 2;
-        if(des2 > 4){
-            des2 = des2 - 4;
-        }
-        int des3 = origin + 3;
-        if(des3 > 4){
-            des3 = des3 - 4;
-        }
-
-        if(des1 == destination){
-            appendVehicleToInLane(vehicle, inLane1);
-        }else if(des2 == destination){
-            appendVehicleToInLane(vehicle, inLane2);
-        }else if(des3 == destination){
-            appendVehicleToInLane(vehicle, inLane3);
-        }
+        appendVehicleToInLane(vehicle, laneHashMap.get(preDestination - origin));
     }
 
     private void appendVehicleToInLane(Vehicle vehicle, Lane lane){
@@ -102,21 +73,7 @@ public class Road {
     }
 
     public boolean isOutLaneFree(int laneId, Vehicle vehicle){
-        Lane outLane;
-        switch (laneId){
-            case 4:
-                outLane = outLane4;
-                break;
-            case 5:
-                outLane = outLane5;
-                break;
-            case 6:
-                outLane = outLane6;
-                break;
-            default:
-                outLane = null;
-                break;
-        }
+        Lane outLane = laneHashMap.get(laneId);
 
         if(outLane.getVehicles().size() > 0){
             Vehicle frontVehicle = outLane.getVehicles().get(outLane.getVehicles().size() - 1);
@@ -132,17 +89,11 @@ public class Road {
 
     public void appendVehicleToOutLane(Vehicle vehicle, int laneId){
         vehicle.getTrajectory().setLocation(vehicle.getLength());
+        laneHashMap.get(laneId).addVehicleToQueue(vehicle);
+    }
 
-        switch (laneId){
-            case 4:
-                outLane4.addVehicleToQueue(vehicle);
-                break;
-            case 5:
-                outLane5.addVehicleToQueue(vehicle);
-                break;
-            case 6:
-                outLane6.addVehicleToQueue(vehicle);
-                break;
-        }
+    public void appendVehicleToOutIntLane(Vehicle vehicle, int laneId){
+        vehicle.getTrajectory().setLocation(0);
+        laneIntHashMap.get(laneId).addVehicleToQueue(vehicle);
     }
 }
