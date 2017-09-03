@@ -3,18 +3,17 @@ package model;
 import java.util.ArrayList;
 
 public class Lane {
-    private final LaneType laneType;
+    private final int laneId;
     private final ArrayList<Vehicle> vehicles;
 
-    public Lane(LaneType laneType) {
-        this.laneType = laneType;
+    public Lane(int laneId) {
+        this.laneId = laneId;
         this.vehicles = new ArrayList<>();
     }
 
-    public LaneType getLaneType() {
-        return laneType;
+    public int getLaneId() {
+        return laneId;
     }
-
     public ArrayList<Vehicle> getVehicles() {
         return vehicles;
     }

@@ -8,9 +8,7 @@ import java.util.Random;
 
 import static java.lang.Double.isInfinite;
 import static java.lang.Double.isNaN;
-import static main.Global.AVERAGE_SPACING;
-import static main.Global.AVERAGE_SPEED;
-import static main.Global.VEHICLE_HASH_MAP;
+import static main.Global.*;
 
 public class Vehicle {
     private int length = (int) (15 + (Math.random() * 10));
@@ -18,16 +16,16 @@ public class Vehicle {
     private Color color;
 
     private double velocity = 0;
-    private double desiredVelocity = Math.random() + 0.1 + (AVERAGE_SPEED.get() * 0.3);
-    private double maxAcceleration = 0.02;
-    private double breakingDeceleration = 0.15;
+    private double desiredVelocity = Math.random() * 3.5 + (AVERAGE_SPEED.get() * 0.5);
+    private double maxAcceleration = 0.4;
+    private double breakingDeceleration = 1.2;
 
     private double timeHeadway = 0.1;
     private double minimumSpacing = 3.0;
 
     private Trajectory trajectory;
 
-    private boolean isDebug = true;
+    private boolean isDebug = false;
     private boolean isOverlapping = false;
     private boolean hasInfiniteSpeed = false;
 

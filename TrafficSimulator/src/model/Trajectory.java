@@ -8,6 +8,7 @@ public class Trajectory {
     private double location;
 
     private int laneIndex;
+    private Road road;
     private Lane lane;
 
     public Trajectory(int origin, int destination, int vehicleLength) {
@@ -33,6 +34,12 @@ public class Trajectory {
     }
     public void setLaneIndex(int laneIndex) {
         this.laneIndex = laneIndex;
+    }
+    public Road getRoad() {
+        return road;
+    }
+    public void setRoad(Road road) {
+        this.road = road;
     }
     public Lane getLane() {
         return lane;

@@ -1,31 +1,29 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
-import static main.Global.LANE_POPULATION;
 import static main.Global.AVERAGE_SPACING;
+import static main.Global.LANE_POPULATION;
 
 public class Road {
     private final int roadId;
+
     private final Lane inLane1;
     private final Lane inLane2;
     private final Lane inLane3;
-    private final Lane outLane1;
-    private final Lane outLane2;
-    private final Lane outLane3;
 
-    private final ArrayList<Vehicle> outLaneQueue;
+    private final Lane outLane4;
+    private final Lane outLane5;
+    private final Lane outLane6;
 
     public Road(int roadId) {
         this.roadId = roadId;
-        inLane1 = new Lane(LaneType.IN_LANE);
-        inLane2 = new Lane(LaneType.IN_LANE);
-        inLane3 = new Lane(LaneType.IN_LANE);
-        outLane1 = new Lane(LaneType.OUT_LANE);
-        outLane2 = new Lane(LaneType.OUT_LANE);
-        outLane3 = new Lane(LaneType.OUT_LANE);
-        outLaneQueue = new ArrayList<>();
+
+        inLane1 = new Lane(1);
+        inLane2 = new Lane(2);
+        inLane3 = new Lane(3);
+
+        outLane4 = new Lane(4);
+        outLane5 = new Lane(5);
+        outLane6 = new Lane(6);
     }
 
     public int getRoadId() {
@@ -40,17 +38,14 @@ public class Road {
     public Lane getInLane3() {
         return inLane3;
     }
-    public Lane getOutLane1() {
-        return outLane1;
+    public Lane getOutLane4() {
+        return outLane4;
     }
-    public Lane getOutLane2() {
-        return outLane2;
+    public Lane getOutLane5() {
+        return outLane5;
     }
-    public Lane getOutLane3() {
-        return outLane3;
-    }
-    public ArrayList<Vehicle> getOutLaneQueue() {
-        return outLaneQueue;
+    public Lane getOutLane6() {
+        return outLane6;
     }
 
     public void populateRoad(){
@@ -60,23 +55,33 @@ public class Road {
     }
 
     public void generateInVehicle(){
-        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Randomize vehicle destinations.
         int origin = roadId;
-        int destination = roadId + 1;
-        if(destination == 5){
-            destination = 1;
+        int destination = origin + 1 + (int)((Math.random() + 0.4) * 2);
+        destination = origin + 1;
+        if(destination > 4){
+            destination = destination - 4;
         }
-        Vehicle vehicle = new Vehicle(origin, destination);
-        appendVehicleToRandomInLane(vehicle);
-    }
 
-    public void appendVehicleToRandomInLane(Vehicle vehicle){
-        double seed = Math.random();
-        if(0.3 > seed){
+        Vehicle vehicle = new Vehicle(origin, destination);
+
+        int des1 = origin + 1;
+        if(des1 > 4){
+            des1 = des1 - 4;
+        }
+        int des2 = origin + 2;
+        if(des2 > 4){
+            des2 = des2 - 4;
+        }
+        int des3 = origin + 3;
+        if(des3 > 4){
+            des3 = des3 - 4;
+        }
+
+        if(des1 == destination){
             appendVehicleToInLane(vehicle, inLane1);
-        }else if(0.6 > seed){
+        }else if(des2 == destination){
             appendVehicleToInLane(vehicle, inLane2);
-        }else{
+        }else if(des3 == destination){
             appendVehicleToInLane(vehicle, inLane3);
         }
     }
@@ -96,28 +101,48 @@ public class Road {
         }
     }
 
-    public void appendVehicleToRandomOutLane(Vehicle vehicle){
-        outLaneQueue.add(vehicle);
+    public boolean isOutLaneFree(int laneId, Vehicle vehicle){
+        Lane outLane;
+        switch (laneId){
+            case 4:
+                outLane = outLane4;
+                break;
+            case 5:
+                outLane = outLane5;
+                break;
+            case 6:
+                outLane = outLane6;
+                break;
+            default:
+                outLane = null;
+                break;
+        }
 
-        refreshOutLaneQueue();
+        if(outLane.getVehicles().size() > 0){
+            Vehicle frontVehicle = outLane.getVehicles().get(outLane.getVehicles().size() - 1);
+            if (vehicle.getLength() < frontVehicle.getTrajectory().getLocation() - frontVehicle.getLength() - AVERAGE_SPACING.get()) {
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return true;
+        }
     }
 
-    public void refreshOutLaneQueue(){
-        Iterator<Vehicle> vehicleIterator = outLaneQueue.iterator();
-        while (vehicleIterator.hasNext()){
-            Vehicle v = vehicleIterator.next();
+    public void appendVehicleToOutLane(Vehicle vehicle, int laneId){
+        vehicle.getTrajectory().setLocation(vehicle.getLength());
 
-            if(outLane1.getVehicles().size() > 0){
-                Vehicle lastVehicle = outLane1.getVehicles().get(outLane1.getVehicles().size() - 1);
-                if(v.getLength() > lastVehicle.getTrajectory().getLocation() - lastVehicle.getLength() - AVERAGE_SPACING.get()){
-                    break;
-                }
-            }
-
-            vehicleIterator.remove();
-
-            v.getTrajectory().setLocation(v.getLength());
-            outLane1.addVehicleToQueue(v);
+        switch (laneId){
+            case 4:
+                outLane4.addVehicleToQueue(vehicle);
+                break;
+            case 5:
+                outLane5.addVehicleToQueue(vehicle);
+                break;
+            case 6:
+                outLane6.addVehicleToQueue(vehicle);
+                break;
         }
     }
 }

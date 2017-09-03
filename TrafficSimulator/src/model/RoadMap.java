@@ -13,8 +13,8 @@ public class RoadMap {
 
     public void populateRoadMap(){
         junction.getnRoad().populateRoad();
-//        junction.geteRoad().populateRoad();
-//        junction.getsRoad().populateRoad();
-//        junction.getwRoad().populateRoad();
+        junction.geteRoad().populateRoad();
+        junction.getsRoad().populateRoad();
+        junction.getwRoad().populateRoad();
     }
 }

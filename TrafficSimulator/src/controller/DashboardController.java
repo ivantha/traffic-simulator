@@ -1,6 +1,10 @@
 package controller;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.Slider;
+import constant.LaneType;
+import javafx.scene.shape.Rectangle;
 import util.Draw;
 import main.Global;
 import javafx.animation.KeyFrame;
@@ -11,7 +15,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
-import model.LaneType;
 import model.Road;
 import model.RoadMap;
 import model.Vehicle;
@@ -20,8 +23,8 @@ import java.net.URL;
 import java.util.*;
 
 import static main.Global.REFRESH_INTERVAL;
-import static model.LaneType.IN_LANE;
-import static model.LaneType.OUT_LANE;
+import static constant.LaneType.IN_LANE;
+import static constant.LaneType.OUT_LANE;
 
 public class DashboardController implements Initializable {
     @FXML
@@ -33,6 +36,8 @@ public class DashboardController implements Initializable {
 
     @FXML
     private AnchorPane canvasAnchorPane;
+    @FXML
+    private AnchorPane topCanvasAnchorPane;
 
     @FXML
     private Button startButton;
@@ -81,7 +86,7 @@ public class DashboardController implements Initializable {
     }
 
     private void stop() {
-        if(null != mainTimer) {
+        if (null != mainTimer) {
             mainTimer.cancel();
             mainTimer.purge();
         }
@@ -115,23 +120,18 @@ public class DashboardController implements Initializable {
             moveVehicles(wRoad.getInLane2().getVehicles(), IN_LANE);
             moveVehicles(wRoad.getInLane3().getVehicles(), IN_LANE);
 
-            moveVehicles(nRoad.getOutLane1().getVehicles(), OUT_LANE);
-            moveVehicles(nRoad.getOutLane2().getVehicles(), OUT_LANE);
-            moveVehicles(nRoad.getOutLane3().getVehicles(), OUT_LANE);
-            moveVehicles(eRoad.getOutLane1().getVehicles(), OUT_LANE);
-            moveVehicles(eRoad.getOutLane2().getVehicles(), OUT_LANE);
-            moveVehicles(eRoad.getOutLane3().getVehicles(), OUT_LANE);
-            moveVehicles(sRoad.getOutLane1().getVehicles(), OUT_LANE);
-            moveVehicles(sRoad.getOutLane2().getVehicles(), OUT_LANE);
-            moveVehicles(sRoad.getOutLane3().getVehicles(), OUT_LANE);
-            moveVehicles(wRoad.getOutLane1().getVehicles(), OUT_LANE);
-            moveVehicles(wRoad.getOutLane2().getVehicles(), OUT_LANE);
-            moveVehicles(wRoad.getOutLane3().getVehicles(), OUT_LANE);
-
-            nRoad.refreshOutLaneQueue();
-            eRoad.refreshOutLaneQueue();
-            sRoad.refreshOutLaneQueue();
-            wRoad.refreshOutLaneQueue();
+            moveVehicles(nRoad.getOutLane6().getVehicles(), OUT_LANE);
+            moveVehicles(nRoad.getOutLane5().getVehicles(), OUT_LANE);
+            moveVehicles(nRoad.getOutLane4().getVehicles(), OUT_LANE);
+            moveVehicles(eRoad.getOutLane6().getVehicles(), OUT_LANE);
+            moveVehicles(eRoad.getOutLane5().getVehicles(), OUT_LANE);
+            moveVehicles(eRoad.getOutLane4().getVehicles(), OUT_LANE);
+            moveVehicles(sRoad.getOutLane6().getVehicles(), OUT_LANE);
+            moveVehicles(sRoad.getOutLane5().getVehicles(), OUT_LANE);
+            moveVehicles(sRoad.getOutLane4().getVehicles(), OUT_LANE);
+            moveVehicles(wRoad.getOutLane6().getVehicles(), OUT_LANE);
+            moveVehicles(wRoad.getOutLane5().getVehicles(), OUT_LANE);
+            moveVehicles(wRoad.getOutLane4().getVehicles(), OUT_LANE);
         }
 
         public void moveVehicles(ArrayList<Vehicle> vehicles, LaneType laneType) {
@@ -141,11 +141,10 @@ public class DashboardController implements Initializable {
                 Vehicle v = vehicleIterator.next();
                 v.move();
 
-                //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Fix vehicle removal condition. Some vehicles get removed prematurely
-                if (v.getTrajectory().getLocation() + v.getLength() >= Global.ROAD_LENGTH) {
+                if (v.getTrajectory().getLocation() >= Global.ROAD_LENGTH) {
                     vehicleIterator.remove();
                     if (laneType == IN_LANE) {
-                        changeRoad(v);
+                        insertIntoIntersection(v);
                     }
                     for (int i = 0; i < vehicles.size(); i++) {
                         vehicles.get(i).getTrajectory().setLaneIndex(i);
@@ -154,22 +153,30 @@ public class DashboardController implements Initializable {
             }
         }
 
-        public void changeRoad(Vehicle vehicle) {
-            switch (vehicle.getTrajectory().getDestination()) {
-                case 1:
-                    nRoad.appendVehicleToRandomOutLane(vehicle);
-                    break;
-                case 2:
-                    eRoad.appendVehicleToRandomOutLane(vehicle);
-                    break;
-                case 3:
-                    sRoad.appendVehicleToRandomOutLane(vehicle);
-                    break;
-                case 4:
-                    wRoad.appendVehicleToRandomOutLane(vehicle);
-                    break;
-                default:
-                    System.out.println(vehicle.getTrajectory().getDestination());
+        public void insertIntoIntersection(Vehicle vehicle) {
+            int destination = vehicle.getTrajectory().getDestination();
+            Road destinationRoad = roadMap.getJunction().getRoad(destination);
+
+            Rectangle rect = new Rectangle();
+
+            if (destinationRoad.isOutLaneFree(6, vehicle)) {
+                Platform.runLater(() -> Draw.animateIntersection(topCanvasAnchorPane, rect, vehicle, vehicle.getTrajectory().getOrigin(),
+                        vehicle.getTrajectory().getLane().getLaneId(), vehicle.getTrajectory().getDestination(), 6, event -> {
+                            topCanvasAnchorPane.getChildren().remove(rect);
+                            destinationRoad.appendVehicleToOutLane(vehicle, 6);
+                        }));
+            } else if (destinationRoad.isOutLaneFree(5, vehicle)) {
+                Platform.runLater(() -> Draw.animateIntersection(topCanvasAnchorPane, rect, vehicle, vehicle.getTrajectory().getOrigin(),
+                        vehicle.getTrajectory().getLane().getLaneId(), vehicle.getTrajectory().getDestination(), 5, event -> {
+                            topCanvasAnchorPane.getChildren().remove(rect);
+                            destinationRoad.appendVehicleToOutLane(vehicle, 5);
+                        }));
+            } else if (destinationRoad.isOutLaneFree(4, vehicle)) {
+                Platform.runLater(() -> Draw.animateIntersection(topCanvasAnchorPane, rect, vehicle, vehicle.getTrajectory().getOrigin(),
+                        vehicle.getTrajectory().getLane().getLaneId(), vehicle.getTrajectory().getDestination(), 4, event -> {
+                            topCanvasAnchorPane.getChildren().remove(rect);
+                            destinationRoad.appendVehicleToOutLane(vehicle, 4);
+                        }));
             }
         }
     }
