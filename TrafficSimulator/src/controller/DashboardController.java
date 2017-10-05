@@ -5,6 +5,7 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Slider;
 import constant.LaneType;
 import javafx.scene.shape.Rectangle;
+import model.*;
 import util.Draw;
 import main.Global;
 import javafx.animation.KeyFrame;
@@ -15,16 +16,16 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
-import model.Road;
-import model.RoadMap;
-import model.Vehicle;
 
 import java.net.URL;
 import java.util.*;
 
+import static constant.LaneType.INTERSECTION_LANE;
+import static java.lang.Math.PI;
 import static main.Global.REFRESH_INTERVAL;
 import static constant.LaneType.IN_LANE;
 import static constant.LaneType.OUT_LANE;
+import static main.Global.ROAD_RADIUS;
 
 public class DashboardController implements Initializable {
     @FXML
@@ -37,12 +38,10 @@ public class DashboardController implements Initializable {
     @FXML
     private AnchorPane canvasAnchorPane;
     @FXML
-    private AnchorPane topCanvasAnchorPane;
+    private AnchorPane backgroundCanvasAnchorPane;
 
     @FXML
-    private Button startButton;
-    @FXML
-    private Button stopButton;
+    private Button startStopButton;
     @FXML
     private Button resetButton;
 
@@ -55,13 +54,20 @@ public class DashboardController implements Initializable {
     private Road eRoad;
     private Road sRoad;
     private Road wRoad;
+    private Intersection intersection;
+    private HashMap<Integer, Lane> nIntRoad;
+    private HashMap<Integer, Lane> eIntRoad;
+    private HashMap<Integer, Lane> sIntRoad;
+    private HashMap<Integer, Lane> wIntRoad;
+
+    private boolean isStarted = false;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Draw.drawMap(roadMap, canvasAnchorPane);
+        Draw.drawMap(roadMap, backgroundCanvasAnchorPane);
 
-        vehicleDensitySlider.valueProperty().bindBidirectional(Global.LANE_POPULATION);
-        averageGapSlider.valueProperty().bindBidirectional(Global.AVERAGE_SPACING);
+        vehicleDensitySlider.valueProperty().bindBidirectional(Global.VEHICLE_DENSITY);
+        averageGapSlider.valueProperty().bindBidirectional(Global.AVERAGE_GAP);
         averageSpeedSlider.valueProperty().bindBidirectional(Global.AVERAGE_SPEED);
 
         reset();
@@ -71,16 +77,24 @@ public class DashboardController implements Initializable {
         }));
         uiUpdater.setCycleCount(Timeline.INDEFINITE);
 
-        startButton.setOnAction(event -> {
-            stop();
+        startStopButton.setOnAction(event -> {
+            if(!isStarted){
+                stop();
 
-            mainTimer = new Timer();
-            mainTimerTask = new CustomerTimerTask();
-            mainTimer.schedule(mainTimerTask, 0, REFRESH_INTERVAL);
-            uiUpdater.play();
+                mainTimer = new Timer();
+                mainTimerTask = new CustomerTimerTask();
+                mainTimer.schedule(mainTimerTask, 0, REFRESH_INTERVAL);
+                uiUpdater.play();
+
+                isStarted = true;
+                startStopButton.setText("Stop");
+            }else{
+                stop();
+
+                isStarted = false;
+                startStopButton.setText("Start");
+            }
         });
-
-        stopButton.setOnAction(event -> stop());
 
         resetButton.setOnAction(event -> reset());
     }
@@ -100,6 +114,13 @@ public class DashboardController implements Initializable {
         eRoad = roadMap.getJunction().getRoad(2);
         sRoad = roadMap.getJunction().getRoad(3);
         wRoad = roadMap.getJunction().getRoad(4);
+
+        intersection = roadMap.getJunction().getIntersection();
+
+        nIntRoad = intersection.getNorthIntRoad();
+        eIntRoad = intersection.getEastIntRoad();
+        sIntRoad = intersection.getSouthIntRoad();
+        wIntRoad = intersection.getWestIntRoad();
     }
 
     class CustomerTimerTask extends TimerTask {
@@ -132,6 +153,19 @@ public class DashboardController implements Initializable {
             moveVehicles(wRoad.getLane(6).getVehicles(), OUT_LANE);
             moveVehicles(wRoad.getLane(5).getVehicles(), OUT_LANE);
             moveVehicles(wRoad.getLane(4).getVehicles(), OUT_LANE);
+
+            moveVehicles(nIntRoad.get(7).getVehicles(), INTERSECTION_LANE);
+            moveVehicles(nIntRoad.get(8).getVehicles(), INTERSECTION_LANE);
+            moveVehicles(nIntRoad.get(9).getVehicles(), INTERSECTION_LANE);
+            moveVehicles(eIntRoad.get(7).getVehicles(), INTERSECTION_LANE);
+            moveVehicles(eIntRoad.get(8).getVehicles(), INTERSECTION_LANE);
+            moveVehicles(eIntRoad.get(9).getVehicles(), INTERSECTION_LANE);
+            moveVehicles(sIntRoad.get(7).getVehicles(), INTERSECTION_LANE);
+            moveVehicles(sIntRoad.get(8).getVehicles(), INTERSECTION_LANE);
+            moveVehicles(sIntRoad.get(9).getVehicles(), INTERSECTION_LANE);
+            moveVehicles(wIntRoad.get(7).getVehicles(), INTERSECTION_LANE);
+            moveVehicles(wIntRoad.get(8).getVehicles(), INTERSECTION_LANE);
+            moveVehicles(wIntRoad.get(9).getVehicles(), INTERSECTION_LANE);
         }
 
         public void moveVehicles(ArrayList<Vehicle> vehicles, LaneType laneType) {
@@ -141,28 +175,51 @@ public class DashboardController implements Initializable {
                 Vehicle v = vehicleIterator.next();
                 v.move();
 
-                if (v.getTrajectory().getLocation() >= Global.ROAD_LENGTH) {
-                    vehicleIterator.remove();
-                    if (laneType == IN_LANE) {
-                        insertIntoIntersection(v);
+                if(laneType == INTERSECTION_LANE){
+                    double laneWidth = ROAD_RADIUS / 6;
+
+                    switch (v.trajectory.destinationDiff){
+                        case 1:
+                            double thetaRadSmall = v.trajectory.getLocation() / (laneWidth + v.length / 2);
+                            if(thetaRadSmall >= PI / 2){
+                                vehicleIterator.remove();
+                                roadMap.getJunction().getRoad(v.trajectory.destination).appendVehicleToOutLane(v, 6);
+
+                                for (int i = 0; i < vehicles.size(); i++) {
+                                    vehicles.get(i).trajectory.setLaneIndex(i);
+                                }
+                            }
+                            break;
+                        case 2:
+                            if(v.trajectory.getLocation() >= ROAD_RADIUS * 2){
+
+                            }
+                            break;
+                        case 3:
+                            double thetaRadLarge = v.trajectory.getLocation() / (ROAD_RADIUS + laneWidth + v.length / 2);
+                            if(thetaRadLarge >= PI / 2){
+                                vehicleIterator.remove();
+                                roadMap.getJunction().getRoad(v.trajectory.destination).appendVehicleToOutLane(v, 4);
+
+                                for (int i = 0; i < vehicles.size(); i++) {
+                                    vehicles.get(i).trajectory.setLaneIndex(i);
+                                }
+                            }
+                            break;
                     }
-                    for (int i = 0; i < vehicles.size(); i++) {
-                        vehicles.get(i).getTrajectory().setLaneIndex(i);
+                }else{
+                    if(v.trajectory.getLocation() >= Global.ROAD_LENGTH){
+                        vehicleIterator.remove();
+
+                        if(laneType == IN_LANE){
+                            intersection.appendVehicleToIntLane(v, v.trajectory.origin, 6 + v.trajectory.destinationDiff);
+                        }
+
+                        for (int i = 0; i < vehicles.size(); i++) {
+                            vehicles.get(i).trajectory.setLaneIndex(i);
+                        }
                     }
                 }
-            }
-        }
-
-        public void insertIntoIntersection(Vehicle vehicle) {
-            int destination = vehicle.getTrajectory().getDestination();
-            Road destinationRoad = roadMap.getJunction().getRoad(destination);
-
-            if (destinationRoad.isOutLaneFree(6, vehicle)) {
-                destinationRoad.appendVehicleToOutIntLane(vehicle, 6);
-            } else if (destinationRoad.isOutLaneFree(5, vehicle)) {
-                destinationRoad.appendVehicleToOutIntLane(vehicle, 5);
-            } else if (destinationRoad.isOutLaneFree(4, vehicle)) {
-                destinationRoad.appendVehicleToOutIntLane(vehicle, 4);
             }
         }
     }
