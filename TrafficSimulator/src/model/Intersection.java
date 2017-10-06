@@ -27,17 +27,18 @@ public class Intersection {
     public HashMap<Integer, Lane> getNorthIntRoad() {
         return northIntRoad;
     }
-
     public HashMap<Integer, Lane> getEastIntRoad() {
         return eastIntRoad;
     }
-
     public HashMap<Integer, Lane> getSouthIntRoad() {
         return southIntRoad;
     }
-
     public HashMap<Integer, Lane> getWestIntRoad() {
         return westIntRoad;
+    }
+
+    public Lane getIntLane(int roadId, int laneId){
+        return intLaneMap.get(roadId).get(laneId);
     }
 
     public void appendVehicleToIntLane(Vehicle vehicle, int roadId, int laneId){

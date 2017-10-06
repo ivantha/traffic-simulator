@@ -73,8 +73,10 @@ public class Vehicle {
     }
 
     public double getAcceleration() {
-        double distanceToNextCar = Global.CANVAS_RADIUS;
-        if (!trajectory.isAtFront()) {
+        double distanceToNextCar;
+        if(trajectory.isAtFront()){
+            distanceToNextCar = Global.CANVAS_RADIUS - trajectory.getLocation();
+        }else{
             Vehicle frontVehicle = trajectory.getFrontVehicle();
             distanceToNextCar = frontVehicle.trajectory.getLocation() - trajectory.getLocation() - frontVehicle.length;
         }
@@ -160,9 +162,8 @@ public class Vehicle {
         double temp_step = (temp_velocity * delta) + (0.5 * acceleration * Math.pow(delta, 2));
 
         // I am not sure if we need this condition. >> Just a way to stop negative steps and over steps
-        if (temp_step >= 0
-                && (trajectory.getFrontVehicle() == null
-                        || trajectory.getLocation() + AVERAGE_GAP.get() + temp_step < trajectory.getFrontVehicle().trajectory.getLocation())) {
+        if (temp_step >= 0 && (trajectory.getFrontVehicle() == null
+                || trajectory.getLocation() + AVERAGE_GAP.get() + Math.abs(temp_step) < trajectory.getFrontVehicle().trajectory.getLocation() - trajectory.getFrontVehicle().length)) {
             velocity += acceleration * delta;
             double step = (velocity * delta) + (0.5 * acceleration * Math.pow(delta, 2));
 

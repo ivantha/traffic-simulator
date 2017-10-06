@@ -153,15 +153,43 @@ public class Draw {
 
         drawVehiclesOnIntersection(canvas, roadMap.getJunction().getIntersection().getNorthIntRoad().get(7).getVehicles(),
                 CANVAS_RADIUS + (ROAD_RADIUS / 6 * 5), CANVAS_RADIUS - ROAD_RADIUS,
-                ROAD_RADIUS / 6,7);
-
+                ROAD_RADIUS / 6, 1,7);
         drawVehiclesOnIntersection(canvas, roadMap.getJunction().getIntersection().getNorthIntRoad().get(8).getVehicles(),
                 CANVAS_RADIUS + (ROAD_RADIUS / 6 * 3), CANVAS_RADIUS - ROAD_RADIUS,
-                0, 8);
-
+                0, 1, 8);
         drawVehiclesOnIntersection(canvas, roadMap.getJunction().getIntersection().getNorthIntRoad().get(9).getVehicles(),
                 CANVAS_RADIUS + (ROAD_RADIUS / 6 * 1), CANVAS_RADIUS - ROAD_RADIUS,
-                ROAD_RADIUS + ROAD_RADIUS / 6, 9);
+                ROAD_RADIUS + ROAD_RADIUS / 6, 1, 9);
+
+        drawVehiclesOnIntersection(canvas, roadMap.getJunction().getIntersection().getEastIntRoad().get(7).getVehicles(),
+                CANVAS_RADIUS + ROAD_RADIUS, CANVAS_RADIUS + (ROAD_RADIUS / 6 * 5),
+                ROAD_RADIUS / 6,2, 7);
+        drawVehiclesOnIntersection(canvas, roadMap.getJunction().getIntersection().getEastIntRoad().get(8).getVehicles(),
+                CANVAS_RADIUS + ROAD_RADIUS, CANVAS_RADIUS + (ROAD_RADIUS / 6 * 3),
+                0, 2, 8);
+        drawVehiclesOnIntersection(canvas, roadMap.getJunction().getIntersection().getEastIntRoad().get(9).getVehicles(),
+                CANVAS_RADIUS + ROAD_RADIUS, CANVAS_RADIUS + (ROAD_RADIUS / 6 * 1),
+                ROAD_RADIUS + ROAD_RADIUS / 6, 2, 9);
+
+        drawVehiclesOnIntersection(canvas, roadMap.getJunction().getIntersection().getSouthIntRoad().get(7).getVehicles(),
+                CANVAS_RADIUS - (ROAD_RADIUS / 6 * 5), CANVAS_RADIUS + ROAD_RADIUS,
+                ROAD_RADIUS / 6, 3,7);
+        drawVehiclesOnIntersection(canvas, roadMap.getJunction().getIntersection().getSouthIntRoad().get(8).getVehicles(),
+                CANVAS_RADIUS - (ROAD_RADIUS / 6 * 3), CANVAS_RADIUS + ROAD_RADIUS,
+                0, 3, 8);
+        drawVehiclesOnIntersection(canvas, roadMap.getJunction().getIntersection().getSouthIntRoad().get(9).getVehicles(),
+                CANVAS_RADIUS - (ROAD_RADIUS / 6 * 1), CANVAS_RADIUS + ROAD_RADIUS,
+                ROAD_RADIUS + ROAD_RADIUS / 6, 3, 9);
+
+        drawVehiclesOnIntersection(canvas, roadMap.getJunction().getIntersection().getWestIntRoad().get(7).getVehicles(),
+                ROAD_LENGTH, CANVAS_RADIUS - (ROAD_RADIUS / 6 * 5),
+                ROAD_RADIUS / 6,4, 7);
+        drawVehiclesOnIntersection(canvas, roadMap.getJunction().getIntersection().getWestIntRoad().get(8).getVehicles(),
+                ROAD_LENGTH, CANVAS_RADIUS - (ROAD_RADIUS / 6 * 3),
+                0, 4, 8);
+        drawVehiclesOnIntersection(canvas, roadMap.getJunction().getIntersection().getWestIntRoad().get(9).getVehicles(),
+                ROAD_LENGTH, CANVAS_RADIUS - (ROAD_RADIUS / 6 * 1),
+                ROAD_RADIUS + ROAD_RADIUS / 6, 4, 9);
     }
 
     private static void drawVehiclesOnLane(AnchorPane canvas, Collection<Vehicle> vehicles, Direction direction, LaneType laneType, double offset) {
@@ -258,7 +286,7 @@ public class Draw {
         }
     }
 
-    public static void drawVehiclesOnIntersection(AnchorPane canvas, Collection<Vehicle> vehicles, double startX, double startY, double radius, int intLaneType){
+    public static void drawVehiclesOnIntersection(AnchorPane canvas, Collection<Vehicle> vehicles, double startX, double startY, double radius, int originRoadId, int originLaneId){
         Iterator<Vehicle> vehicleIterator = vehicles.iterator();
 
         while (vehicleIterator.hasNext()) {
@@ -267,31 +295,112 @@ public class Draw {
             Rectangle rect = new Rectangle();
             rect.setFill(vehicle.getColor());
 
-            rect.setHeight(vehicle.length);
-            rect.setWidth(vehicle.width);
-
             double thetaRad = vehicle.trajectory.getLocation() / (radius + vehicle.length / 2);
 
-            switch (intLaneType){
-                case 7:
-                    rect.setX(startX - vehicle.width / 2);
-                    rect.setY(startY - vehicle.length);
-
-                    rect.getTransforms().add(new Rotate((-1) * thetaRad * 180 / PI, CANVAS_RADIUS + ROAD_RADIUS + vehicle.length / 2, ROAD_LENGTH - vehicle.length / 2));
-                    break;
-                case 8:
+            switch (originRoadId){
+                case 1:
                     rect.setHeight(vehicle.length);
                     rect.setWidth(vehicle.width);
 
-                    rect.setX(startX - vehicle.width / 2);
-                    rect.setY(ROAD_LENGTH + vehicle.trajectory.getLocation() - vehicle.length);
+                    switch (originLaneId){
+                        case 7:
+                            rect.setX(startX - vehicle.width / 2);
+                            rect.setY(startY - vehicle.length);
 
+                            rect.getTransforms().add(new Rotate((-1) * thetaRad * 180 / PI, CANVAS_RADIUS + ROAD_RADIUS + vehicle.length / 2, ROAD_LENGTH - vehicle.length / 2));
+                            break;
+                        case 8:
+                            rect.setHeight(vehicle.length);
+                            rect.setWidth(vehicle.width);
+
+                            rect.setX(startX - vehicle.width / 2);
+                            rect.setY(ROAD_LENGTH + vehicle.trajectory.getLocation() - vehicle.length);
+                            break;
+                        case 9:
+                            rect.setX(startX - vehicle.width / 2);
+                            rect.setY(startY - vehicle.length);
+
+                            rect.getTransforms().add(new Rotate(thetaRad * 180 / PI, ROAD_LENGTH - vehicle.length / 2, ROAD_LENGTH - vehicle.length / 2));
+                            break;
+                    }
                     break;
-                case 9:
-                    rect.setX(startX - vehicle.width / 2);
-                    rect.setY(startY - vehicle.length);
+                case 2:
+                    rect.setHeight(vehicle.width);
+                    rect.setWidth(vehicle.length);
 
-                    rect.getTransforms().add(new Rotate(thetaRad * 180 / PI, ROAD_LENGTH - vehicle.length / 2, ROAD_LENGTH - vehicle.length / 2));
+                    switch (originLaneId){
+                        case 7:
+                            rect.setX(startX);
+                            rect.setY(startY - vehicle.width / 2);
+
+                            rect.getTransforms().add(new Rotate((-1) * thetaRad * 180 / PI, CANVAS_RADIUS + ROAD_RADIUS + vehicle.length / 2, CANVAS_RADIUS + ROAD_RADIUS + vehicle.length / 2));
+                            break;
+                        case 8:
+                            rect.setHeight(vehicle.width);
+                            rect.setWidth(vehicle.length);
+
+                            rect.setX(CANVAS_RADIUS + ROAD_RADIUS - vehicle.trajectory.getLocation());
+                            rect.setY(startY - vehicle.width / 2);
+                            break;
+                        case 9:
+                            rect.setX(startX);
+                            rect.setY(startY - vehicle.width / 2);
+
+                            rect.getTransforms().add(new Rotate(thetaRad * 180 / PI, CANVAS_RADIUS + ROAD_RADIUS + vehicle.length / 2, ROAD_LENGTH - vehicle.length / 2));
+                            break;
+                    }
+                    break;
+                case 3:
+                    rect.setHeight(vehicle.length);
+                    rect.setWidth(vehicle.width);
+
+                    switch (originLaneId){
+                        case 7:
+                            rect.setX(startX - vehicle.width / 2);
+                            rect.setY(startY);
+
+                            rect.getTransforms().add(new Rotate((-1) * thetaRad * 180 / PI, ROAD_LENGTH - vehicle.length / 2, CANVAS_RADIUS + ROAD_RADIUS + vehicle.length / 2));
+                            break;
+                        case 8:
+                            rect.setHeight(vehicle.length);
+                            rect.setWidth(vehicle.width);
+
+                            rect.setX(startX - vehicle.width / 2);
+                            rect.setY(CANVAS_RADIUS + ROAD_RADIUS - vehicle.trajectory.getLocation());
+                            break;
+                        case 9:
+                            rect.setX(startX - vehicle.width / 2);
+                            rect.setY(startY);
+
+                            rect.getTransforms().add(new Rotate(thetaRad * 180 / PI, CANVAS_RADIUS + ROAD_RADIUS + vehicle.length / 2, CANVAS_RADIUS + ROAD_RADIUS + vehicle.length / 2));
+                            break;
+                    }
+                    break;
+                case 4:
+                    rect.setHeight(vehicle.width);
+                    rect.setWidth(vehicle.length);
+
+                    switch (originLaneId){
+                        case 7:
+                            rect.setX(startX - vehicle.length);
+                            rect.setY(startY - vehicle.width / 2);
+
+                            rect.getTransforms().add(new Rotate((-1) * thetaRad * 180 / PI, ROAD_LENGTH - vehicle.length / 2, ROAD_LENGTH - vehicle.length / 2));
+                            break;
+                        case 8:
+                            rect.setHeight(vehicle.width);
+                            rect.setWidth(vehicle.length);
+
+                            rect.setX(ROAD_LENGTH + vehicle.trajectory.getLocation() - vehicle.length);
+                            rect.setY(startY - vehicle.width / 2);
+                            break;
+                        case 9:
+                            rect.setX(startX - vehicle.length);
+                            rect.setY(startY - vehicle.width / 2);
+
+                            rect.getTransforms().add(new Rotate(thetaRad * 180 / PI, ROAD_LENGTH - vehicle.length / 2, CANVAS_RADIUS + ROAD_RADIUS + vehicle.length / 2));
+                            break;
+                    }
                     break;
             }
 

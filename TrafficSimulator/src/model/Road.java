@@ -75,21 +75,6 @@ public class Road {
         }
     }
 
-    public boolean isOutLaneFree(int laneId, Vehicle vehicle){
-        Lane outLane = laneHashMap.get(laneId);
-
-        if(outLane.getVehicles().size() > 0){
-            Vehicle frontVehicle = outLane.getVehicles().get(outLane.getVehicles().size() - 1);
-            if (vehicle.length < frontVehicle.trajectory.getLocation() - frontVehicle.length - AVERAGE_GAP.get()) {
-                return true;
-            }else{
-                return false;
-            }
-        }else{
-            return true;
-        }
-    }
-
     public void appendVehicleToOutLane(Vehicle vehicle, int laneId){
         vehicle.trajectory.setLocation(vehicle.length);
         laneHashMap.get(laneId).addVehicleToQueue(vehicle);

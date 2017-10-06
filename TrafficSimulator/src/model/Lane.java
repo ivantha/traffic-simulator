@@ -5,6 +5,7 @@ import main.Global;
 
 import java.util.ArrayList;
 
+import static main.Global.AVERAGE_GAP;
 import static main.Global.ROAD_LENGTH;
 import static main.Global.ROAD_RADIUS;
 
@@ -66,4 +67,16 @@ public class Lane {
         vehicle.trajectory.setLaneIndex(vehicles.size() - 1);
     }
 
+    public boolean isSapceAvailable(Vehicle vehicle){
+        if(getVehicles().size() > 0){
+            Vehicle frontVehicle = getVehicles().get(getVehicles().size() - 1);
+            if (vehicle.length < frontVehicle.trajectory.getLocation() - frontVehicle.length - AVERAGE_GAP.get()) {
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return true;
+        }
+    }
 }

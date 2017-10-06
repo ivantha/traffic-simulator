@@ -19,7 +19,6 @@
 
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
-
 }
 
 .tab{
@@ -72,6 +71,10 @@
     -fx-background-image: url("../icons/theme_white.png");
 }
 
-#closeButton{
-    -fx-background-color: transparent;
+.slider > .thumb{
+    -fx-background-color: #1565C0;
+}
+
+.jfx-toggle-button{
+    -jfx-toggle-color: #1565C0;
 }

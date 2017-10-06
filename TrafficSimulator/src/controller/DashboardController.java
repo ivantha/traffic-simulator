@@ -1,5 +1,7 @@
 package controller;
 
+import com.jfoenix.controls.JFXSlider;
+import com.jfoenix.controls.JFXToggleButton;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Slider;
@@ -29,11 +31,20 @@ import static main.Global.ROAD_RADIUS;
 
 public class DashboardController implements Initializable {
     @FXML
-    private Slider vehicleDensitySlider;
+    private JFXToggleButton northToggleButton;
     @FXML
-    private Slider averageSpeedSlider;
+    private JFXToggleButton eastToggleButton;
     @FXML
-    private Slider averageGapSlider;
+    private JFXToggleButton southToggleButton;
+    @FXML
+    private JFXToggleButton westToggleButton;
+
+    @FXML
+    private JFXSlider vehicleDensitySlider;
+    @FXML
+    private JFXSlider averageSpeedSlider;
+    @FXML
+    private JFXSlider averageGapSlider;
 
     @FXML
     private AnchorPane canvasAnchorPane;
@@ -97,6 +108,11 @@ public class DashboardController implements Initializable {
         });
 
         resetButton.setOnAction(event -> reset());
+
+        northToggleButton.setOnAction(event -> roadMap.setNorthEnabled(northToggleButton.isSelected()));
+        eastToggleButton.setOnAction(event -> roadMap.setEastEnabled(eastToggleButton.isSelected()));
+        southToggleButton.setOnAction(event -> roadMap.setSouthEnabled(southToggleButton.isSelected()));
+        westToggleButton.setOnAction(event -> roadMap.setWestEnabled(westToggleButton.isSelected()));
     }
 
     private void stop() {
@@ -173,58 +189,136 @@ public class DashboardController implements Initializable {
 
             while (vehicleIterator.hasNext()) {
                 Vehicle v = vehicleIterator.next();
-                v.move();
+//                v.move();
 
-                if(laneType == INTERSECTION_LANE){
-                    double laneWidth = ROAD_RADIUS / 6;
-
-                    switch (v.trajectory.destinationDiff){
-                        case 1:
-                            double thetaRadSmall = v.trajectory.getLocation() / (laneWidth + v.length / 2);
-                            if(thetaRadSmall >= PI / 2){
+                switch(laneType){
+                    case IN_LANE:
+                        if(v.trajectory.getLocation() >= Global.ROAD_LENGTH){
+                            if(intersection.getIntLane(v.trajectory.origin, 6 + v.trajectory.destinationDiff).isSapceAvailable(v)){
                                 vehicleIterator.remove();
-                                roadMap.getJunction().getRoad(v.trajectory.destination).appendVehicleToOutLane(v, 6);
+                                intersection.appendVehicleToIntLane(v, v.trajectory.origin, 6 + v.trajectory.destinationDiff);
 
                                 for (int i = 0; i < vehicles.size(); i++) {
                                     vehicles.get(i).trajectory.setLaneIndex(i);
                                 }
                             }
-                            break;
-                        case 2:
-                            if(v.trajectory.getLocation() >= ROAD_RADIUS * 2 + v.length){
-                                vehicleIterator.remove();
-                                roadMap.getJunction().getRoad(v.trajectory.destination).appendVehicleToOutLane(v, 5);
-
-                                for (int i = 0; i < vehicles.size(); i++) {
-                                    vehicles.get(i).trajectory.setLaneIndex(i);
-                                }
-                            }
-                            break;
-                        case 3:
-                            double thetaRadLarge = v.trajectory.getLocation() / (ROAD_RADIUS + laneWidth + v.length / 2);
-                            if(thetaRadLarge >= PI / 2){
-                                vehicleIterator.remove();
-                                roadMap.getJunction().getRoad(v.trajectory.destination).appendVehicleToOutLane(v, 4);
-
-                                for (int i = 0; i < vehicles.size(); i++) {
-                                    vehicles.get(i).trajectory.setLaneIndex(i);
-                                }
-                            }
-                            break;
-                    }
-                }else{
-                    if(v.trajectory.getLocation() >= Global.ROAD_LENGTH){
-                        vehicleIterator.remove();
-
-                        if(laneType == IN_LANE){
-                            intersection.appendVehicleToIntLane(v, v.trajectory.origin, 6 + v.trajectory.destinationDiff);
+                        }else{
+                            v.move();
                         }
+                        break;
+                    case OUT_LANE:
+                        if(v.trajectory.getLocation() >= Global.ROAD_LENGTH){
+                            vehicleIterator.remove();
 
-                        for (int i = 0; i < vehicles.size(); i++) {
-                            vehicles.get(i).trajectory.setLaneIndex(i);
+                            for (int i = 0; i < vehicles.size(); i++) {
+                                vehicles.get(i).trajectory.setLaneIndex(i);
+                            }
+                        }else{
+                            v.move();
                         }
-                    }
+                        break;
+                    case INTERSECTION_LANE:
+                        double laneWidth = ROAD_RADIUS / 6;
+                        switch (v.trajectory.destinationDiff) {
+                            case 1:
+                                double thetaRadSmall = v.trajectory.getLocation() / (laneWidth + v.length / 2);
+                                if (thetaRadSmall >= PI / 2) {
+                                    if(roadMap.getJunction().getRoad(v.trajectory.destination).getLane(6).isSapceAvailable(v)){
+                                        vehicleIterator.remove();
+                                        roadMap.getJunction().getRoad(v.trajectory.destination).appendVehicleToOutLane(v, 6);
+
+                                        for (int i = 0; i < vehicles.size(); i++) {
+                                            vehicles.get(i).trajectory.setLaneIndex(i);
+                                        }
+                                    }
+                                } else {
+                                    v.move();
+                                }
+                                break;
+                            case 2:
+                                if (v.trajectory.getLocation() >= ROAD_RADIUS * 2 + v.length) {
+                                    if(roadMap.getJunction().getRoad(v.trajectory.destination).getLane(5).isSapceAvailable(v)){
+                                        vehicleIterator.remove();
+                                        roadMap.getJunction().getRoad(v.trajectory.destination).appendVehicleToOutLane(v, 5);
+
+                                        for (int i = 0; i < vehicles.size(); i++) {
+                                            vehicles.get(i).trajectory.setLaneIndex(i);
+                                        }
+                                    }
+                                } else {
+                                    v.move();
+                                }
+                                break;
+                            case 3:
+                                double thetaRadLarge = v.trajectory.getLocation() / (ROAD_RADIUS + laneWidth + v.length / 2);
+                                if (thetaRadLarge >= PI / 2) {
+                                    if(roadMap.getJunction().getRoad(v.trajectory.destination).getLane(4).isSapceAvailable(v)){
+                                        vehicleIterator.remove();
+                                        roadMap.getJunction().getRoad(v.trajectory.destination).appendVehicleToOutLane(v, 4);
+
+                                        for (int i = 0; i < vehicles.size(); i++) {
+                                            vehicles.get(i).trajectory.setLaneIndex(i);
+                                        }
+                                    }
+                                } else {
+                                    v.move();
+                                }
+                                break;
+                        }
+                        break;
                 }
+
+
+//                if(laneType == INTERSECTION_LANE){
+//                    double laneWidth = ROAD_RADIUS / 6;
+//
+//                    switch (v.trajectory.destinationDiff){
+//                        case 1:
+//                            double thetaRadSmall = v.trajectory.getLocation() / (laneWidth + v.length / 2);
+//                            if(thetaRadSmall >= PI / 2){
+//                                vehicleIterator.remove();
+//                                roadMap.getJunction().getRoad(v.trajectory.destination).appendVehicleToOutLane(v, 6);
+//
+//                                for (int i = 0; i < vehicles.size(); i++) {
+//                                    vehicles.get(i).trajectory.setLaneIndex(i);
+//                                }
+//                            }
+//                            break;
+//                        case 2:
+//                            if(v.trajectory.getLocation() >= ROAD_RADIUS * 2 + v.length){
+//                                vehicleIterator.remove();
+//                                roadMap.getJunction().getRoad(v.trajectory.destination).appendVehicleToOutLane(v, 5);
+//
+//                                for (int i = 0; i < vehicles.size(); i++) {
+//                                    vehicles.get(i).trajectory.setLaneIndex(i);
+//                                }
+//                            }
+//                            break;
+//                        case 3:
+//                            double thetaRadLarge = v.trajectory.getLocation() / (ROAD_RADIUS + laneWidth + v.length / 2);
+//                            if(thetaRadLarge >= PI / 2){
+//                                vehicleIterator.remove();
+//                                roadMap.getJunction().getRoad(v.trajectory.destination).appendVehicleToOutLane(v, 4);
+//
+//                                for (int i = 0; i < vehicles.size(); i++) {
+//                                    vehicles.get(i).trajectory.setLaneIndex(i);
+//                                }
+//                            }
+//                            break;
+//                    }
+//                }else{
+//                    if(v.trajectory.getLocation() >= Global.ROAD_LENGTH){
+//                        vehicleIterator.remove();
+//
+//                        if(laneType == IN_LANE){
+//                            intersection.appendVehicleToIntLane(v, v.trajectory.origin, 6 + v.trajectory.destinationDiff);
+//                        }
+//
+//                        for (int i = 0; i < vehicles.size(); i++) {
+//                            vehicles.get(i).trajectory.setLaneIndex(i);
+//                        }
+//                    }
+//                }
             }
         }
     }
