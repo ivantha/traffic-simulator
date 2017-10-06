@@ -155,9 +155,9 @@ public class Draw {
                 CANVAS_RADIUS + (ROAD_RADIUS / 6 * 5), CANVAS_RADIUS - ROAD_RADIUS,
                 ROAD_RADIUS / 6,7);
 
-//        drawVehiclesOnIntersection(canvas, roadMap.getJunction().getIntersection().getNorthIntRoad().get(8).getVehicles(),
-//                CANVAS_RADIUS + (ROAD_RADIUS / 6 * 5), CANVAS_RADIUS - ROAD_RADIUS,
-//                CANVAS_RADIUS + ROAD_RADIUS, CANVAS_RADIUS - (ROAD_RADIUS / 6 * 5));
+        drawVehiclesOnIntersection(canvas, roadMap.getJunction().getIntersection().getNorthIntRoad().get(8).getVehicles(),
+                CANVAS_RADIUS + (ROAD_RADIUS / 6 * 3), CANVAS_RADIUS - ROAD_RADIUS,
+                0, 8);
 
         drawVehiclesOnIntersection(canvas, roadMap.getJunction().getIntersection().getNorthIntRoad().get(9).getVehicles(),
                 CANVAS_RADIUS + (ROAD_RADIUS / 6 * 1), CANVAS_RADIUS - ROAD_RADIUS,
@@ -280,6 +280,12 @@ public class Draw {
                     rect.getTransforms().add(new Rotate((-1) * thetaRad * 180 / PI, CANVAS_RADIUS + ROAD_RADIUS + vehicle.length / 2, ROAD_LENGTH - vehicle.length / 2));
                     break;
                 case 8:
+                    rect.setHeight(vehicle.length);
+                    rect.setWidth(vehicle.width);
+
+                    rect.setX(startX - vehicle.width / 2);
+                    rect.setY(ROAD_LENGTH + vehicle.trajectory.getLocation() - vehicle.length);
+
                     break;
                 case 9:
                     rect.setX(startX - vehicle.width / 2);

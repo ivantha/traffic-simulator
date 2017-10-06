@@ -191,8 +191,13 @@ public class DashboardController implements Initializable {
                             }
                             break;
                         case 2:
-                            if(v.trajectory.getLocation() >= ROAD_RADIUS * 2){
+                            if(v.trajectory.getLocation() >= ROAD_RADIUS * 2 + v.length){
+                                vehicleIterator.remove();
+                                roadMap.getJunction().getRoad(v.trajectory.destination).appendVehicleToOutLane(v, 5);
 
+                                for (int i = 0; i < vehicles.size(); i++) {
+                                    vehicles.get(i).trajectory.setLaneIndex(i);
+                                }
                             }
                             break;
                         case 3:

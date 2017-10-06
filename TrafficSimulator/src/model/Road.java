@@ -25,7 +25,6 @@ public class Road {
         laneIntHashMap.put(4, new Lane(4));         //Out-lane-int 4
         laneIntHashMap.put(5, new Lane(5));         //Out-lane-int 5
         laneIntHashMap.put(6, new Lane(6));         //Out-lane-int 6
-
     }
 
     public int getRoadId() {
