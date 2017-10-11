@@ -1,0 +1,56 @@
+.redStateRadioButton > .radio, .orangeStateRadioButton > .radio, .greenStateRadioButton > .radio{
+    -fx-background-radius: 50%;
+    -fx-pref-width: 15px;
+    -fx-pref-height: 15px;
+    -fx-background-color: transparent;
+
+    -fx-border-width: 1px;
+    -fx-border-radius: 50%;
+    -fx-padding: 0px;
+}
+
+.redStateRadioButton > .radio{
+    -fx-border-color: #b71c1c;
+}
+
+.redStateRadioButton:selected > .radio > .dot{
+    -fx-background-color: #b71c1c;
+    -fx-background-insets: 0;
+}
+
+.orangeStateRadioButton > .radio{
+    -fx-border-color: #E65100;
+}
+
+.orangeStateRadioButton:selected > .radio > .dot{
+    -fx-background-color: #E65100;
+    -fx-background-insets: 0;
+}
+
+.greenStateRadioButton > .radio{
+    -fx-border-color: #1B5E20;
+}
+
+.greenStateRadioButton:selected > .radio > .dot{
+    -fx-background-color: #1B5E20;
+    -fx-background-insets: 0;
+}
+
+.semiTextField{
+    -fx-min-height: 20px;
+    -fx-pref-height: 20px;
+    -fx-max-height: 20px;
+    -fx-min-width: 60px;
+    -fx-pref-width: 60px;
+    -fx-max-width: 60px;
+
+    -fx-background-color: white;
+    -fx-padding: 2px 5px 2px 5px;
+
+    -fx-border-width: 1px;
+    -fx-border-color: #2e3436;
+}
+
+.trafficTile:hover{
+    -fx-background-color: #42A5F5;
+}

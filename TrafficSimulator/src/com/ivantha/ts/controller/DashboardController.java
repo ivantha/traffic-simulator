@@ -1,6 +1,7 @@
 package com.ivantha.ts.controller;
 
 import com.ivantha.ts.model.*;
+import com.ivantha.ts.ui.components.TileToggle;
 import com.jfoenix.controls.JFXSlider;
 import com.jfoenix.controls.JFXToggleButton;
 import com.ivantha.ts.constant.LaneType;
@@ -9,16 +10,22 @@ import com.ivantha.ts.common.Global;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.TilePane;
 import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.*;
 
 import static com.ivantha.ts.constant.LaneType.INTERSECTION_LANE;
+import static com.ivantha.ts.model.TrafficLight.TrafficLightState.GREEN;
 import static java.lang.Math.PI;
 import static com.ivantha.ts.common.Global.REFRESH_INTERVAL;
 import static com.ivantha.ts.constant.LaneType.IN_LANE;
@@ -52,6 +59,59 @@ public class DashboardController implements Initializable {
     @FXML
     private Button resetButton;
 
+    @FXML
+    private TilePane nLane1IntervalTile;
+    @FXML
+    private TilePane nLane2IntervalTile;
+    @FXML
+    private TilePane nLane3IntervalTile;
+    @FXML
+    private TilePane eLane1IntervalTile;
+    @FXML
+    private TilePane eLane2IntervalTile;
+    @FXML
+    private TilePane eLane3IntervalTile;
+    @FXML
+    private TilePane sLane1IntervalTile;
+    @FXML
+    private TilePane sLane2IntervalTile;
+    @FXML
+    private TilePane sLane3IntervalTile;
+    @FXML
+    private TilePane wLane1IntervalTile;
+    @FXML
+    private TilePane wLane2IntervalTile;
+    @FXML
+    private TilePane wLane3IntervalTile;
+
+    @FXML
+    private HBox nLane1ManualTile;
+    @FXML
+    private HBox nLane2ManualTile;
+    @FXML
+    private HBox nLane3ManualTile;
+    @FXML
+    private HBox eLane1ManualTile;
+    @FXML
+    private HBox eLane2ManualTile;
+    @FXML
+    private HBox eLane3ManualTile;
+    @FXML
+    private HBox sLane1ManualTile;
+    @FXML
+    private HBox sLane2ManualTile;
+    @FXML
+    private HBox sLane3ManualTile;
+    @FXML
+    private HBox wLane1ManualTile;
+    @FXML
+    private HBox wLane2ManualTile;
+    @FXML
+    private HBox wLane3ManualTile;
+
+
+
+
     private Timeline uiUpdater;
     private Timer mainTimer;
     private TimerTask mainTimerTask;
@@ -68,6 +128,19 @@ public class DashboardController implements Initializable {
     private HashMap<Integer, Lane> wIntRoad;
 
     private boolean isStarted = false;
+
+    private TileToggle<TilePane, HBox> nLane1TileToggle;
+    private TileToggle<TilePane, HBox> nLane2TileToggle;
+    private TileToggle<TilePane, HBox> nLane3TileToggle;
+    private TileToggle<TilePane, HBox> eLane1TileToggle;
+    private TileToggle<TilePane, HBox> eLane2TileToggle;
+    private TileToggle<TilePane, HBox> eLane3TileToggle;
+    private TileToggle<TilePane, HBox> sLane1TileToggle;
+    private TileToggle<TilePane, HBox> sLane2TileToggle;
+    private TileToggle<TilePane, HBox> sLane3TileToggle;
+    private TileToggle<TilePane, HBox> wLane1TileToggle;
+    private TileToggle<TilePane, HBox> wLane2TileToggle;
+    private TileToggle<TilePane, HBox> wLane3TileToggle;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -109,6 +182,19 @@ public class DashboardController implements Initializable {
         eastToggleButton.setOnAction(event -> roadMap.setEastEnabled(eastToggleButton.isSelected()));
         southToggleButton.setOnAction(event -> roadMap.setSouthEnabled(southToggleButton.isSelected()));
         westToggleButton.setOnAction(event -> roadMap.setWestEnabled(westToggleButton.isSelected()));
+
+        nLane1TileToggle = new TileToggle<>(nLane1IntervalTile, nLane1ManualTile);
+        nLane2TileToggle = new TileToggle<>(nLane2IntervalTile, nLane2ManualTile);
+        nLane3TileToggle = new TileToggle<>(nLane3IntervalTile, nLane3ManualTile);
+        eLane1TileToggle = new TileToggle<>(eLane1IntervalTile, eLane1ManualTile);
+        eLane2TileToggle = new TileToggle<>(eLane2IntervalTile, eLane2ManualTile);
+        eLane3TileToggle = new TileToggle<>(eLane3IntervalTile, eLane3ManualTile);
+        sLane1TileToggle = new TileToggle<>(sLane1IntervalTile, sLane1ManualTile);
+        sLane2TileToggle = new TileToggle<>(sLane2IntervalTile, sLane2ManualTile);
+        sLane3TileToggle = new TileToggle<>(sLane3IntervalTile, sLane3ManualTile);
+        wLane1TileToggle = new TileToggle<>(wLane1IntervalTile, wLane1ManualTile);
+        wLane2TileToggle = new TileToggle<>(wLane2IntervalTile, wLane2ManualTile);
+        wLane3TileToggle = new TileToggle<>(wLane3IntervalTile, wLane3ManualTile);
     }
 
     private void stop() {
@@ -133,6 +219,11 @@ public class DashboardController implements Initializable {
         eIntRoad = intersection.getEastIntRoad();
         sIntRoad = intersection.getSouthIntRoad();
         wIntRoad = intersection.getWestIntRoad();
+
+        northToggleButton.setSelected(false);
+        eastToggleButton.setSelected(false);
+        southToggleButton.setSelected(false);
+        westToggleButton.setSelected(false);
     }
 
     class CustomerTimerTask extends TimerTask {
@@ -185,12 +276,13 @@ public class DashboardController implements Initializable {
 
             while (vehicleIterator.hasNext()) {
                 Vehicle v = vehicleIterator.next();
-//                v.move();
 
                 switch(laneType){
                     case IN_LANE:
                         if(v.trajectory.getLocation() >= Global.ROAD_LENGTH){
-                            if(intersection.getIntLane(v.trajectory.origin, 6 + v.trajectory.destinationDiff).isSapceAvailable(v)){
+                            boolean trafficLightGreen = roadMap.getJunction().getRoad(v.trajectory.origin).getLane(v.trajectory.startLaneId).getTrafficLight().getState() == GREEN;
+                            boolean spaceAvalable = intersection.getIntLane(v.trajectory.origin, 6 + v.trajectory.destinationDiff).isSapceAvailable(v);
+                            if(trafficLightGreen && spaceAvalable){
                                 vehicleIterator.remove();
                                 intersection.appendVehicleToIntLane(v, v.trajectory.origin, 6 + v.trajectory.destinationDiff);
 
@@ -263,58 +355,6 @@ public class DashboardController implements Initializable {
                         }
                         break;
                 }
-
-
-//                if(laneType == INTERSECTION_LANE){
-//                    double laneWidth = ROAD_RADIUS / 6;
-//
-//                    switch (v.trajectory.destinationDiff){
-//                        case 1:
-//                            double thetaRadSmall = v.trajectory.getLocation() / (laneWidth + v.length / 2);
-//                            if(thetaRadSmall >= PI / 2){
-//                                vehicleIterator.remove();
-//                                roadMap.getJunction().getRoad(v.trajectory.destination).appendVehicleToOutLane(v, 6);
-//
-//                                for (int i = 0; i < vehicles.size(); i++) {
-//                                    vehicles.get(i).trajectory.setLaneIndex(i);
-//                                }
-//                            }
-//                            break;
-//                        case 2:
-//                            if(v.trajectory.getLocation() >= ROAD_RADIUS * 2 + v.length){
-//                                vehicleIterator.remove();
-//                                roadMap.getJunction().getRoad(v.trajectory.destination).appendVehicleToOutLane(v, 5);
-//
-//                                for (int i = 0; i < vehicles.size(); i++) {
-//                                    vehicles.get(i).trajectory.setLaneIndex(i);
-//                                }
-//                            }
-//                            break;
-//                        case 3:
-//                            double thetaRadLarge = v.trajectory.getLocation() / (ROAD_RADIUS + laneWidth + v.length / 2);
-//                            if(thetaRadLarge >= PI / 2){
-//                                vehicleIterator.remove();
-//                                roadMap.getJunction().getRoad(v.trajectory.destination).appendVehicleToOutLane(v, 4);
-//
-//                                for (int i = 0; i < vehicles.size(); i++) {
-//                                    vehicles.get(i).trajectory.setLaneIndex(i);
-//                                }
-//                            }
-//                            break;
-//                    }
-//                }else{
-//                    if(v.trajectory.getLocation() >= Global.ROAD_LENGTH){
-//                        vehicleIterator.remove();
-//
-//                        if(laneType == IN_LANE){
-//                            intersection.appendVehicleToIntLane(v, v.trajectory.origin, 6 + v.trajectory.destinationDiff);
-//                        }
-//
-//                        for (int i = 0; i < vehicles.size(); i++) {
-//                            vehicles.get(i).trajectory.setLaneIndex(i);
-//                        }
-//                    }
-//                }
             }
         }
     }

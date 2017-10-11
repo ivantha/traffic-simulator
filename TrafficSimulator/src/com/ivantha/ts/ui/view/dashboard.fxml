@@ -4,14 +4,18 @@
 <?import com.jfoenix.controls.JFXToggleButton?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.layout.VBox?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1600.0" stylesheets="@../styles/dashboard.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ivantha.ts.controller.DashboardController">
@@ -30,11 +34,11 @@
                   <Button fx:id="resetButton" mnemonicParsing="false" styleClass="controlButton" text="Reset" />
                </children>
             </HBox>
-            <TabPane prefHeight="700.0" prefWidth="400.0" tabClosingPolicy="UNAVAILABLE">
+            <TabPane prefHeight="770.0" prefWidth="400.0" tabClosingPolicy="UNAVAILABLE">
                <tabs>
                   <Tab fx:id="worldTab">
                     <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: #ffffff;" styleClass="tabAnchorPane">
                            <children>
                               <GridPane layoutX="23.0" layoutY="43.0" prefHeight="284.0" prefWidth="443.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
                                 <columnConstraints>
@@ -71,17 +75,261 @@
                   </Tab>
                   <Tab fx:id="trafficTab">
                     <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: #ffffff;" styleClass="tabAnchorPane">
+                           <children>
+                              <GridPane layoutX="39.0" layoutY="244.0" prefHeight="518.0" prefWidth="367.0" AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="10.0">
+                                <columnConstraints>
+                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="80.0" minWidth="80.0" prefWidth="80.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="35.0" minWidth="35.0" prefWidth="35.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" prefWidth="100.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                    <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" valignment="CENTER" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" valignment="CENTER" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" valignment="CENTER" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" valignment="CENTER" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" valignment="CENTER" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                                 <children>
+                                    <Label text="North road" GridPane.rowIndex="1" />
+                                    <Label text="East road" GridPane.rowIndex="6" />
+                                    <Label text="South road" GridPane.rowIndex="11" />
+                                    <Label text="West road" GridPane.rowIndex="16" />
+                                    <Label text="Interval" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
+                                    <Label text="Manual" GridPane.columnIndex="3" GridPane.halignment="CENTER" />
+                                    <TilePane fx:id="nLane1IntervalTile" alignment="CENTER" styleClass="trafficTile" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                                       <children>
+                                          <TextField styleClass="semiTextField" />
+                                       </children>
+                                    </TilePane>
+                                    <HBox fx:id="nLane1ManualTile" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="trafficTile" GridPane.columnIndex="3" GridPane.rowIndex="2">
+                                       <children>
+                                          <RadioButton mnemonicParsing="false" selected="true" styleClass="redStateRadioButton">
+                                             <toggleGroup>
+                                                <ToggleGroup fx:id="northLane1StateToggleGroup" />
+                                             </toggleGroup>
+                                          </RadioButton>
+                                          <RadioButton mnemonicParsing="false" styleClass="orangeStateRadioButton" toggleGroup="$northLane1StateToggleGroup" />
+                                          <RadioButton mnemonicParsing="false" styleClass="greenStateRadioButton" toggleGroup="$northLane1StateToggleGroup" />
+                                       </children>
+                                    </HBox>
+                                    <TilePane fx:id="nLane2IntervalTile" alignment="CENTER" styleClass="trafficTile" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                                       <children>
+                                          <TextField styleClass="semiTextField" />
+                                       </children>
+                                    </TilePane>
+                                    <TilePane fx:id="nLane3IntervalTile" alignment="CENTER" styleClass="trafficTile" GridPane.columnIndex="2" GridPane.rowIndex="4">
+                                       <children>
+                                          <TextField styleClass="semiTextField" />
+                                       </children>
+                                    </TilePane>
+                                    <TilePane fx:id="eLane1IntervalTile" alignment="CENTER" styleClass="trafficTile" GridPane.columnIndex="2" GridPane.rowIndex="7">
+                                       <children>
+                                          <TextField styleClass="semiTextField" />
+                                       </children>
+                                    </TilePane>
+                                    <TilePane fx:id="eLane2IntervalTile" alignment="CENTER" styleClass="trafficTile" GridPane.columnIndex="2" GridPane.rowIndex="8">
+                                       <children>
+                                          <TextField styleClass="semiTextField" />
+                                       </children>
+                                    </TilePane>
+                                    <TilePane fx:id="eLane3IntervalTile" alignment="CENTER" styleClass="trafficTile" GridPane.columnIndex="2" GridPane.rowIndex="9">
+                                       <children>
+                                          <TextField styleClass="semiTextField" />
+                                       </children>
+                                    </TilePane>
+                                    <TilePane fx:id="sLane1IntervalTile" alignment="CENTER" styleClass="trafficTile" GridPane.columnIndex="2" GridPane.rowIndex="12">
+                                       <children>
+                                          <TextField styleClass="semiTextField" />
+                                       </children>
+                                    </TilePane>
+                                    <TilePane fx:id="sLane2IntervalTile" alignment="CENTER" styleClass="trafficTile" GridPane.columnIndex="2" GridPane.rowIndex="13">
+                                       <children>
+                                          <TextField styleClass="semiTextField" />
+                                       </children>
+                                    </TilePane>
+                                    <TilePane fx:id="sLane3IntervalTile" alignment="CENTER" styleClass="trafficTile" GridPane.columnIndex="2" GridPane.rowIndex="14">
+                                       <children>
+                                          <TextField styleClass="semiTextField" />
+                                       </children>
+                                    </TilePane>
+                                    <TilePane fx:id="wLane1IntervalTile" alignment="CENTER" styleClass="trafficTile" GridPane.columnIndex="2" GridPane.rowIndex="17">
+                                       <children>
+                                          <TextField styleClass="semiTextField" />
+                                       </children>
+                                    </TilePane>
+                                    <TilePane fx:id="wLane2IntervalTile" alignment="CENTER" styleClass="trafficTile" GridPane.columnIndex="2" GridPane.rowIndex="18">
+                                       <children>
+                                          <TextField styleClass="semiTextField" />
+                                       </children>
+                                    </TilePane>
+                                    <TilePane fx:id="wLane3IntervalTile" alignment="CENTER" styleClass="trafficTile" GridPane.columnIndex="2" GridPane.rowIndex="19">
+                                       <children>
+                                          <TextField styleClass="semiTextField" />
+                                       </children>
+                                    </TilePane>
+                                    <HBox fx:id="nLane2ManualTile" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="trafficTile" GridPane.columnIndex="3" GridPane.rowIndex="3">
+                                       <children>
+                                          <RadioButton mnemonicParsing="false" selected="true" styleClass="redStateRadioButton">
+                                             <toggleGroup>
+                                                <ToggleGroup fx:id="northLane2StateToggleGroup" />
+                                             </toggleGroup>
+                                          </RadioButton>
+                                          <RadioButton mnemonicParsing="false" styleClass="orangeStateRadioButton" toggleGroup="$northLane2StateToggleGroup" />
+                                          <RadioButton mnemonicParsing="false" styleClass="greenStateRadioButton" toggleGroup="$northLane2StateToggleGroup" />
+                                       </children>
+                                    </HBox>
+                                    <HBox fx:id="nLane3ManualTile" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="trafficTile" GridPane.columnIndex="3" GridPane.rowIndex="4">
+                                       <children>
+                                          <RadioButton mnemonicParsing="false" selected="true" styleClass="redStateRadioButton">
+                                             <toggleGroup>
+                                                <ToggleGroup fx:id="northlane3StateToggleGroup" />
+                                             </toggleGroup>
+                                          </RadioButton>
+                                          <RadioButton mnemonicParsing="false" styleClass="orangeStateRadioButton" toggleGroup="$northlane3StateToggleGroup" />
+                                          <RadioButton mnemonicParsing="false" styleClass="greenStateRadioButton" toggleGroup="$northlane3StateToggleGroup" />
+                                       </children>
+                                    </HBox>
+                                    <HBox fx:id="eLane1ManualTile" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="trafficTile" GridPane.columnIndex="3" GridPane.rowIndex="7">
+                                       <children>
+                                          <RadioButton mnemonicParsing="false" selected="true" styleClass="redStateRadioButton">
+                                             <toggleGroup>
+                                                <ToggleGroup fx:id="eastLane1StateToggleGroup" />
+                                             </toggleGroup>
+                                          </RadioButton>
+                                          <RadioButton mnemonicParsing="false" styleClass="orangeStateRadioButton" toggleGroup="$eastLane1StateToggleGroup" />
+                                          <RadioButton mnemonicParsing="false" styleClass="greenStateRadioButton" toggleGroup="$eastLane1StateToggleGroup" />
+                                       </children>
+                                    </HBox>
+                                    <HBox fx:id="eLane2ManualTile" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="trafficTile" GridPane.columnIndex="3" GridPane.rowIndex="8">
+                                       <children>
+                                          <RadioButton mnemonicParsing="false" selected="true" styleClass="redStateRadioButton">
+                                             <toggleGroup>
+                                                <ToggleGroup fx:id="eastLane2StateToggleGroup" />
+                                             </toggleGroup>
+                                          </RadioButton>
+                                          <RadioButton mnemonicParsing="false" styleClass="orangeStateRadioButton" toggleGroup="$eastLane2StateToggleGroup" />
+                                          <RadioButton mnemonicParsing="false" styleClass="greenStateRadioButton" toggleGroup="$eastLane2StateToggleGroup" />
+                                       </children>
+                                    </HBox>
+                                    <HBox fx:id="eLane3ManualTile" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="trafficTile" GridPane.columnIndex="3" GridPane.rowIndex="9">
+                                       <children>
+                                          <RadioButton mnemonicParsing="false" selected="true" styleClass="redStateRadioButton">
+                                             <toggleGroup>
+                                                <ToggleGroup fx:id="eastLane3StateToggleGroup" />
+                                             </toggleGroup>
+                                          </RadioButton>
+                                          <RadioButton mnemonicParsing="false" styleClass="orangeStateRadioButton" toggleGroup="$eastLane3StateToggleGroup" />
+                                          <RadioButton mnemonicParsing="false" styleClass="greenStateRadioButton" toggleGroup="$eastLane3StateToggleGroup" />
+                                       </children>
+                                    </HBox>
+                                    <HBox fx:id="sLane1ManualTile" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="trafficTile" GridPane.columnIndex="3" GridPane.rowIndex="12">
+                                       <children>
+                                          <RadioButton mnemonicParsing="false" selected="true" styleClass="redStateRadioButton">
+                                             <toggleGroup>
+                                                <ToggleGroup fx:id="southLane1StateToggleButton" />
+                                             </toggleGroup>
+                                          </RadioButton>
+                                          <RadioButton mnemonicParsing="false" styleClass="orangeStateRadioButton" toggleGroup="$southLane1StateToggleButton" />
+                                          <RadioButton mnemonicParsing="false" styleClass="greenStateRadioButton" toggleGroup="$southLane1StateToggleButton" />
+                                       </children>
+                                    </HBox>
+                                    <HBox fx:id="sLane2ManualTile" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="trafficTile" GridPane.columnIndex="3" GridPane.rowIndex="13">
+                                       <children>
+                                          <RadioButton mnemonicParsing="false" selected="true" styleClass="redStateRadioButton">
+                                             <toggleGroup>
+                                                <ToggleGroup fx:id="southLane2StateToggleButton" />
+                                             </toggleGroup>
+                                          </RadioButton>
+                                          <RadioButton mnemonicParsing="false" styleClass="orangeStateRadioButton" toggleGroup="$southLane2StateToggleButton" />
+                                          <RadioButton mnemonicParsing="false" styleClass="greenStateRadioButton" toggleGroup="$southLane2StateToggleButton" />
+                                       </children>
+                                    </HBox>
+                                    <HBox fx:id="sLane3ManualTile" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="trafficTile" GridPane.columnIndex="3" GridPane.rowIndex="14">
+                                       <children>
+                                          <RadioButton mnemonicParsing="false" selected="true" styleClass="redStateRadioButton">
+                                             <toggleGroup>
+                                                <ToggleGroup fx:id="southLane3StateToggleButton" />
+                                             </toggleGroup>
+                                          </RadioButton>
+                                          <RadioButton mnemonicParsing="false" styleClass="orangeStateRadioButton" toggleGroup="$southLane3StateToggleButton" />
+                                          <RadioButton mnemonicParsing="false" styleClass="greenStateRadioButton" toggleGroup="$southLane3StateToggleButton" />
+                                       </children>
+                                    </HBox>
+                                    <HBox fx:id="wLane1ManualTile" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="trafficTile" GridPane.columnIndex="3" GridPane.rowIndex="17">
+                                       <children>
+                                          <RadioButton mnemonicParsing="false" selected="true" styleClass="redStateRadioButton">
+                                             <toggleGroup>
+                                                <ToggleGroup fx:id="westLane1StateToggleButton" />
+                                             </toggleGroup>
+                                          </RadioButton>
+                                          <RadioButton mnemonicParsing="false" styleClass="orangeStateRadioButton" toggleGroup="$westLane1StateToggleButton" />
+                                          <RadioButton mnemonicParsing="false" styleClass="greenStateRadioButton" toggleGroup="$westLane1StateToggleButton" />
+                                       </children>
+                                    </HBox>
+                                    <HBox fx:id="wLane2ManualTile" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="trafficTile" GridPane.columnIndex="3" GridPane.rowIndex="18">
+                                       <children>
+                                          <RadioButton mnemonicParsing="false" selected="true" styleClass="redStateRadioButton">
+                                             <toggleGroup>
+                                                <ToggleGroup fx:id="westLane2StateToggleButton" />
+                                             </toggleGroup>
+                                          </RadioButton>
+                                          <RadioButton mnemonicParsing="false" styleClass="orangeStateRadioButton" toggleGroup="$westLane2StateToggleButton" />
+                                          <RadioButton mnemonicParsing="false" styleClass="greenStateRadioButton" toggleGroup="$westLane2StateToggleButton" />
+                                       </children>
+                                    </HBox>
+                                    <HBox fx:id="wLane3ManualTile" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="trafficTile" GridPane.columnIndex="3" GridPane.rowIndex="19">
+                                       <children>
+                                          <RadioButton mnemonicParsing="false" selected="true" styleClass="redStateRadioButton">
+                                             <toggleGroup>
+                                                <ToggleGroup fx:id="westlane3StateToggleButton" />
+                                             </toggleGroup>
+                                          </RadioButton>
+                                          <RadioButton mnemonicParsing="false" styleClass="orangeStateRadioButton" toggleGroup="$westlane3StateToggleButton" />
+                                          <RadioButton mnemonicParsing="false" styleClass="greenStateRadioButton" toggleGroup="$westlane3StateToggleButton" />
+                                       </children>
+                                    </HBox>
+                                    <Label text="1st Lane" GridPane.rowIndex="2" />
+                                    <Label text="2nd Lane" GridPane.rowIndex="3" />
+                                    <Label text="3rd Lane" GridPane.rowIndex="4" />
+                                    <Label text="1st Lane" GridPane.rowIndex="7" />
+                                    <Label text="2nd Lane" GridPane.rowIndex="8" />
+                                    <Label text="3rd Lane" GridPane.rowIndex="9" />
+                                    <Label text="1st Lane" GridPane.rowIndex="12" />
+                                    <Label text="2nd Lane" GridPane.rowIndex="13" />
+                                    <Label text="3rd Lane" GridPane.rowIndex="14" />
+                                    <Label text="1st Lane" GridPane.rowIndex="17" />
+                                    <Label text="2nd Lane" GridPane.rowIndex="18" />
+                                    <Label text="3rd Lane" GridPane.rowIndex="19" />
+                                 </children>
+                              </GridPane>
+                           </children></AnchorPane>
                     </content>
                   </Tab>
                   <Tab fx:id="connectTab">
                     <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: #ffffff;" styleClass="tabAnchorPane" />
                     </content>
                   </Tab>
                   <Tab fx:id="themeTab">
                     <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: #ffffff;" styleClass="tabAnchorPane" />
                     </content>
                   </Tab>
                </tabs>

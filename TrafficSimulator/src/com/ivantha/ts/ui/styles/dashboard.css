@@ -1,6 +1,6 @@
-@import "drawingpane.css";
-@import "optionpane.css";
-@import "statuspane.css";
+@import "pane_drawing.css";
+@import "pane_option.css";
+@import "pane_status.css";
 
 .controlButton{
     -fx-pref-width: 200px;

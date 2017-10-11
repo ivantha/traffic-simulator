@@ -14,6 +14,7 @@ public class Lane {
     public final double length;
 
     private final ArrayList<Vehicle> vehicles = new ArrayList<>();
+    private final TrafficLight trafficLight = new TrafficLight();
 
     public Lane(int laneId) {
         this.laneId = laneId;
@@ -58,6 +59,9 @@ public class Lane {
     }
     public ArrayList<Vehicle> getVehicles() {
         return vehicles;
+    }
+    public TrafficLight getTrafficLight() {
+        return trafficLight;
     }
 
     public void addVehicleToQueue(Vehicle vehicle){

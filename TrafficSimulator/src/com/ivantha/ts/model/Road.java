@@ -7,10 +7,8 @@ import static com.ivantha.ts.common.Global.VEHICLE_DENSITY;
 
 public class Road {
     private final int roadId;
-
     private final HashMap<Integer, Lane> laneHashMap = new HashMap<>();
     private final HashMap<Integer, Lane> laneIntHashMap = new HashMap<>();
-
 
     public Road(int roadId) {
         this.roadId = roadId;
