@@ -1,36 +1,33 @@
 package com.ivantha.ts.controller;
 
+import com.ivantha.ts.common.Global;
+import com.ivantha.ts.constant.LaneType;
 import com.ivantha.ts.model.*;
-import com.ivantha.ts.ui.components.TileToggle;
+import com.ivantha.ts.util.Draw;
 import com.jfoenix.controls.JFXSlider;
 import com.jfoenix.controls.JFXToggleButton;
-import com.ivantha.ts.constant.LaneType;
-import com.ivantha.ts.util.Draw;
-import com.ivantha.ts.common.Global;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.control.RadioButton;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.TilePane;
 import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.*;
 
-import static com.ivantha.ts.constant.LaneType.INTERSECTION_LANE;
-import static com.ivantha.ts.model.TrafficLight.TrafficLightState.GREEN;
-import static java.lang.Math.PI;
 import static com.ivantha.ts.common.Global.REFRESH_INTERVAL;
-import static com.ivantha.ts.constant.LaneType.IN_LANE;
-import static com.ivantha.ts.constant.LaneType.OUT_LANE;
 import static com.ivantha.ts.common.Global.ROAD_RADIUS;
+import static com.ivantha.ts.constant.LaneType.*;
+import static com.ivantha.ts.model.TrafficLight.TrafficLightState.GREEN;
+import static com.ivantha.ts.model.TrafficLight.TrafficLightState.ORANGE;
+import static com.ivantha.ts.model.TrafficLight.TrafficLightState.RED;
+import static java.lang.Math.PI;
 
 public class DashboardController implements Initializable {
     @FXML
@@ -60,57 +57,77 @@ public class DashboardController implements Initializable {
     private Button resetButton;
 
     @FXML
-    private TilePane nLane1IntervalTile;
+    private RadioButton n1RedRadioButton;
     @FXML
-    private TilePane nLane2IntervalTile;
+    private RadioButton n1OrangeRadioButton;
     @FXML
-    private TilePane nLane3IntervalTile;
+    private RadioButton n1GreenRadioButton;
     @FXML
-    private TilePane eLane1IntervalTile;
+    private RadioButton n2RedRadioButton;
     @FXML
-    private TilePane eLane2IntervalTile;
+    private RadioButton n2OrangeRadioButton;
     @FXML
-    private TilePane eLane3IntervalTile;
+    private RadioButton n2GreenRadioButton;
     @FXML
-    private TilePane sLane1IntervalTile;
+    private RadioButton n3RedRadioButton;
     @FXML
-    private TilePane sLane2IntervalTile;
+    private RadioButton n3OrangeRadioButton;
     @FXML
-    private TilePane sLane3IntervalTile;
+    private RadioButton n3GreenRadioButton;
     @FXML
-    private TilePane wLane1IntervalTile;
+    private RadioButton e1RedRadioButton;
     @FXML
-    private TilePane wLane2IntervalTile;
+    private RadioButton e1OrangeRadioButton;
     @FXML
-    private TilePane wLane3IntervalTile;
-
+    private RadioButton e1GreenRadioButton;
     @FXML
-    private HBox nLane1ManualTile;
+    private RadioButton e2RedRadioButton;
     @FXML
-    private HBox nLane2ManualTile;
+    private RadioButton e2OrangeRadioButton;
     @FXML
-    private HBox nLane3ManualTile;
+    private RadioButton e2GreenRadioButton;
     @FXML
-    private HBox eLane1ManualTile;
+    private RadioButton e3RedRadioButton;
     @FXML
-    private HBox eLane2ManualTile;
+    private RadioButton e3OrangeRadioButton;
     @FXML
-    private HBox eLane3ManualTile;
+    private RadioButton e3GreenRadioButton;
     @FXML
-    private HBox sLane1ManualTile;
+    private RadioButton s1RedRadioButton;
     @FXML
-    private HBox sLane2ManualTile;
+    private RadioButton s1OrangeRadioButton;
     @FXML
-    private HBox sLane3ManualTile;
+    private RadioButton s1GreenRadioButton;
     @FXML
-    private HBox wLane1ManualTile;
+    private RadioButton s2RedRadioButton;
     @FXML
-    private HBox wLane2ManualTile;
+    private RadioButton s2OrangeRadioButton;
     @FXML
-    private HBox wLane3ManualTile;
-
-
-
+    private RadioButton s2GreenRadioButton;
+    @FXML
+    private RadioButton s3RedRadioButton;
+    @FXML
+    private RadioButton s3OrangeRadioButton;
+    @FXML
+    private RadioButton s3GreenRadioButton;
+    @FXML
+    private RadioButton w1RedRadioButton;
+    @FXML
+    private RadioButton w1OrangeRadioButton;
+    @FXML
+    private RadioButton w1GreenRadioButton;
+    @FXML
+    private RadioButton w2RedRadioButton;
+    @FXML
+    private RadioButton w2OrangeRadioButton;
+    @FXML
+    private RadioButton w2GreenRadioButton;
+    @FXML
+    private RadioButton w3RedRadioButton;
+    @FXML
+    private RadioButton w3OrangeRadioButton;
+    @FXML
+    private RadioButton w3GreenRadioButton;
 
     private Timeline uiUpdater;
     private Timer mainTimer;
@@ -128,19 +145,6 @@ public class DashboardController implements Initializable {
     private HashMap<Integer, Lane> wIntRoad;
 
     private boolean isStarted = false;
-
-    private TileToggle<TilePane, HBox> nLane1TileToggle;
-    private TileToggle<TilePane, HBox> nLane2TileToggle;
-    private TileToggle<TilePane, HBox> nLane3TileToggle;
-    private TileToggle<TilePane, HBox> eLane1TileToggle;
-    private TileToggle<TilePane, HBox> eLane2TileToggle;
-    private TileToggle<TilePane, HBox> eLane3TileToggle;
-    private TileToggle<TilePane, HBox> sLane1TileToggle;
-    private TileToggle<TilePane, HBox> sLane2TileToggle;
-    private TileToggle<TilePane, HBox> sLane3TileToggle;
-    private TileToggle<TilePane, HBox> wLane1TileToggle;
-    private TileToggle<TilePane, HBox> wLane2TileToggle;
-    private TileToggle<TilePane, HBox> wLane3TileToggle;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -183,18 +187,42 @@ public class DashboardController implements Initializable {
         southToggleButton.setOnAction(event -> roadMap.setSouthEnabled(southToggleButton.isSelected()));
         westToggleButton.setOnAction(event -> roadMap.setWestEnabled(westToggleButton.isSelected()));
 
-        nLane1TileToggle = new TileToggle<>(nLane1IntervalTile, nLane1ManualTile);
-        nLane2TileToggle = new TileToggle<>(nLane2IntervalTile, nLane2ManualTile);
-        nLane3TileToggle = new TileToggle<>(nLane3IntervalTile, nLane3ManualTile);
-        eLane1TileToggle = new TileToggle<>(eLane1IntervalTile, eLane1ManualTile);
-        eLane2TileToggle = new TileToggle<>(eLane2IntervalTile, eLane2ManualTile);
-        eLane3TileToggle = new TileToggle<>(eLane3IntervalTile, eLane3ManualTile);
-        sLane1TileToggle = new TileToggle<>(sLane1IntervalTile, sLane1ManualTile);
-        sLane2TileToggle = new TileToggle<>(sLane2IntervalTile, sLane2ManualTile);
-        sLane3TileToggle = new TileToggle<>(sLane3IntervalTile, sLane3ManualTile);
-        wLane1TileToggle = new TileToggle<>(wLane1IntervalTile, wLane1ManualTile);
-        wLane2TileToggle = new TileToggle<>(wLane2IntervalTile, wLane2ManualTile);
-        wLane3TileToggle = new TileToggle<>(wLane3IntervalTile, wLane3ManualTile);
+        n1RedRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(1).getLane(1).getTrafficLight().setState(RED));
+        n1OrangeRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(1).getLane(1).getTrafficLight().setState(ORANGE));
+        n1GreenRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(1).getLane(1).getTrafficLight().setState(GREEN));
+        n2RedRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(1).getLane(2).getTrafficLight().setState(RED));
+        n2OrangeRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(1).getLane(2).getTrafficLight().setState(ORANGE));
+        n2GreenRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(1).getLane(2).getTrafficLight().setState(GREEN));
+        n3RedRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(1).getLane(3).getTrafficLight().setState(RED));
+        n3OrangeRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(1).getLane(3).getTrafficLight().setState(ORANGE));
+        n3GreenRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(1).getLane(3).getTrafficLight().setState(GREEN));
+        e1RedRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(2).getLane(1).getTrafficLight().setState(RED));
+        e1OrangeRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(2).getLane(1).getTrafficLight().setState(ORANGE));
+        e1GreenRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(2).getLane(1).getTrafficLight().setState(GREEN));
+        e2RedRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(2).getLane(2).getTrafficLight().setState(RED));
+        e2OrangeRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(2).getLane(2).getTrafficLight().setState(ORANGE));
+        e2GreenRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(2).getLane(2).getTrafficLight().setState(GREEN));
+        e3RedRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(2).getLane(3).getTrafficLight().setState(RED));
+        e3OrangeRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(2).getLane(3).getTrafficLight().setState(ORANGE));
+        e3GreenRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(2).getLane(3).getTrafficLight().setState(GREEN));
+        s1RedRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(3).getLane(1).getTrafficLight().setState(RED));
+        s1OrangeRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(3).getLane(1).getTrafficLight().setState(ORANGE));
+        s1GreenRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(3).getLane(1).getTrafficLight().setState(GREEN));
+        s2RedRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(3).getLane(2).getTrafficLight().setState(RED));
+        s2OrangeRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(3).getLane(2).getTrafficLight().setState(ORANGE));
+        s2GreenRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(3).getLane(2).getTrafficLight().setState(GREEN));
+        s3RedRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(3).getLane(3).getTrafficLight().setState(RED));
+        s3OrangeRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(3).getLane(3).getTrafficLight().setState(ORANGE));
+        s3GreenRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(3).getLane(3).getTrafficLight().setState(GREEN));
+        w1RedRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(4).getLane(1).getTrafficLight().setState(RED));
+        w1OrangeRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(4).getLane(1).getTrafficLight().setState(ORANGE));
+        w1GreenRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(4).getLane(1).getTrafficLight().setState(GREEN));
+        w2RedRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(4).getLane(2).getTrafficLight().setState(RED));
+        w2OrangeRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(4).getLane(2).getTrafficLight().setState(ORANGE));
+        w2GreenRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(4).getLane(2).getTrafficLight().setState(GREEN));
+        w3RedRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(4).getLane(3).getTrafficLight().setState(RED));
+        w3OrangeRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(4).getLane(3).getTrafficLight().setState(ORANGE));
+        w3GreenRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(4).getLane(3).getTrafficLight().setState(GREEN));
     }
 
     private void stop() {
