@@ -3,15 +3,14 @@ package com.ivantha.ts.model;
 import com.ivantha.ts.constant.LaneType;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
-import static com.ivantha.ts.common.Global.AVERAGE_GAP;
-import static com.ivantha.ts.common.Global.ROAD_LENGTH;
-import static com.ivantha.ts.common.Global.ROAD_RADIUS;
+import static com.ivantha.ts.common.Global.*;
 
 public class Lane {
-    public final int laneId;
-    public final LaneType laneType;
-    public final double length;
+    private final int laneId;
+    private final LaneType laneType;
+    private final double length;
 
     private final ArrayList<Vehicle> vehicles = new ArrayList<>();
     private final TrafficLight trafficLight = new TrafficLight();
@@ -19,7 +18,7 @@ public class Lane {
     public Lane(int laneId) {
         this.laneId = laneId;
 
-        switch (laneId){
+        switch (laneId) {
             case 1:
             case 2:
             case 3:
@@ -54,31 +53,38 @@ public class Lane {
     public int getLaneId() {
         return laneId;
     }
+
     public LaneType getLaneType() {
         return laneType;
     }
-    public ArrayList<Vehicle> getVehicles() {
+
+    public double getLength() {
+        return length;
+    }
+
+    public ArrayList<Vehicle> getVehicleList() {
         return vehicles;
     }
+
     public TrafficLight getTrafficLight() {
         return trafficLight;
     }
 
-    public void addVehicleToQueue(Vehicle vehicle){
+    public void addVehicleToQueue(Vehicle vehicle) {
         vehicles.add(vehicle);
-        vehicle.trajectory.setLane(this);
-        vehicle.trajectory.setLaneIndex(vehicles.size() - 1);
+        vehicle.getTrajectory().setLane(this);
+        vehicle.getTrajectory().setLaneIndex(vehicles.size() - 1);
     }
 
-    public boolean isSapceAvailable(Vehicle vehicle){
-        if(getVehicles().size() > 0){
-            Vehicle frontVehicle = getVehicles().get(getVehicles().size() - 1);
-            if (vehicle.length < frontVehicle.trajectory.getLocation() - frontVehicle.length - AVERAGE_GAP.get()) {
+    public boolean isSapceAvailable(Vehicle vehicle) {
+        if (getVehicleList().size() > 0) {
+            Vehicle frontVehicle = getVehicleList().get(getVehicleList().size() - 1);
+            if (vehicle.getLength() < frontVehicle.getTrajectory().getLocation() - frontVehicle.getLength() - AVERAGE_GAP.get()) {
                 return true;
-            }else{
+            } else {
                 return false;
             }
-        }else{
+        } else {
             return true;
         }
     }

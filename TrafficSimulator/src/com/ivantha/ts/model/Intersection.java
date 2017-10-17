@@ -16,7 +16,7 @@ public class Intersection {
         intLaneMap.put(3, southIntRoad);
         intLaneMap.put(4, westIntRoad);
 
-        for(HashMap.Entry<Integer, HashMap<Integer, Lane>> entry : intLaneMap.entrySet()) {
+        for (HashMap.Entry<Integer, HashMap<Integer, Lane>> entry : intLaneMap.entrySet()) {
             HashMap<Integer, Lane> road = entry.getValue();
             road.put(7, new Lane(7));
             road.put(8, new Lane(8));
@@ -27,22 +27,25 @@ public class Intersection {
     public HashMap<Integer, Lane> getNorthIntRoad() {
         return northIntRoad;
     }
+
     public HashMap<Integer, Lane> getEastIntRoad() {
         return eastIntRoad;
     }
+
     public HashMap<Integer, Lane> getSouthIntRoad() {
         return southIntRoad;
     }
+
     public HashMap<Integer, Lane> getWestIntRoad() {
         return westIntRoad;
     }
 
-    public Lane getIntLane(int roadId, int laneId){
+    public Lane getIntLane(int roadId, int laneId) {
         return intLaneMap.get(roadId).get(laneId);
     }
 
-    public void appendVehicleToIntLane(Vehicle vehicle, int roadId, int laneId){
-        vehicle.trajectory.setLocation(0);
+    public void appendVehicleToIntLane(Vehicle vehicle, int roadId, int laneId) {
+        vehicle.getTrajectory().setLocation(0);
         intLaneMap.get(roadId).get(laneId).addVehicleToQueue(vehicle);
     }
 }

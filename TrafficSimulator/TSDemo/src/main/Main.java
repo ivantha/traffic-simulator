@@ -8,7 +8,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         Simulator simulator = new Simulator();
-        simulator.startNewInstance(primaryStage);
+        simulator.start(primaryStage);
     }
 
     public static void main(String[] args) {

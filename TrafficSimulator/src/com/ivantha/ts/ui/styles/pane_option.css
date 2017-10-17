@@ -3,10 +3,10 @@
 @import "tab_connect.css";
 @import "tab_theme.css";
 
-#optionsAnchorPane{
+#optionsAnchorPane {
 }
 
-.tabAnchorPane{
+.tabAnchorPane {
 }
 
 .tab-pane *.tab-header-area *.tab-header-background {
@@ -18,7 +18,7 @@
     -fx-padding: 0.0em 0.0em 0.0em 0.0em;
 }
 
-.tab-pane{
+.tab-pane {
     -fx-tab-min-width: 83px;
     -fx-tab-min-height: 30px;
     -fx-tab-max-width: 83px;
@@ -28,7 +28,7 @@
     -fx-faint-focus-color: transparent;
 }
 
-.tab{
+.tab {
     -fx-background-color: transparent;
     -fx-background-radius: 0px;
 
@@ -38,43 +38,51 @@
     -fx-background-position: center;
 }
 
-#worldTab{
+#worldTab {
     -fx-background-image: url("../icons/world_black.png");
 }
-#worldTab:hover{
-    -fx-background-image: url("../icons/world_white.png");
-}
-#worldTab:selected{
+
+#worldTab:hover {
     -fx-background-image: url("../icons/world_white.png");
 }
 
-#trafficTab{
+#worldTab:selected {
+    -fx-background-image: url("../icons/world_white.png");
+}
+
+#trafficTab {
     -fx-background-image: url("../icons/traffic_black.png");
 }
-#trafficTab:hover{
-    -fx-background-image: url("../icons/traffic_white.png");
-}
-#trafficTab:selected{
+
+#trafficTab:hover {
     -fx-background-image: url("../icons/traffic_white.png");
 }
 
-#connectTab{
+#trafficTab:selected {
+    -fx-background-image: url("../icons/traffic_white.png");
+}
+
+#connectTab {
     -fx-background-image: url("../icons/connect_black.png");
 }
-#connectTab:hover{
-    -fx-background-image: url("../icons/connect_white.png");
-}
-#connectTab:selected{
+
+#connectTab:hover {
     -fx-background-image: url("../icons/connect_white.png");
 }
 
-#themeTab{
+#connectTab:selected {
+    -fx-background-image: url("../icons/connect_white.png");
+}
+
+#themeTab {
     -fx-background-image: url("../icons/theme_black.png");
 }
-#themeTab:hover{
+
+#themeTab:hover {
     -fx-background-image: url("../icons/theme_white.png");
 }
-#themeTab:selected{
+
+#themeTab:selected {
     -fx-background-image: url("../icons/theme_white.png");
 }
 

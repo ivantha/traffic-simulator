@@ -2,7 +2,7 @@
 @import "pane_option.css";
 @import "pane_status.css";
 
-.controlButton{
+.controlButton {
     -fx-pref-width: 200px;
     -fx-pref-height: 30px;
     -fx-background-color: #1565C0;
@@ -11,6 +11,6 @@
     -fx-text-fill: black;
 }
 
-.controlButton:hover{
+.controlButton:hover {
     -fx-text-fill: white;
 }

@@ -8,10 +8,15 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Simulator {
-    public void startNewInstance(Stage stage){
+    private Stage stage;
+
+    public void start(Stage stage) {
         try {
+            this.stage = stage;
+
             Parent root = FXMLLoader.load(getClass().getResource("../ui/view/dashboard.fxml"));
             Scene scene = new Scene(root);
             scene.setOnKeyReleased(event -> {
@@ -19,7 +24,6 @@ public class Simulator {
                     System.exit(0);
                 }
             });
-
             stage.initStyle(StageStyle.UNDECORATED);
             stage.setTitle("Traffic simulator");
             stage.setScene(scene);
@@ -27,6 +31,27 @@ public class Simulator {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
+
+    public void stop() {
+        stage.close();
+    }
+
+//    public ArrayList<Boolean> getNorthTraffic() {
+//
+//    }
+//
+//    public ArrayList<Boolean> getEastTraffic() {
+//
+//    }
+//
+//    public ArrayList<Boolean> getSouthTraffic() {
+//
+//    }
+//
+//    public ArrayList<Boolean> getWestTraffic() {
+//
+//    }
+
+
 }

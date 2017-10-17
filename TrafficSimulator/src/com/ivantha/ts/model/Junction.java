@@ -16,6 +16,7 @@ public class Junction {
     public Road getRoad(int roadId) {
         return roadHashMap.get(roadId);
     }
+
     public Intersection getIntersection() {
         return intersection;
     }

@@ -1,26 +1,22 @@
 package com.ivantha.ts.util;
 
-import com.ivantha.ts.constant.Direction;
-import com.ivantha.ts.constant.LaneType;
-import javafx.scene.Group;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.shape.*;
-import javafx.scene.transform.Rotate;
 import com.ivantha.ts.model.RoadMap;
 import com.ivantha.ts.model.Vehicle;
+import javafx.scene.Group;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.Polyline;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.transform.Rotate;
 
-import java.util.Collection;
 import java.util.Iterator;
 
-import static com.ivantha.ts.constant.Direction.*;
-import static com.ivantha.ts.constant.LaneType.IN_LANE;
-import static com.ivantha.ts.constant.LaneType.OUT_LANE;
-import static java.lang.Math.PI;
 import static com.ivantha.ts.common.Global.*;
+import static java.lang.Math.PI;
 
 public class Draw {
 
-    public static void drawMap(RoadMap roadMap, AnchorPane canvas){
+    public static void drawMap(RoadMap roadMap, AnchorPane canvas) {
         Group g = new Group();
 
         Rectangle vRect = new Rectangle(ROAD_LENGTH, 0, ROAD_RADIUS * 2, CANVAS_RADIUS * 2);
@@ -109,289 +105,395 @@ public class Draw {
         canvas.getChildren().add(g);
     }
 
-    public static void refreshMap(RoadMap roadMap, AnchorPane canvas){
+    public static void refreshMap(RoadMap roadMap, AnchorPane canvas) {
         canvas.getChildren().clear();
 
-        drawVehiclesOnLane(canvas, roadMap.getJunction().getRoad(1).getLane(1).getVehicles(), NORTH, IN_LANE, ROAD_RADIUS / 6 * 5);
-        drawVehiclesOnLane(canvas, roadMap.getJunction().getRoad(1).getLane(2).getVehicles(), NORTH, IN_LANE, ROAD_RADIUS / 6 * 3);
-        drawVehiclesOnLane(canvas, roadMap.getJunction().getRoad(1).getLane(3).getVehicles(), NORTH, IN_LANE, ROAD_RADIUS / 6 * 1);
-        drawVehiclesOnLane(canvas, roadMap.getJunction().getRoad(2).getLane(1).getVehicles(), EAST, IN_LANE, ROAD_RADIUS / 6 * 5);
-        drawVehiclesOnLane(canvas, roadMap.getJunction().getRoad(2).getLane(2).getVehicles(), EAST, IN_LANE, ROAD_RADIUS / 6 * 3);
-        drawVehiclesOnLane(canvas, roadMap.getJunction().getRoad(2).getLane(3).getVehicles(), EAST, IN_LANE, ROAD_RADIUS / 6 * 1);
-        drawVehiclesOnLane(canvas, roadMap.getJunction().getRoad(3).getLane(1).getVehicles(), SOUTH, IN_LANE, (-1) * ROAD_RADIUS / 6 * 5);
-        drawVehiclesOnLane(canvas, roadMap.getJunction().getRoad(3).getLane(2).getVehicles(), SOUTH, IN_LANE, (-1) * ROAD_RADIUS / 6 * 3);
-        drawVehiclesOnLane(canvas, roadMap.getJunction().getRoad(3).getLane(3).getVehicles(), SOUTH, IN_LANE, (-1) * ROAD_RADIUS / 6 * 1);
-        drawVehiclesOnLane(canvas, roadMap.getJunction().getRoad(4).getLane(1).getVehicles(), WEST, IN_LANE, (-1) * ROAD_RADIUS / 6 * 5);
-        drawVehiclesOnLane(canvas, roadMap.getJunction().getRoad(4).getLane(2).getVehicles(), WEST, IN_LANE, (-1) * ROAD_RADIUS / 6 * 3);
-        drawVehiclesOnLane(canvas, roadMap.getJunction().getRoad(4).getLane(3).getVehicles(), WEST, IN_LANE, (-1) * ROAD_RADIUS / 6 * 1);
+        Iterator<Vehicle> vehicleIterator;
 
-        drawVehiclesOnLane(canvas, roadMap.getJunction().getRoad(1).getLane(4).getVehicles(), NORTH, OUT_LANE, (-1) * ROAD_RADIUS / 6 * 1);
-        drawVehiclesOnLane(canvas, roadMap.getJunction().getRoad(1).getLane(5).getVehicles(), NORTH, OUT_LANE, (-1) * ROAD_RADIUS / 6 * 3);
-        drawVehiclesOnLane(canvas, roadMap.getJunction().getRoad(1).getLane(6).getVehicles(), NORTH, OUT_LANE, (-1) * ROAD_RADIUS / 6 * 5);
-        drawVehiclesOnLane(canvas, roadMap.getJunction().getRoad(2).getLane(4).getVehicles(), EAST, OUT_LANE, (-1) * ROAD_RADIUS / 6 * 1);
-        drawVehiclesOnLane(canvas, roadMap.getJunction().getRoad(2).getLane(5).getVehicles(), EAST, OUT_LANE, (-1) * ROAD_RADIUS / 6 * 3);
-        drawVehiclesOnLane(canvas, roadMap.getJunction().getRoad(2).getLane(6).getVehicles(), EAST, OUT_LANE, (-1) * ROAD_RADIUS / 6 * 5);
-        drawVehiclesOnLane(canvas, roadMap.getJunction().getRoad(3).getLane(4).getVehicles(), SOUTH, OUT_LANE,  ROAD_RADIUS / 6 * 1);
-        drawVehiclesOnLane(canvas, roadMap.getJunction().getRoad(3).getLane(5).getVehicles(), SOUTH, OUT_LANE,  ROAD_RADIUS / 6 * 3);
-        drawVehiclesOnLane(canvas, roadMap.getJunction().getRoad(3).getLane(6).getVehicles(), SOUTH, OUT_LANE,  ROAD_RADIUS / 6 * 5);
-        drawVehiclesOnLane(canvas, roadMap.getJunction().getRoad(4).getLane(4).getVehicles(), WEST, OUT_LANE, ROAD_RADIUS / 6 * 1);
-        drawVehiclesOnLane(canvas, roadMap.getJunction().getRoad(4).getLane(5).getVehicles(), WEST, OUT_LANE, ROAD_RADIUS / 6 * 3);
-        drawVehiclesOnLane(canvas, roadMap.getJunction().getRoad(4).getLane(6).getVehicles(), WEST, OUT_LANE, ROAD_RADIUS / 6 * 5);
-
-        drawVehiclesOnIntersection(canvas, roadMap.getJunction().getIntersection().getNorthIntRoad().get(7).getVehicles(),
-                CANVAS_RADIUS + (ROAD_RADIUS / 6 * 5), CANVAS_RADIUS - ROAD_RADIUS,
-                ROAD_RADIUS / 6, 1,7);
-        drawVehiclesOnIntersection(canvas, roadMap.getJunction().getIntersection().getNorthIntRoad().get(8).getVehicles(),
-                CANVAS_RADIUS + (ROAD_RADIUS / 6 * 3), CANVAS_RADIUS - ROAD_RADIUS,
-                0, 1, 8);
-        drawVehiclesOnIntersection(canvas, roadMap.getJunction().getIntersection().getNorthIntRoad().get(9).getVehicles(),
-                CANVAS_RADIUS + (ROAD_RADIUS / 6 * 1), CANVAS_RADIUS - ROAD_RADIUS,
-                ROAD_RADIUS + ROAD_RADIUS / 6, 1, 9);
-
-        drawVehiclesOnIntersection(canvas, roadMap.getJunction().getIntersection().getEastIntRoad().get(7).getVehicles(),
-                CANVAS_RADIUS + ROAD_RADIUS, CANVAS_RADIUS + (ROAD_RADIUS / 6 * 5),
-                ROAD_RADIUS / 6,2, 7);
-        drawVehiclesOnIntersection(canvas, roadMap.getJunction().getIntersection().getEastIntRoad().get(8).getVehicles(),
-                CANVAS_RADIUS + ROAD_RADIUS, CANVAS_RADIUS + (ROAD_RADIUS / 6 * 3),
-                0, 2, 8);
-        drawVehiclesOnIntersection(canvas, roadMap.getJunction().getIntersection().getEastIntRoad().get(9).getVehicles(),
-                CANVAS_RADIUS + ROAD_RADIUS, CANVAS_RADIUS + (ROAD_RADIUS / 6 * 1),
-                ROAD_RADIUS + ROAD_RADIUS / 6, 2, 9);
-
-        drawVehiclesOnIntersection(canvas, roadMap.getJunction().getIntersection().getSouthIntRoad().get(7).getVehicles(),
-                CANVAS_RADIUS - (ROAD_RADIUS / 6 * 5), CANVAS_RADIUS + ROAD_RADIUS,
-                ROAD_RADIUS / 6, 3,7);
-        drawVehiclesOnIntersection(canvas, roadMap.getJunction().getIntersection().getSouthIntRoad().get(8).getVehicles(),
-                CANVAS_RADIUS - (ROAD_RADIUS / 6 * 3), CANVAS_RADIUS + ROAD_RADIUS,
-                0, 3, 8);
-        drawVehiclesOnIntersection(canvas, roadMap.getJunction().getIntersection().getSouthIntRoad().get(9).getVehicles(),
-                CANVAS_RADIUS - (ROAD_RADIUS / 6 * 1), CANVAS_RADIUS + ROAD_RADIUS,
-                ROAD_RADIUS + ROAD_RADIUS / 6, 3, 9);
-
-        drawVehiclesOnIntersection(canvas, roadMap.getJunction().getIntersection().getWestIntRoad().get(7).getVehicles(),
-                ROAD_LENGTH, CANVAS_RADIUS - (ROAD_RADIUS / 6 * 5),
-                ROAD_RADIUS / 6,4, 7);
-        drawVehiclesOnIntersection(canvas, roadMap.getJunction().getIntersection().getWestIntRoad().get(8).getVehicles(),
-                ROAD_LENGTH, CANVAS_RADIUS - (ROAD_RADIUS / 6 * 3),
-                0, 4, 8);
-        drawVehiclesOnIntersection(canvas, roadMap.getJunction().getIntersection().getWestIntRoad().get(9).getVehicles(),
-                ROAD_LENGTH, CANVAS_RADIUS - (ROAD_RADIUS / 6 * 1),
-                ROAD_RADIUS + ROAD_RADIUS / 6, 4, 9);
-    }
-
-    private static void drawVehiclesOnLane(AnchorPane canvas, Collection<Vehicle> vehicles, Direction direction, LaneType laneType, double offset) {
-        Iterator<Vehicle> vehicleIterator = vehicles.iterator();
-        switch (direction) {
-            case NORTH:
-                while (vehicleIterator.hasNext()) {
-                    Vehicle vehicle = vehicleIterator.next();
-
-                    Rectangle rect = new Rectangle();
-                    rect.setFill(vehicle.getColor());
-
-                    double adjustedOffset = offset - vehicle.width / 2;
-
-                    rect.setHeight(vehicle.length);
-                    rect.setWidth(vehicle.width);
-
-                    rect.setX(CANVAS_RADIUS + adjustedOffset);
-                    if(laneType == IN_LANE){
-                        rect.setY(vehicle.trajectory.getLocation() - vehicle.length);
-                    }else {
-                        rect.setY(ROAD_LENGTH - vehicle.trajectory.getLocation());
-                    }
-
-                    canvas.getChildren().add(rect);
-                }
-                break;
-            case EAST:
-                while (vehicleIterator.hasNext()) {
-                    Vehicle vehicle = vehicleIterator.next();
-
-                    Rectangle rect = new Rectangle();
-                    rect.setFill(vehicle.getColor());
-
-                    double adjustedOffset = offset - vehicle.width / 2;
-
-                    rect.setHeight(vehicle.width);
-                    rect.setWidth(vehicle.length);
-
-                    rect.setY(CANVAS_RADIUS + adjustedOffset);
-                    if(laneType == IN_LANE){
-                        rect.setX((2 * CANVAS_RADIUS) - vehicle.trajectory.getLocation());
-                    }else {
-                        rect.setX(CANVAS_RADIUS + ROAD_RADIUS + vehicle.trajectory.getLocation() - vehicle.length);
-                    }
-
-                    canvas.getChildren().add(rect);
-                }
-                break;
-            case SOUTH:
-                while (vehicleIterator.hasNext()) {
-                    Vehicle vehicle = vehicleIterator.next();
-
-                    Rectangle rect = new Rectangle();
-                    rect.setFill(vehicle.getColor());
-
-                    double adjustedOffset = offset - vehicle.width / 2;
-
-                    rect.setHeight(vehicle.length);
-                    rect.setWidth(vehicle.width);
-
-                    rect.setX(CANVAS_RADIUS + adjustedOffset);
-                    if(laneType == IN_LANE){
-                        rect.setY((2 * CANVAS_RADIUS) - vehicle.trajectory.getLocation());
-                    }else {
-                        rect.setY(CANVAS_RADIUS + ROAD_RADIUS + vehicle.trajectory.getLocation() - vehicle.length);
-                    }
-
-                    canvas.getChildren().add(rect);
-                }
-                break;
-            case WEST:
-                while (vehicleIterator.hasNext()) {
-                    Vehicle vehicle = vehicleIterator.next();
-
-                    Rectangle rect = new Rectangle();
-                    rect.setFill(vehicle.getColor());
-
-                    double adjustedOffset = offset - vehicle.width / 2;
-
-                    rect.setHeight(vehicle.width);
-                    rect.setWidth(vehicle.length);
-
-                    rect.setY(CANVAS_RADIUS + adjustedOffset);
-                    if(laneType == IN_LANE){
-                        rect.setX(vehicle.trajectory.getLocation() - vehicle.length);
-                    }else {
-                        rect.setX(ROAD_LENGTH - vehicle.trajectory.getLocation());
-                    }
-
-                    canvas.getChildren().add(rect);
-                }
-                break;
-        }
-    }
-
-    public static void drawVehiclesOnIntersection(AnchorPane canvas, Collection<Vehicle> vehicles, double startX, double startY, double radius, int originRoadId, int originLaneId){
-        Iterator<Vehicle> vehicleIterator = vehicles.iterator();
-
+        // North - In lane 1
+        vehicleIterator = roadMap.getJunction().getRoad(1).getLane(1).getVehicleList().iterator();
         while (vehicleIterator.hasNext()) {
             Vehicle vehicle = vehicleIterator.next();
-
-            Rectangle rect = new Rectangle();
-            rect.setFill(vehicle.getColor());
-
-            double thetaRad = vehicle.trajectory.getLocation() / (radius + vehicle.length / 2);
-
-            switch (originRoadId){
-                case 1:
-                    rect.setHeight(vehicle.length);
-                    rect.setWidth(vehicle.width);
-
-                    switch (originLaneId){
-                        case 7:
-                            rect.setX(startX - vehicle.width / 2);
-                            rect.setY(startY - vehicle.length);
-
-                            rect.getTransforms().add(new Rotate((-1) * thetaRad * 180 / PI, CANVAS_RADIUS + ROAD_RADIUS + vehicle.length / 2, ROAD_LENGTH - vehicle.length / 2));
-                            break;
-                        case 8:
-                            rect.setHeight(vehicle.length);
-                            rect.setWidth(vehicle.width);
-
-                            rect.setX(startX - vehicle.width / 2);
-                            rect.setY(ROAD_LENGTH + vehicle.trajectory.getLocation() - vehicle.length);
-                            break;
-                        case 9:
-                            rect.setX(startX - vehicle.width / 2);
-                            rect.setY(startY - vehicle.length);
-
-                            rect.getTransforms().add(new Rotate(thetaRad * 180 / PI, ROAD_LENGTH - vehicle.length / 2, ROAD_LENGTH - vehicle.length / 2));
-                            break;
-                    }
-                    break;
-                case 2:
-                    rect.setHeight(vehicle.width);
-                    rect.setWidth(vehicle.length);
-
-                    switch (originLaneId){
-                        case 7:
-                            rect.setX(startX);
-                            rect.setY(startY - vehicle.width / 2);
-
-                            rect.getTransforms().add(new Rotate((-1) * thetaRad * 180 / PI, CANVAS_RADIUS + ROAD_RADIUS + vehicle.length / 2, CANVAS_RADIUS + ROAD_RADIUS + vehicle.length / 2));
-                            break;
-                        case 8:
-                            rect.setHeight(vehicle.width);
-                            rect.setWidth(vehicle.length);
-
-                            rect.setX(CANVAS_RADIUS + ROAD_RADIUS - vehicle.trajectory.getLocation());
-                            rect.setY(startY - vehicle.width / 2);
-                            break;
-                        case 9:
-                            rect.setX(startX);
-                            rect.setY(startY - vehicle.width / 2);
-
-                            rect.getTransforms().add(new Rotate(thetaRad * 180 / PI, CANVAS_RADIUS + ROAD_RADIUS + vehicle.length / 2, ROAD_LENGTH - vehicle.length / 2));
-                            break;
-                    }
-                    break;
-                case 3:
-                    rect.setHeight(vehicle.length);
-                    rect.setWidth(vehicle.width);
-
-                    switch (originLaneId){
-                        case 7:
-                            rect.setX(startX - vehicle.width / 2);
-                            rect.setY(startY);
-
-                            rect.getTransforms().add(new Rotate((-1) * thetaRad * 180 / PI, ROAD_LENGTH - vehicle.length / 2, CANVAS_RADIUS + ROAD_RADIUS + vehicle.length / 2));
-                            break;
-                        case 8:
-                            rect.setHeight(vehicle.length);
-                            rect.setWidth(vehicle.width);
-
-                            rect.setX(startX - vehicle.width / 2);
-                            rect.setY(CANVAS_RADIUS + ROAD_RADIUS - vehicle.trajectory.getLocation());
-                            break;
-                        case 9:
-                            rect.setX(startX - vehicle.width / 2);
-                            rect.setY(startY);
-
-                            rect.getTransforms().add(new Rotate(thetaRad * 180 / PI, CANVAS_RADIUS + ROAD_RADIUS + vehicle.length / 2, CANVAS_RADIUS + ROAD_RADIUS + vehicle.length / 2));
-                            break;
-                    }
-                    break;
-                case 4:
-                    rect.setHeight(vehicle.width);
-                    rect.setWidth(vehicle.length);
-
-                    switch (originLaneId){
-                        case 7:
-                            rect.setX(startX - vehicle.length);
-                            rect.setY(startY - vehicle.width / 2);
-
-                            rect.getTransforms().add(new Rotate((-1) * thetaRad * 180 / PI, ROAD_LENGTH - vehicle.length / 2, ROAD_LENGTH - vehicle.length / 2));
-                            break;
-                        case 8:
-                            rect.setHeight(vehicle.width);
-                            rect.setWidth(vehicle.length);
-
-                            rect.setX(ROAD_LENGTH + vehicle.trajectory.getLocation() - vehicle.length);
-                            rect.setY(startY - vehicle.width / 2);
-                            break;
-                        case 9:
-                            rect.setX(startX - vehicle.length);
-                            rect.setY(startY - vehicle.width / 2);
-
-                            rect.getTransforms().add(new Rotate(thetaRad * 180 / PI, ROAD_LENGTH - vehicle.length / 2, CANVAS_RADIUS + ROAD_RADIUS + vehicle.length / 2));
-                            break;
-                    }
-                    break;
-            }
-
-            canvas.getChildren().add(rect);
+            drawVehicleOnLane(canvas, vehicle, vehicle.getLength(), vehicle.getWidth(),
+                    CANVAS_RADIUS + ((ROAD_RADIUS / 6 * 5) - vehicle.getWidth() / 2),
+                    vehicle.getTrajectory().getLocation() - vehicle.getLength());
         }
+
+        // North - In lane 2
+        vehicleIterator = roadMap.getJunction().getRoad(1).getLane(2).getVehicleList().iterator();
+        while (vehicleIterator.hasNext()) {
+            Vehicle vehicle = vehicleIterator.next();
+            drawVehicleOnLane(canvas, vehicle, vehicle.getLength(), vehicle.getWidth(),
+                    CANVAS_RADIUS + ((ROAD_RADIUS / 6 * 3) - vehicle.getWidth() / 2),
+                    vehicle.getTrajectory().getLocation() - vehicle.getLength());
+        }
+
+        // North - In lane 3
+        vehicleIterator = roadMap.getJunction().getRoad(1).getLane(3).getVehicleList().iterator();
+        while (vehicleIterator.hasNext()) {
+            Vehicle vehicle = vehicleIterator.next();
+            drawVehicleOnLane(canvas, vehicle, vehicle.getLength(), vehicle.getWidth(),
+                    CANVAS_RADIUS + ((ROAD_RADIUS / 6 * 1) - vehicle.getWidth() / 2),
+                    vehicle.getTrajectory().getLocation() - vehicle.getLength());
+        }
+
+        // North - Out lane 1
+        vehicleIterator = roadMap.getJunction().getRoad(1).getLane(4).getVehicleList().iterator();
+        while (vehicleIterator.hasNext()) {
+            Vehicle vehicle = vehicleIterator.next();
+            drawVehicleOnLane(canvas, vehicle, vehicle.getLength(), vehicle.getWidth(),
+                    CANVAS_RADIUS + (((-1) * ROAD_RADIUS / 6 * 1) - vehicle.getWidth() / 2),
+                    ROAD_LENGTH - vehicle.getTrajectory().getLocation());
+        }
+
+        // North - Out lane 2
+        vehicleIterator = roadMap.getJunction().getRoad(1).getLane(5).getVehicleList().iterator();
+        while (vehicleIterator.hasNext()) {
+            Vehicle vehicle = vehicleIterator.next();
+            drawVehicleOnLane(canvas, vehicle, vehicle.getLength(), vehicle.getWidth(),
+                    CANVAS_RADIUS + (((-1) * ROAD_RADIUS / 6 * 3) - vehicle.getWidth() / 2),
+                    ROAD_LENGTH - vehicle.getTrajectory().getLocation());
+        }
+
+        // North - Out lane 3
+        vehicleIterator = roadMap.getJunction().getRoad(1).getLane(6).getVehicleList().iterator();
+        while (vehicleIterator.hasNext()) {
+            Vehicle vehicle = vehicleIterator.next();
+            drawVehicleOnLane(canvas, vehicle, vehicle.getLength(), vehicle.getWidth(),
+                    CANVAS_RADIUS + (((-1) * ROAD_RADIUS / 6 * 5) - vehicle.getWidth() / 2),
+                    ROAD_LENGTH - vehicle.getTrajectory().getLocation());
+        }
+
+        // East - In lane 1
+        vehicleIterator = roadMap.getJunction().getRoad(2).getLane(1).getVehicleList().iterator();
+        while (vehicleIterator.hasNext()) {
+            Vehicle vehicle = vehicleIterator.next();
+            drawVehicleOnLane(canvas, vehicle, vehicle.getWidth(), vehicle.getLength(),
+                    (2 * CANVAS_RADIUS) - vehicle.getTrajectory().getLocation(),
+                    CANVAS_RADIUS + ((ROAD_RADIUS / 6 * 5) - vehicle.getWidth() / 2));
+        }
+
+        // East - In lane 2
+        vehicleIterator = roadMap.getJunction().getRoad(2).getLane(2).getVehicleList().iterator();
+        while (vehicleIterator.hasNext()) {
+            Vehicle vehicle = vehicleIterator.next();
+            drawVehicleOnLane(canvas, vehicle, vehicle.getWidth(), vehicle.getLength(),
+                    (2 * CANVAS_RADIUS) - vehicle.getTrajectory().getLocation(),
+                    CANVAS_RADIUS + ((ROAD_RADIUS / 6 * 3) - vehicle.getWidth() / 2));
+        }
+
+        // East - In lane 3
+        vehicleIterator = roadMap.getJunction().getRoad(2).getLane(3).getVehicleList().iterator();
+        while (vehicleIterator.hasNext()) {
+            Vehicle vehicle = vehicleIterator.next();
+            drawVehicleOnLane(canvas, vehicle, vehicle.getWidth(), vehicle.getLength(),
+                    (2 * CANVAS_RADIUS) - vehicle.getTrajectory().getLocation(),
+                    CANVAS_RADIUS + ((ROAD_RADIUS / 6 * 1) - vehicle.getWidth() / 2));
+        }
+
+        // East - Out lane 1
+        vehicleIterator = roadMap.getJunction().getRoad(2).getLane(4).getVehicleList().iterator();
+        while (vehicleIterator.hasNext()) {
+            Vehicle vehicle = vehicleIterator.next();
+            drawVehicleOnLane(canvas, vehicle, vehicle.getWidth(), vehicle.getLength(),
+                    CANVAS_RADIUS + ROAD_RADIUS + vehicle.getTrajectory().getLocation() - vehicle.getLength(),
+                    CANVAS_RADIUS + (((-1) * ROAD_RADIUS / 6 * 1) - vehicle.getWidth() / 2));
+        }
+
+        // East - Out lane 2
+        vehicleIterator = roadMap.getJunction().getRoad(2).getLane(5).getVehicleList().iterator();
+        while (vehicleIterator.hasNext()) {
+            Vehicle vehicle = vehicleIterator.next();
+            drawVehicleOnLane(canvas, vehicle, vehicle.getWidth(), vehicle.getLength(),
+                    CANVAS_RADIUS + ROAD_RADIUS + vehicle.getTrajectory().getLocation() - vehicle.getLength(),
+                    CANVAS_RADIUS + (((-1) * ROAD_RADIUS / 6 * 3) - vehicle.getWidth() / 2));
+        }
+
+        // East - Out lane 3
+        vehicleIterator = roadMap.getJunction().getRoad(2).getLane(6).getVehicleList().iterator();
+        while (vehicleIterator.hasNext()) {
+            Vehicle vehicle = vehicleIterator.next();
+            drawVehicleOnLane(canvas, vehicle, vehicle.getWidth(), vehicle.getLength(),
+                    CANVAS_RADIUS + ROAD_RADIUS + vehicle.getTrajectory().getLocation() - vehicle.getLength(),
+                    CANVAS_RADIUS + (((-1) * ROAD_RADIUS / 6 * 5) - vehicle.getWidth() / 2));
+        }
+
+        // South - In lane 1
+        vehicleIterator = roadMap.getJunction().getRoad(3).getLane(1).getVehicleList().iterator();
+        while (vehicleIterator.hasNext()) {
+            Vehicle vehicle = vehicleIterator.next();
+            drawVehicleOnLane(canvas, vehicle, vehicle.getLength(), vehicle.getWidth(),
+                    CANVAS_RADIUS + (((-1) * ROAD_RADIUS / 6 * 5) - vehicle.getWidth() / 2),
+                    (2 * CANVAS_RADIUS) - vehicle.getTrajectory().getLocation());
+        }
+
+        // South - In lane 2
+        vehicleIterator = roadMap.getJunction().getRoad(3).getLane(2).getVehicleList().iterator();
+        while (vehicleIterator.hasNext()) {
+            Vehicle vehicle = vehicleIterator.next();
+            drawVehicleOnLane(canvas, vehicle, vehicle.getLength(), vehicle.getWidth(),
+                    CANVAS_RADIUS + (((-1) * ROAD_RADIUS / 6 * 3) - vehicle.getWidth() / 2),
+                    (2 * CANVAS_RADIUS) - vehicle.getTrajectory().getLocation());
+        }
+
+        // South - In lane 3
+        vehicleIterator = roadMap.getJunction().getRoad(3).getLane(3).getVehicleList().iterator();
+        while (vehicleIterator.hasNext()) {
+            Vehicle vehicle = vehicleIterator.next();
+            drawVehicleOnLane(canvas, vehicle, vehicle.getLength(), vehicle.getWidth(),
+                    CANVAS_RADIUS + (((-1) * ROAD_RADIUS / 6 * 1) - vehicle.getWidth() / 2),
+                    (2 * CANVAS_RADIUS) - vehicle.getTrajectory().getLocation());
+        }
+
+        // South - Out lane 1
+        vehicleIterator = roadMap.getJunction().getRoad(3).getLane(4).getVehicleList().iterator();
+        while (vehicleIterator.hasNext()) {
+            Vehicle vehicle = vehicleIterator.next();
+            drawVehicleOnLane(canvas, vehicle, vehicle.getLength(), vehicle.getWidth(),
+                    CANVAS_RADIUS + ((ROAD_RADIUS / 6 * 1) - vehicle.getWidth() / 2),
+                    CANVAS_RADIUS + ROAD_RADIUS + vehicle.getTrajectory().getLocation() - vehicle.getLength());
+        }
+
+        // South - Out lane 2
+        vehicleIterator = roadMap.getJunction().getRoad(3).getLane(5).getVehicleList().iterator();
+        while (vehicleIterator.hasNext()) {
+            Vehicle vehicle = vehicleIterator.next();
+            drawVehicleOnLane(canvas, vehicle, vehicle.getLength(), vehicle.getWidth(),
+                    CANVAS_RADIUS + ((ROAD_RADIUS / 6 * 3) - vehicle.getWidth() / 2),
+                    CANVAS_RADIUS + ROAD_RADIUS + vehicle.getTrajectory().getLocation() - vehicle.getLength());
+        }
+
+        // South - Out lane 3
+        vehicleIterator = roadMap.getJunction().getRoad(3).getLane(6).getVehicleList().iterator();
+        while (vehicleIterator.hasNext()) {
+            Vehicle vehicle = vehicleIterator.next();
+            drawVehicleOnLane(canvas, vehicle, vehicle.getLength(), vehicle.getWidth(),
+                    CANVAS_RADIUS + ((ROAD_RADIUS / 6 * 5) - vehicle.getWidth() / 2),
+                    CANVAS_RADIUS + ROAD_RADIUS + vehicle.getTrajectory().getLocation() - vehicle.getLength());
+        }
+
+        // West - In lane 1
+        vehicleIterator = roadMap.getJunction().getRoad(4).getLane(1).getVehicleList().iterator();
+        while (vehicleIterator.hasNext()) {
+            Vehicle vehicle = vehicleIterator.next();
+            drawVehicleOnLane(canvas, vehicle, vehicle.getWidth(), vehicle.getLength(),
+                    vehicle.getTrajectory().getLocation() - vehicle.getLength(),
+                    CANVAS_RADIUS + (((-1) * ROAD_RADIUS / 6 * 5) - vehicle.getWidth() / 2));
+        }
+
+        // West - In lane 2
+        vehicleIterator = roadMap.getJunction().getRoad(4).getLane(2).getVehicleList().iterator();
+        while (vehicleIterator.hasNext()) {
+            Vehicle vehicle = vehicleIterator.next();
+            drawVehicleOnLane(canvas, vehicle, vehicle.getWidth(), vehicle.getLength(),
+                    vehicle.getTrajectory().getLocation() - vehicle.getLength(),
+                    CANVAS_RADIUS + (((-1) * ROAD_RADIUS / 6 * 3) - vehicle.getWidth() / 2));
+        }
+
+        // West - In lane 3
+        vehicleIterator = roadMap.getJunction().getRoad(4).getLane(3).getVehicleList().iterator();
+        while (vehicleIterator.hasNext()) {
+            Vehicle vehicle = vehicleIterator.next();
+            drawVehicleOnLane(canvas, vehicle, vehicle.getWidth(), vehicle.getLength(),
+                    vehicle.getTrajectory().getLocation() - vehicle.getLength(),
+                    CANVAS_RADIUS + (((-1) * ROAD_RADIUS / 6 * 1) - vehicle.getWidth() / 2));
+        }
+
+        // West - Out lane 1
+        vehicleIterator = roadMap.getJunction().getRoad(4).getLane(4).getVehicleList().iterator();
+        while (vehicleIterator.hasNext()) {
+            Vehicle vehicle = vehicleIterator.next();
+            drawVehicleOnLane(canvas, vehicle, vehicle.getWidth(), vehicle.getLength(),
+                    ROAD_LENGTH - vehicle.getTrajectory().getLocation(),
+                    CANVAS_RADIUS + ((ROAD_RADIUS / 6 * 1) - vehicle.getWidth() / 2));
+        }
+
+        // West - Out lane 2
+        vehicleIterator = roadMap.getJunction().getRoad(4).getLane(5).getVehicleList().iterator();
+        while (vehicleIterator.hasNext()) {
+            Vehicle vehicle = vehicleIterator.next();
+            drawVehicleOnLane(canvas, vehicle, vehicle.getWidth(), vehicle.getLength(),
+                    ROAD_LENGTH - vehicle.getTrajectory().getLocation(),
+                    CANVAS_RADIUS + ((ROAD_RADIUS / 6 * 3) - vehicle.getWidth() / 2));
+        }
+
+        // West - Out lane 3
+        vehicleIterator = roadMap.getJunction().getRoad(4).getLane(6).getVehicleList().iterator();
+        while (vehicleIterator.hasNext()) {
+            Vehicle vehicle = vehicleIterator.next();
+            drawVehicleOnLane(canvas, vehicle, vehicle.getWidth(), vehicle.getLength(),
+                    ROAD_LENGTH - vehicle.getTrajectory().getLocation(),
+                    CANVAS_RADIUS + ((ROAD_RADIUS / 6 * 5) - vehicle.getWidth() / 2));
+        }
+
+
+        // North - Int lane 1
+        vehicleIterator = roadMap.getJunction().getIntersection().getNorthIntRoad().get(7).getVehicleList().iterator();
+        while (vehicleIterator.hasNext()) {
+            Vehicle vehicle = vehicleIterator.next();
+            double radius = ROAD_RADIUS / 6;
+            double thetaRad = vehicle.getTrajectory().getLocation() / (radius + vehicle.getLength() / 2);
+            drawVehicleOnIntersection(canvas, vehicle, vehicle.getLength(), vehicle.getWidth(),
+                    (CANVAS_RADIUS + (ROAD_RADIUS / 6 * 5)) - vehicle.getWidth() / 2, (CANVAS_RADIUS - ROAD_RADIUS) - vehicle.getLength(),
+                    (-1) * thetaRad * 180 / PI,
+                    CANVAS_RADIUS + ROAD_RADIUS + vehicle.getLength() / 2, ROAD_LENGTH - vehicle.getLength() / 2);
+        }
+
+        // North - Int lane 2
+        vehicleIterator = roadMap.getJunction().getIntersection().getNorthIntRoad().get(8).getVehicleList().iterator();
+        while (vehicleIterator.hasNext()) {
+            Vehicle vehicle = vehicleIterator.next();
+            drawVehicleOnIntersection(canvas, vehicle, vehicle.getLength(), vehicle.getWidth(),
+                    (CANVAS_RADIUS + (ROAD_RADIUS / 6 * 3)) - vehicle.getWidth() / 2, ROAD_LENGTH + vehicle.getTrajectory().getLocation() - vehicle.getLength());
+        }
+
+        // North - Int lane 3
+        vehicleIterator = roadMap.getJunction().getIntersection().getNorthIntRoad().get(9).getVehicleList().iterator();
+        while (vehicleIterator.hasNext()) {
+            Vehicle vehicle = vehicleIterator.next();
+            double radius = ROAD_RADIUS + ROAD_RADIUS / 6;
+            double thetaRad = vehicle.getTrajectory().getLocation() / (radius + vehicle.getLength() / 2);
+            drawVehicleOnIntersection(canvas, vehicle, vehicle.getLength(), vehicle.getWidth(),
+                    (CANVAS_RADIUS + (ROAD_RADIUS / 6 * 1)) - vehicle.getWidth() / 2, (CANVAS_RADIUS - ROAD_RADIUS) - vehicle.getLength(),
+                    thetaRad * 180 / PI,
+                    ROAD_LENGTH - vehicle.getLength() / 2, ROAD_LENGTH - vehicle.getLength() / 2);
+        }
+
+        // East - Int lane 1
+        vehicleIterator = roadMap.getJunction().getIntersection().getEastIntRoad().get(7).getVehicleList().iterator();
+        while (vehicleIterator.hasNext()) {
+            Vehicle vehicle = vehicleIterator.next();
+            double radius = ROAD_RADIUS / 6;
+            double thetaRad = vehicle.getTrajectory().getLocation() / (radius + vehicle.getLength() / 2);
+            drawVehicleOnIntersection(canvas, vehicle, vehicle.getWidth(), vehicle.getLength(),
+                    (CANVAS_RADIUS + ROAD_RADIUS), (CANVAS_RADIUS + (ROAD_RADIUS / 6 * 5)) - vehicle.getWidth() / 2,
+                    (-1) * thetaRad * 180 / PI,
+                    CANVAS_RADIUS + ROAD_RADIUS + vehicle.getLength() / 2, CANVAS_RADIUS + ROAD_RADIUS + vehicle.getLength() / 2);
+        }
+
+        // East - Int lane 2
+        vehicleIterator = roadMap.getJunction().getIntersection().getEastIntRoad().get(8).getVehicleList().iterator();
+        while (vehicleIterator.hasNext()) {
+            Vehicle vehicle = vehicleIterator.next();
+            drawVehicleOnIntersection(canvas, vehicle, vehicle.getWidth(), vehicle.getLength(),
+                    CANVAS_RADIUS + ROAD_RADIUS - vehicle.getTrajectory().getLocation(), (CANVAS_RADIUS + (ROAD_RADIUS / 6 * 3)) - vehicle.getWidth() / 2);
+        }
+
+        // East - Int lane 3
+        vehicleIterator = roadMap.getJunction().getIntersection().getEastIntRoad().get(9).getVehicleList().iterator();
+        while (vehicleIterator.hasNext()) {
+            Vehicle vehicle = vehicleIterator.next();
+            double radius = ROAD_RADIUS + ROAD_RADIUS / 6;
+            double thetaRad = vehicle.getTrajectory().getLocation() / (radius + vehicle.getLength() / 2);
+            drawVehicleOnIntersection(canvas, vehicle, vehicle.getWidth(), vehicle.getLength(),
+                    (CANVAS_RADIUS + ROAD_RADIUS), (CANVAS_RADIUS + (ROAD_RADIUS / 6 * 1)) - vehicle.getWidth() / 2,
+                    thetaRad * 180 / PI,
+                    CANVAS_RADIUS + ROAD_RADIUS + vehicle.getLength() / 2, ROAD_LENGTH - vehicle.getLength() / 2);
+        }
+
+        // South - Int lane 1
+        vehicleIterator = roadMap.getJunction().getIntersection().getSouthIntRoad().get(7).getVehicleList().iterator();
+        while (vehicleIterator.hasNext()) {
+            Vehicle vehicle = vehicleIterator.next();
+            double radius = ROAD_RADIUS / 6;
+            double thetaRad = vehicle.getTrajectory().getLocation() / (radius + vehicle.getLength() / 2);
+            drawVehicleOnIntersection(canvas, vehicle, vehicle.getLength(), vehicle.getWidth(),
+                    (CANVAS_RADIUS - (ROAD_RADIUS / 6 * 5)) - vehicle.getWidth() / 2, (CANVAS_RADIUS + ROAD_RADIUS),
+                    (-1) * thetaRad * 180 / PI,
+                    ROAD_LENGTH - vehicle.getLength() / 2, CANVAS_RADIUS + ROAD_RADIUS + vehicle.getLength() / 2);
+        }
+
+        // South - Int lane 2
+        vehicleIterator = roadMap.getJunction().getIntersection().getSouthIntRoad().get(8).getVehicleList().iterator();
+        while (vehicleIterator.hasNext()) {
+            Vehicle vehicle = vehicleIterator.next();
+            drawVehicleOnIntersection(canvas, vehicle, vehicle.getLength(), vehicle.getWidth(),
+                    (CANVAS_RADIUS - (ROAD_RADIUS / 6 * 3)) - vehicle.getWidth() / 2, CANVAS_RADIUS + ROAD_RADIUS - vehicle.getTrajectory().getLocation());
+        }
+
+        // South - Int lane 3
+        vehicleIterator = roadMap.getJunction().getIntersection().getSouthIntRoad().get(9).getVehicleList().iterator();
+        while (vehicleIterator.hasNext()) {
+            Vehicle vehicle = vehicleIterator.next();
+            double radius = ROAD_RADIUS + ROAD_RADIUS / 6;
+            double thetaRad = vehicle.getTrajectory().getLocation() / (radius + vehicle.getLength() / 2);
+            drawVehicleOnIntersection(canvas, vehicle, vehicle.getLength(), vehicle.getWidth(),
+                    (CANVAS_RADIUS - (ROAD_RADIUS / 6 * 1)) - vehicle.getWidth() / 2, (CANVAS_RADIUS + ROAD_RADIUS),
+                    thetaRad * 180 / PI,
+                    CANVAS_RADIUS + ROAD_RADIUS + vehicle.getLength() / 2, CANVAS_RADIUS + ROAD_RADIUS + vehicle.getLength() / 2);
+        }
+
+        // West - Int lane 1
+        vehicleIterator = roadMap.getJunction().getIntersection().getWestIntRoad().get(7).getVehicleList().iterator();
+        while (vehicleIterator.hasNext()) {
+            Vehicle vehicle = vehicleIterator.next();
+            double radius = ROAD_RADIUS / 6;
+            double thetaRad = vehicle.getTrajectory().getLocation() / (radius + vehicle.getLength() / 2);
+            drawVehicleOnIntersection(canvas, vehicle, vehicle.getWidth(), vehicle.getLength(),
+                    (ROAD_LENGTH) - vehicle.getLength(), (CANVAS_RADIUS - (ROAD_RADIUS / 6 * 5)) - vehicle.getWidth() / 2,
+                    (-1) * thetaRad * 180 / PI,
+                    ROAD_LENGTH - vehicle.getLength() / 2, ROAD_LENGTH - vehicle.getLength() / 2);
+        }
+
+        // West - Int lane 2
+        vehicleIterator = roadMap.getJunction().getIntersection().getWestIntRoad().get(8).getVehicleList().iterator();
+        while (vehicleIterator.hasNext()) {
+            Vehicle vehicle = vehicleIterator.next();
+            drawVehicleOnIntersection(canvas, vehicle, vehicle.getWidth(), vehicle.getLength(),
+                    ROAD_LENGTH + vehicle.getTrajectory().getLocation() - vehicle.getLength(), (CANVAS_RADIUS - (ROAD_RADIUS / 6 * 3)) - vehicle.getWidth() / 2);
+        }
+
+        // West - Int lane 3
+        vehicleIterator = roadMap.getJunction().getIntersection().getWestIntRoad().get(9).getVehicleList().iterator();
+        while (vehicleIterator.hasNext()) {
+            Vehicle vehicle = vehicleIterator.next();
+            double radius = ROAD_RADIUS + ROAD_RADIUS / 6;
+            double thetaRad = vehicle.getTrajectory().getLocation() / (radius + vehicle.getLength() / 2);
+            drawVehicleOnIntersection(canvas, vehicle, vehicle.getWidth(), vehicle.getLength(),
+                    (ROAD_LENGTH) - vehicle.getLength(), (CANVAS_RADIUS - (ROAD_RADIUS / 6 * 1)) - vehicle.getWidth() / 2,
+                    thetaRad * 180 / PI,
+                    ROAD_LENGTH - vehicle.getLength() / 2, CANVAS_RADIUS + ROAD_RADIUS + vehicle.getLength() / 2);
+        }
+    }
+
+    private static void drawVehicleOnLane(AnchorPane canvas, Vehicle vehicle, double rectHeight, double rectWidth, double rectX, double rectY) {
+        Rectangle rect = new Rectangle();
+        rect.setFill(vehicle.getColor());
+
+        rect.setHeight(rectHeight);
+        rect.setWidth(rectWidth);
+
+        rect.setX(rectX);
+        rect.setY(rectY);
+
+        canvas.getChildren().add(rect);
+    }
+
+    public static void drawVehicleOnIntersection(AnchorPane canvas, Vehicle vehicle, double rectHeight, double rectWidth, double startX, double startY, double rotateAngle, double pivotX, double pivotY) {
+        Rectangle rect = new Rectangle();
+        rect.setFill(vehicle.getColor());
+
+        rect.setHeight(rectHeight);
+        rect.setWidth(rectWidth);
+
+        rect.setX(startX);
+        rect.setY(startY);
+
+        rect.getTransforms().add(new Rotate(rotateAngle, pivotX, pivotY));
+
+        canvas.getChildren().add(rect);
+    }
+
+    public static void drawVehicleOnIntersection(AnchorPane canvas, Vehicle vehicle, double rectHeight, double rectWidth, double startX, double startY) {
+        Rectangle rect = new Rectangle();
+        rect.setFill(vehicle.getColor());
+
+        rect.setHeight(rectHeight);
+        rect.setWidth(rectWidth);
+
+        rect.setX(startX);
+        rect.setY(startY);
+
+        canvas.getChildren().add(rect);
     }
 }

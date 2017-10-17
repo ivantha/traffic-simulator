@@ -1,82 +1,97 @@
 package com.ivantha.ts.model;
 
-import javafx.scene.paint.Color;
 import com.ivantha.ts.common.Global;
 import com.ivantha.ts.util.Common;
+import javafx.scene.paint.Color;
 
 import java.time.LocalTime;
 
-import static java.lang.Double.isInfinite;
-import static java.lang.Double.isNaN;
 import static com.ivantha.ts.common.Global.*;
 
 public class Vehicle {
-    public final LocalTime birthTime;
-    public final int length = (int) (15 + (Math.random() * 10));
-    public final int width = 8;
+    private final LocalTime birthTime;
+    private final int length = (int) (15 + (Math.random() * 10));
+    private final int width = 8;
 
-    public final double desiredVelocity = Math.random() * 3.5 + (AVERAGE_SPEED.get() * 0.5);
-    public final double maxAcceleration = 1;
-    public final double breakingDeceleration = 1.2;
-    public final double timeHeadway = 0.1;
-    public final double minimumGap = 3.0;
+    private final double desiredVelocity = Math.random() * 3.5 + (AVERAGE_SPEED.get() * 0.5);
+    private final double maxAcceleration = 1;
+    private final double breakingDeceleration = 1.2;
+    private final double timeHeadway = 0.1;
+    private final double minimumGap = 3.0;
 
-    public final Trajectory trajectory;
+    private final Trajectory trajectory;
 
     private Color color = Common.getRandomVehicleColor();
 
     private double velocity = 0;
 
-    private boolean isDebug = false;
-    private boolean isOverlapping = false;
-    private boolean hasInfiniteSpeed = false;
-
     public Vehicle(int origin, int destination, int preDestination, int startLaneId) {
         birthTime = LocalTime.now();
 
-        if(!VEHICLE_HASH_MAP.containsKey(this.toString())){
+        if (!VEHICLE_HASH_MAP.containsKey(this.toString())) {
             VEHICLE_HASH_MAP.put(this.toString(), VEHICLE_HASH_MAP.size() + 1);
         }
 
         this.trajectory = new Trajectory(origin, destination, preDestination, startLaneId);
     }
 
-    public double getVelocity() {
-        return velocity;
+    public LocalTime getBirthTime() {
+        return birthTime;
     }
-    public void setVelocity(double velocity) {
-        this.velocity = velocity;
+
+    public int getLength() {
+        return length;
     }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public double getDesiredVelocity() {
+        return desiredVelocity;
+    }
+
+    public double getMaxAcceleration() {
+        return maxAcceleration;
+    }
+
+    public double getBreakingDeceleration() {
+        return breakingDeceleration;
+    }
+
+    public double getTimeHeadway() {
+        return timeHeadway;
+    }
+
+    public double getMinimumGap() {
+        return minimumGap;
+    }
+
+    public Trajectory getTrajectory() {
+        return trajectory;
+    }
+
     public Color getColor() {
         return color;
     }
+
     public void setColor(Color color) {
         this.color = color;
     }
-    public boolean isDebug() {
-        return isDebug;
+
+    public double getVelocity() {
+        return velocity;
     }
-    public void setDebug(boolean debug) {
-        isDebug = debug;
-    }
-    public boolean isOverlapping() {
-        return isOverlapping;
-    }
-    public void setOverlapping(boolean overlapping) {
-        isOverlapping = overlapping;
-    }
-    public boolean isHasInfiniteSpeed() {
-        return hasInfiniteSpeed;
-    }
-    public void setHasInfiniteSpeed(boolean hasInfiniteSpeed) {
-        this.hasInfiniteSpeed = hasInfiniteSpeed;
+
+    public void setVelocity(double velocity) {
+        this.velocity = velocity;
     }
 
     public double getAcceleration() {
         double distanceToNextCar;
-        if(trajectory.isAtFront()){
+        if (trajectory.isAtFront()) {
             distanceToNextCar = Global.CANVAS_RADIUS - trajectory.getLocation();
-        }else{
+        } else {
             Vehicle frontVehicle = trajectory.getFrontVehicle();
             distanceToNextCar = frontVehicle.trajectory.getLocation() - trajectory.getLocation() - frontVehicle.length;
         }
@@ -100,47 +115,8 @@ public class Vehicle {
         double intersectionCoeff = Math.pow(safeIntersectionDistance / trajectory.getDistanceToStopLine(), 2);
         double coeff = 1 - freeRoadCoeff - busyRoadCoeff - intersectionCoeff;
 
-        if(isDebug){
-            System.out.println("________________________________________");
-            System.out.println("vehicle                 :" + VEHICLE_HASH_MAP.get(this.toString()));
-            System.out.println("laneIndex               :" + trajectory.getLaneIndex());
-            System.out.println("speed                   :" + speed);
-            System.out.println("freeRoadCoeff           :" + freeRoadCoeff);
-            System.out.println("timeGap                 :" + timeGap);
-            System.out.println("breakGap                :" + breakGap);
-            System.out.println("safeDistance            :" + safeDistance);
-            System.out.println("busyRoadCoeff           :" + busyRoadCoeff);
-            System.out.println("safeIntersectionDistance:" + safeIntersectionDistance);
-            System.out.println("intersectionCoeff       :" + intersectionCoeff);
-            System.out.println("coeff                   :" + coeff);
-
-            if(maxAcceleration * coeff > 1000 || maxAcceleration * coeff < -1000){
-                System.out.println("Incorrect acceleration");
-//                System.exit(0);
-            }
-
-            if(speed > 1000 || speed < -1000){
-                System.out.println("Incorrect speed");
-//                System.exit(0);
-            }
-
-            if(isInfinite(speed) || isInfinite(freeRoadCoeff) || isInfinite(timeGap) || isInfinite(breakGap) || isInfinite(safeDistance) || isInfinite(busyRoadCoeff)
-                    || isInfinite(safeIntersectionDistance) || isInfinite(intersectionCoeff) || isInfinite(coeff)){
-                System.out.println(">>>> Infinite value");
-                hasInfiniteSpeed = true;
-
-                System.out.println(speed);
-                System.out.println(maxSpeed);
-                System.out.println(speed / maxSpeed);
-                System.out.println(Math.pow(speed/ maxSpeed, 4));
-//                System.exit(0);
-            }
-
-            if(isNaN(speed) || isNaN(freeRoadCoeff) || isNaN(timeGap) || isNaN(breakGap) || isNaN(safeDistance) || isNaN(busyRoadCoeff)
-                    || isNaN(safeIntersectionDistance) || isNaN(intersectionCoeff) || isNaN(coeff)){
-                System.out.println(">>>> NaN value");
-            }
-        }
+//        DebugServices.showVehicleDebug(this, speed, freeRoadCoeff, timeGap, breakGap, safeDistance, busyRoadCoeff, safeIntersectionDistance, intersectionCoeff, coeff, maxSpeed);
+//        DebugServices.showVehicleNaNDebud(speed, freeRoadCoeff, timeGap, breakGap, safeDistance, busyRoadCoeff, safeIntersectionDistance, intersectionCoeff, coeff);
 
         return maxAcceleration * coeff;
     }
@@ -169,34 +145,12 @@ public class Vehicle {
 
             trajectory.setLocation(trajectory.getLocation() + step);
 
-            if (isDebug) {
-                System.out.println("");
-                System.out.println("velocity                :" + velocity);
-                System.out.println("step                    :" + step);
-
-                for (int i = 0; i < trajectory.getLocation() / 2; i++) {
-                    System.out.print(".");
-                }
-                System.out.println(" : " + trajectory.getLocation());
-
-                if (step < 0) {
-                    System.out.println(">>>> step is less than 0");
-                    System.out.println("v-delta             :" + velocity * delta);
-                    System.out.println("1/2a(t^2)           :" + 0.5 * acceleration * Math.pow(delta, 2));
-                }
-
-                if (!trajectory.isAtFront() &&
-                        step > trajectory.getFrontVehicle().trajectory.getLocation()
-                                - trajectory.getLocation() - trajectory.getFrontVehicle().length) {
-                    System.out.println(">>>> Overlapping cars");
-                    isOverlapping = true;
-//                    System.exit(0);
-                }
-            }
+//            DebugServices.showVehicleStepDebug(this, velocity, step, acceleration, delta);
+//            DebugServices.showVehicleOverlappingDebug(this, step);
         }
     }
 
-    public class Trajectory{
+    public class Trajectory {
         public final int origin;
         public final int destination;
         public final int destinationDiff;
@@ -219,18 +173,23 @@ public class Vehicle {
         public double getLocation() {
             return location;
         }
+
         public void setLocation(double location) {
             this.location = location;
         }
+
         public int getLaneIndex() {
             return laneIndex;
         }
+
         public void setLaneIndex(int laneIndex) {
             this.laneIndex = laneIndex;
         }
+
         public Lane getLane() {
             return lane;
         }
+
         public void setLane(Lane lane) {
             this.lane = lane;
         }
@@ -243,12 +202,12 @@ public class Vehicle {
             if (isAtFront()) {
                 return null;
             } else {
-                return getLane().getVehicles().get(getLaneIndex() - 1);
+                return getLane().getVehicleList().get(getLaneIndex() - 1);
             }
         }
 
-        public double getDistanceToStopLine(){
-            return Math.abs(lane.length - location);
+        public double getDistanceToStopLine() {
+            return Math.abs(lane.getLength() - location);
         }
     }
 }
