@@ -30,8 +30,8 @@ public class Road {
     }
 
     public void populateRoad() {
-        if (laneHashMap.get(1).getVehicleList().size() + laneHashMap.get(2).getVehicleList().size() +
-                laneHashMap.get(3).getVehicleList().size() < VEHICLE_DENSITY.get()) {
+        if (laneHashMap.get(1).getVehicleArrayList().size() + laneHashMap.get(2).getVehicleArrayList().size() +
+                laneHashMap.get(3).getVehicleArrayList().size() < VEHICLE_DENSITY.get()) {
             generateInVehicle();
         }
     }
@@ -53,8 +53,8 @@ public class Road {
     }
 
     private void appendVehicleToInLane(Vehicle vehicle, Lane lane) {
-        if (lane.getVehicleList().size() > 0) {
-            Vehicle frontVehicle = lane.getVehicleList().get(lane.getVehicleList().size() - 1);
+        if (lane.getVehicleArrayList().size() > 0) {
+            Vehicle frontVehicle = lane.getVehicleArrayList().get(lane.getVehicleArrayList().size() - 1);
             if (vehicle.getTrajectory().getLocation() < frontVehicle.getTrajectory().getLocation() - frontVehicle.getLength() - AVERAGE_GAP.get()) {
                 vehicle.getTrajectory().setLocation(vehicle.getLength());
                 vehicle.setVelocity(0.0);

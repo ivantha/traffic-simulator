@@ -202,7 +202,7 @@ public class Vehicle {
             if (isAtFront()) {
                 return null;
             } else {
-                return getLane().getVehicleList().get(getLaneIndex() - 1);
+                return getLane().getVehicleArrayList().get(getLaneIndex() - 1);
             }
         }
 

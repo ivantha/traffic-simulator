@@ -3,7 +3,6 @@ package com.ivantha.ts.model;
 import com.ivantha.ts.constant.LaneType;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 import static com.ivantha.ts.common.Global.*;
 
@@ -62,7 +61,7 @@ public class Lane {
         return length;
     }
 
-    public ArrayList<Vehicle> getVehicleList() {
+    public ArrayList<Vehicle> getVehicleArrayList() {
         return vehicles;
     }
 
@@ -77,8 +76,8 @@ public class Lane {
     }
 
     public boolean isSapceAvailable(Vehicle vehicle) {
-        if (getVehicleList().size() > 0) {
-            Vehicle frontVehicle = getVehicleList().get(getVehicleList().size() - 1);
+        if (getVehicleArrayList().size() > 0) {
+            Vehicle frontVehicle = getVehicleArrayList().get(getVehicleArrayList().size() - 1);
             if (vehicle.getLength() < frontVehicle.getTrajectory().getLocation() - frontVehicle.getLength() - AVERAGE_GAP.get()) {
                 return true;
             } else {

@@ -1,6 +1,7 @@
 package com.ivantha.ts.controller;
 
 import com.ivantha.ts.common.Global;
+import com.ivantha.ts.constant.LaneType;
 import com.ivantha.ts.model.*;
 import com.ivantha.ts.util.Draw;
 import com.jfoenix.controls.JFXSlider;
@@ -20,6 +21,7 @@ import java.util.*;
 
 import static com.ivantha.ts.common.Global.REFRESH_INTERVAL;
 import static com.ivantha.ts.common.Global.ROAD_RADIUS;
+import static com.ivantha.ts.constant.LaneType.*;
 import static com.ivantha.ts.model.TrafficLight.TrafficLightState.*;
 import static java.lang.Math.PI;
 
@@ -253,150 +255,160 @@ public class DashboardController implements Initializable {
         public void run() {
             roadMap.populateRoadMap();
 
-            moveInLaneVehicles(nRoad.getLane(1).getVehicleList());
-            moveInLaneVehicles(nRoad.getLane(2).getVehicleList());
-            moveInLaneVehicles(nRoad.getLane(3).getVehicleList());
-            moveInLaneVehicles(eRoad.getLane(1).getVehicleList());
-            moveInLaneVehicles(eRoad.getLane(2).getVehicleList());
-            moveInLaneVehicles(eRoad.getLane(3).getVehicleList());
-            moveInLaneVehicles(sRoad.getLane(1).getVehicleList());
-            moveInLaneVehicles(sRoad.getLane(2).getVehicleList());
-            moveInLaneVehicles(sRoad.getLane(3).getVehicleList());
-            moveInLaneVehicles(wRoad.getLane(1).getVehicleList());
-            moveInLaneVehicles(wRoad.getLane(2).getVehicleList());
-            moveInLaneVehicles(wRoad.getLane(3).getVehicleList());
+            moveInLaneVehicles(nRoad.getLane(1).getVehicleArrayList());
+            moveInLaneVehicles(nRoad.getLane(2).getVehicleArrayList());
+            moveInLaneVehicles(nRoad.getLane(3).getVehicleArrayList());
+            moveInLaneVehicles(eRoad.getLane(1).getVehicleArrayList());
+            moveInLaneVehicles(eRoad.getLane(2).getVehicleArrayList());
+            moveInLaneVehicles(eRoad.getLane(3).getVehicleArrayList());
+            moveInLaneVehicles(sRoad.getLane(1).getVehicleArrayList());
+            moveInLaneVehicles(sRoad.getLane(2).getVehicleArrayList());
+            moveInLaneVehicles(sRoad.getLane(3).getVehicleArrayList());
+            moveInLaneVehicles(wRoad.getLane(1).getVehicleArrayList());
+            moveInLaneVehicles(wRoad.getLane(2).getVehicleArrayList());
+            moveInLaneVehicles(wRoad.getLane(3).getVehicleArrayList());
 
-            moveOutLaneVehicles(nRoad.getLane(6).getVehicleList());
-            moveOutLaneVehicles(nRoad.getLane(5).getVehicleList());
-            moveOutLaneVehicles(nRoad.getLane(4).getVehicleList());
-            moveOutLaneVehicles(eRoad.getLane(6).getVehicleList());
-            moveOutLaneVehicles(eRoad.getLane(5).getVehicleList());
-            moveOutLaneVehicles(eRoad.getLane(4).getVehicleList());
-            moveOutLaneVehicles(sRoad.getLane(6).getVehicleList());
-            moveOutLaneVehicles(sRoad.getLane(5).getVehicleList());
-            moveOutLaneVehicles(sRoad.getLane(4).getVehicleList());
-            moveOutLaneVehicles(wRoad.getLane(6).getVehicleList());
-            moveOutLaneVehicles(wRoad.getLane(5).getVehicleList());
-            moveOutLaneVehicles(wRoad.getLane(4).getVehicleList());
+            moveOutLaneVehicles(nRoad.getLane(6).getVehicleArrayList());
+            moveOutLaneVehicles(nRoad.getLane(5).getVehicleArrayList());
+            moveOutLaneVehicles(nRoad.getLane(4).getVehicleArrayList());
+            moveOutLaneVehicles(eRoad.getLane(6).getVehicleArrayList());
+            moveOutLaneVehicles(eRoad.getLane(5).getVehicleArrayList());
+            moveOutLaneVehicles(eRoad.getLane(4).getVehicleArrayList());
+            moveOutLaneVehicles(sRoad.getLane(6).getVehicleArrayList());
+            moveOutLaneVehicles(sRoad.getLane(5).getVehicleArrayList());
+            moveOutLaneVehicles(sRoad.getLane(4).getVehicleArrayList());
+            moveOutLaneVehicles(wRoad.getLane(6).getVehicleArrayList());
+            moveOutLaneVehicles(wRoad.getLane(5).getVehicleArrayList());
+            moveOutLaneVehicles(wRoad.getLane(4).getVehicleArrayList());
 
-            moveIntersectionVehiclesSmallArc(nIntRoad.get(7).getVehicleList());
-            moveIntersectionVehiclesStraight(nIntRoad.get(8).getVehicleList());
-            moveIntersectionVehiclesLargeArc(nIntRoad.get(9).getVehicleList());
-            moveIntersectionVehiclesSmallArc(eIntRoad.get(7).getVehicleList());
-            moveIntersectionVehiclesStraight(eIntRoad.get(8).getVehicleList());
-            moveIntersectionVehiclesLargeArc(eIntRoad.get(9).getVehicleList());
-            moveIntersectionVehiclesSmallArc(sIntRoad.get(7).getVehicleList());
-            moveIntersectionVehiclesStraight(sIntRoad.get(8).getVehicleList());
-            moveIntersectionVehiclesLargeArc(sIntRoad.get(9).getVehicleList());
-            moveIntersectionVehiclesSmallArc(wIntRoad.get(7).getVehicleList());
-            moveIntersectionVehiclesStraight(wIntRoad.get(8).getVehicleList());
-            moveIntersectionVehiclesLargeArc(wIntRoad.get(9).getVehicleList());
+            moveIntersectionVehiclesSmallArc(nIntRoad.get(7).getVehicleArrayList());
+            moveIntersectionVehiclesStraight(nIntRoad.get(8).getVehicleArrayList());
+            moveIntersectionVehiclesLargeArc(nIntRoad.get(9).getVehicleArrayList());
+            moveIntersectionVehiclesSmallArc(eIntRoad.get(7).getVehicleArrayList());
+            moveIntersectionVehiclesStraight(eIntRoad.get(8).getVehicleArrayList());
+            moveIntersectionVehiclesLargeArc(eIntRoad.get(9).getVehicleArrayList());
+            moveIntersectionVehiclesSmallArc(sIntRoad.get(7).getVehicleArrayList());
+            moveIntersectionVehiclesStraight(sIntRoad.get(8).getVehicleArrayList());
+            moveIntersectionVehiclesLargeArc(sIntRoad.get(9).getVehicleArrayList());
+            moveIntersectionVehiclesSmallArc(wIntRoad.get(7).getVehicleArrayList());
+            moveIntersectionVehiclesStraight(wIntRoad.get(8).getVehicleArrayList());
+            moveIntersectionVehiclesLargeArc(wIntRoad.get(9).getVehicleArrayList());
         }
 
         public void moveInLaneVehicles(ArrayList<Vehicle> vehicles) {
-            Iterator<Vehicle> vehicleIterator = vehicles.iterator();
+            synchronized (vehicles){
+                Iterator<Vehicle> vehicleIterator = vehicles.iterator();
 
-            while (vehicleIterator.hasNext()) {
-                Vehicle v = vehicleIterator.next();
+                while (vehicleIterator.hasNext()) {
+                    Vehicle v = vehicleIterator.next();
 
-                if (v.getTrajectory().getLocation() >= Global.ROAD_LENGTH) {
-                    boolean trafficLightGreen = roadMap.getJunction().getRoad(v.getTrajectory().origin).getLane(v.getTrajectory().startLaneId).getTrafficLight().getState() == GREEN;
-                    boolean spaceAvalable = intersection.getIntLane(v.getTrajectory().origin, 6 + v.getTrajectory().destinationDiff).isSapceAvailable(v);
-                    if (trafficLightGreen && spaceAvalable) {
-                        vehicleIterator.remove();
-                        intersection.appendVehicleToIntLane(v, v.getTrajectory().origin, 6 + v.getTrajectory().destinationDiff);
+                    if (v.getTrajectory().getLocation() >= Global.ROAD_LENGTH) {
+                        boolean trafficLightGreen = roadMap.getJunction().getRoad(v.getTrajectory().origin).getLane(v.getTrajectory().startLaneId).getTrafficLight().getState() == GREEN;
+                        boolean spaceAvalable = intersection.getIntLane(v.getTrajectory().origin, 6 + v.getTrajectory().destinationDiff).isSapceAvailable(v);
+                        if (trafficLightGreen && spaceAvalable) {
+                            vehicleIterator.remove();
+                            intersection.appendVehicleToIntLane(v, v.getTrajectory().origin, 6 + v.getTrajectory().destinationDiff);
 
-                        for (int i = 0; i < vehicles.size(); i++) {
-                            vehicles.get(i).getTrajectory().setLaneIndex(i);
+                            for (int i = 0; i < vehicles.size(); i++) {
+                                vehicles.get(i).getTrajectory().setLaneIndex(i);
+                            }
                         }
+                    } else {
+                        v.move();
                     }
-                } else {
-                    v.move();
                 }
             }
         }
 
         public void moveOutLaneVehicles(ArrayList<Vehicle> vehicles) {
-            Iterator<Vehicle> vehicleIterator = vehicles.iterator();
+            synchronized (vehicles){
+                Iterator<Vehicle> vehicleIterator = vehicles.iterator();
 
-            while (vehicleIterator.hasNext()) {
-                Vehicle v = vehicleIterator.next();
+                while (vehicleIterator.hasNext()) {
+                    Vehicle v = vehicleIterator.next();
 
-                if (v.getTrajectory().getLocation() >= Global.ROAD_LENGTH) {
-                    vehicleIterator.remove();
+                    if (v.getTrajectory().getLocation() >= Global.ROAD_LENGTH) {
+                        vehicleIterator.remove();
 
-                    for (int i = 0; i < vehicles.size(); i++) {
-                        vehicles.get(i).getTrajectory().setLaneIndex(i);
+                        for (int i = 0; i < vehicles.size(); i++) {
+                            vehicles.get(i).getTrajectory().setLaneIndex(i);
+                        }
+                    } else {
+                        v.move();
                     }
-                } else {
-                    v.move();
                 }
             }
         }
 
         public void moveIntersectionVehiclesSmallArc(ArrayList<Vehicle> vehicles) {
-            Iterator<Vehicle> vehicleIterator = vehicles.iterator();
+            synchronized (vehicles){
+                Iterator<Vehicle> vehicleIterator = vehicles.iterator();
 
-            while (vehicleIterator.hasNext()) {
-                Vehicle v = vehicleIterator.next();
+                while (vehicleIterator.hasNext()) {
+                    Vehicle v = vehicleIterator.next();
 
-                double laneWidth = ROAD_RADIUS / 6;
-                double thetaRadSmall = v.getTrajectory().getLocation() / (laneWidth + v.getLength() / 2);
-                if (thetaRadSmall >= PI / 2) {
-                    if (roadMap.getJunction().getRoad(v.getTrajectory().destination).getLane(3 + v.getTrajectory().destinationDiff).isSapceAvailable(v)) {
-                        vehicleIterator.remove();
-                        roadMap.getJunction().getRoad(v.getTrajectory().destination).appendVehicleToOutLane(v, 6);
+                    double laneWidth = ROAD_RADIUS / 6;
+                    double thetaRadSmall = v.getTrajectory().getLocation() / (laneWidth + v.getLength() / 2);
+                    if (thetaRadSmall >= PI / 2) {
+                        if (roadMap.getJunction().getRoad(v.getTrajectory().destination).getLane(3 + v.getTrajectory().destinationDiff).isSapceAvailable(v)) {
+                            vehicleIterator.remove();
+                            roadMap.getJunction().getRoad(v.getTrajectory().destination).appendVehicleToOutLane(v, 6);
 
-                        for (int i = 0; i < vehicles.size(); i++) {
-                            vehicles.get(i).getTrajectory().setLaneIndex(i);
+                            for (int i = 0; i < vehicles.size(); i++) {
+                                vehicles.get(i).getTrajectory().setLaneIndex(i);
+                            }
                         }
+                    } else {
+                        v.move();
                     }
-                } else {
-                    v.move();
                 }
             }
         }
 
         public void moveIntersectionVehiclesStraight(ArrayList<Vehicle> vehicles) {
-            Iterator<Vehicle> vehicleIterator = vehicles.iterator();
+            synchronized (vehicles){
+                Iterator<Vehicle> vehicleIterator = vehicles.iterator();
 
-            while (vehicleIterator.hasNext()) {
-                Vehicle v = vehicleIterator.next();
+                while (vehicleIterator.hasNext()) {
+                    Vehicle v = vehicleIterator.next();
 
-                if (v.getTrajectory().getLocation() >= ROAD_RADIUS * 2 + v.getLength()) {
-                    if (roadMap.getJunction().getRoad(v.getTrajectory().destination).getLane(3 + v.getTrajectory().destinationDiff).isSapceAvailable(v)) {
-                        vehicleIterator.remove();
-                        roadMap.getJunction().getRoad(v.getTrajectory().destination).appendVehicleToOutLane(v, 5);
+                    if (v.getTrajectory().getLocation() >= ROAD_RADIUS * 2 + v.getLength()) {
+                        if (roadMap.getJunction().getRoad(v.getTrajectory().destination).getLane(3 + v.getTrajectory().destinationDiff).isSapceAvailable(v)) {
+                            vehicleIterator.remove();
+                            roadMap.getJunction().getRoad(v.getTrajectory().destination).appendVehicleToOutLane(v, 5);
 
-                        for (int i = 0; i < vehicles.size(); i++) {
-                            vehicles.get(i).getTrajectory().setLaneIndex(i);
+                            for (int i = 0; i < vehicles.size(); i++) {
+                                vehicles.get(i).getTrajectory().setLaneIndex(i);
+                            }
                         }
+                    } else {
+                        v.move();
                     }
-                } else {
-                    v.move();
                 }
             }
         }
 
         public void moveIntersectionVehiclesLargeArc(ArrayList<Vehicle> vehicles) {
-            Iterator<Vehicle> vehicleIterator = vehicles.iterator();
+            synchronized (vehicles){
+                Iterator<Vehicle> vehicleIterator = vehicles.iterator();
 
-            while (vehicleIterator.hasNext()) {
-                Vehicle v = vehicleIterator.next();
+                while (vehicleIterator.hasNext()) {
+                    Vehicle v = vehicleIterator.next();
 
-                double laneWidth = ROAD_RADIUS / 6;
-                double thetaRadLarge = v.getTrajectory().getLocation() / (ROAD_RADIUS + laneWidth + v.getLength() / 2);
-                if (thetaRadLarge >= PI / 2) {
-                    if (roadMap.getJunction().getRoad(v.getTrajectory().destination).getLane(3 + v.getTrajectory().destinationDiff).isSapceAvailable(v)) {
-                        vehicleIterator.remove();
-                        roadMap.getJunction().getRoad(v.getTrajectory().destination).appendVehicleToOutLane(v, 4);
+                    double laneWidth = ROAD_RADIUS / 6;
+                    double thetaRadLarge = v.getTrajectory().getLocation() / (ROAD_RADIUS + laneWidth + v.getLength() / 2);
+                    if (thetaRadLarge >= PI / 2) {
+                        if (roadMap.getJunction().getRoad(v.getTrajectory().destination).getLane(3 + v.getTrajectory().destinationDiff).isSapceAvailable(v)) {
+                            vehicleIterator.remove();
+                            roadMap.getJunction().getRoad(v.getTrajectory().destination).appendVehicleToOutLane(v, 4);
 
-                        for (int i = 0; i < vehicles.size(); i++) {
-                            vehicles.get(i).getTrajectory().setLaneIndex(i);
+                            for (int i = 0; i < vehicles.size(); i++) {
+                                vehicles.get(i).getTrajectory().setLaneIndex(i);
+                            }
                         }
+                    } else {
+                        v.move();
                     }
-                } else {
-                    v.move();
                 }
             }
         }
