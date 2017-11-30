@@ -1,7 +1,8 @@
 package com.ivantha.ts.model;
 
 public class TrafficLight {
-    private TrafficLightState state = TrafficLightState.RED;
+    private TrafficLightState state = TrafficLightState.GREEN;
+
 
     public TrafficLight() {
     }
@@ -13,6 +14,7 @@ public class TrafficLight {
     public void setState(TrafficLightState state) {
         this.state = state;
     }
+
 
     public enum TrafficLightState {
         RED,

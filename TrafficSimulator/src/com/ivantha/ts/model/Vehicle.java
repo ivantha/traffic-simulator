@@ -1,19 +1,18 @@
 package com.ivantha.ts.model;
 
 import com.ivantha.ts.common.Global;
+import com.ivantha.ts.common.Session;
 import com.ivantha.ts.util.Common;
 import javafx.scene.paint.Color;
 
 import java.time.LocalTime;
-
-import static com.ivantha.ts.common.Global.*;
 
 public class Vehicle {
     private final LocalTime birthTime;
     private final int length = (int) (15 + (Math.random() * 10));
     private final int width = 8;
 
-    private final double desiredVelocity = Math.random() * 3.5 + (AVERAGE_SPEED.get() * 0.5);
+    private final double desiredVelocity = Math.random() * 3.5 + (Session.getAverageSpeed() * 0.5);
     private final double maxAcceleration = 1;
     private final double breakingDeceleration = 1.2;
     private final double timeHeadway = 0.1;
@@ -28,8 +27,8 @@ public class Vehicle {
     public Vehicle(int origin, int destination, int preDestination, int startLaneId) {
         birthTime = LocalTime.now();
 
-        if (!VEHICLE_HASH_MAP.containsKey(this.toString())) {
-            VEHICLE_HASH_MAP.put(this.toString(), VEHICLE_HASH_MAP.size() + 1);
+        if (!Session.VEHICLE_HASH_MAP.containsKey(this.toString())) {
+            Session.VEHICLE_HASH_MAP.put(this.toString(), Session.VEHICLE_HASH_MAP.size() + 1);
         }
 
         this.trajectory = new Trajectory(origin, destination, preDestination, startLaneId);
@@ -139,7 +138,7 @@ public class Vehicle {
 
         // I am not sure if we need this condition. >> Just a way to stop negative steps and over steps
         if (temp_step >= 0 && (trajectory.getFrontVehicle() == null
-                || trajectory.getLocation() + AVERAGE_GAP.get() + Math.abs(temp_step) < trajectory.getFrontVehicle().trajectory.getLocation() - trajectory.getFrontVehicle().length)) {
+                || trajectory.getLocation() + Session.getAverageGap() + Math.abs(temp_step) < trajectory.getFrontVehicle().trajectory.getLocation() - trajectory.getFrontVehicle().length)) {
             velocity += acceleration * delta;
             double step = (velocity * delta) + (0.5 * acceleration * Math.pow(delta, 2));
 

@@ -1,11 +1,15 @@
 package com.ivantha.ts.model;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+
 public class RoadMap {
     private final Junction junction;
-    private boolean northEnabled = false;
-    private boolean eastEnabled = false;
-    private boolean southEnabled = false;
-    private boolean westEnabled = false;
+
+    private BooleanProperty northEnabled = new SimpleBooleanProperty(false);
+    private BooleanProperty eastEnabled = new SimpleBooleanProperty(false);
+    private BooleanProperty southEnabled = new SimpleBooleanProperty(false);
+    private BooleanProperty westEnabled = new SimpleBooleanProperty(false);
 
     public RoadMap() {
         junction = new Junction();
@@ -16,51 +20,67 @@ public class RoadMap {
     }
 
     public boolean isNorthEnabled() {
+        return northEnabled.get();
+    }
+
+    public BooleanProperty northEnabledProperty() {
         return northEnabled;
     }
 
     public void setNorthEnabled(boolean northEnabled) {
-        this.northEnabled = northEnabled;
+        this.northEnabled.set(northEnabled);
     }
 
     public boolean isEastEnabled() {
+        return eastEnabled.get();
+    }
+
+    public BooleanProperty eastEnabledProperty() {
         return eastEnabled;
     }
 
     public void setEastEnabled(boolean eastEnabled) {
-        this.eastEnabled = eastEnabled;
+        this.eastEnabled.set(eastEnabled);
     }
 
     public boolean isSouthEnabled() {
+        return southEnabled.get();
+    }
+
+    public BooleanProperty southEnabledProperty() {
         return southEnabled;
     }
 
     public void setSouthEnabled(boolean southEnabled) {
-        this.southEnabled = southEnabled;
+        this.southEnabled.set(southEnabled);
     }
 
     public boolean isWestEnabled() {
+        return westEnabled.get();
+    }
+
+    public BooleanProperty westEnabledProperty() {
         return westEnabled;
     }
 
     public void setWestEnabled(boolean westEnabled) {
-        this.westEnabled = westEnabled;
+        this.westEnabled.set(westEnabled);
     }
 
     public void populateRoadMap() {
-        if (northEnabled) {
+        if (isNorthEnabled()) {
             junction.getRoad(1).populateRoad();
         }
 
-        if (eastEnabled) {
+        if (isEastEnabled()) {
             junction.getRoad(2).populateRoad();
         }
 
-        if (southEnabled) {
+        if (isSouthEnabled()) {
             junction.getRoad(3).populateRoad();
         }
 
-        if (westEnabled) {
+        if (isWestEnabled()) {
             junction.getRoad(4).populateRoad();
         }
     }

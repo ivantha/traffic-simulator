@@ -1,5 +1,6 @@
 package com.ivantha.ts.model;
 
+import com.ivantha.ts.common.Session;
 import com.ivantha.ts.constant.LaneType;
 
 import java.util.ArrayList;
@@ -78,7 +79,7 @@ public class Lane {
     public boolean isSapceAvailable(Vehicle vehicle) {
         if (getVehicleArrayList().size() > 0) {
             Vehicle frontVehicle = getVehicleArrayList().get(getVehicleArrayList().size() - 1);
-            if (vehicle.getLength() < frontVehicle.getTrajectory().getLocation() - frontVehicle.getLength() - AVERAGE_GAP.get()) {
+            if (vehicle.getLength() < frontVehicle.getTrajectory().getLocation() - frontVehicle.getLength() - Session.getAverageGap()) {
                 return true;
             } else {
                 return false;

@@ -1,8 +1,9 @@
 package com.ivantha.ts.controller;
 
 import com.ivantha.ts.common.Global;
-import com.ivantha.ts.constant.LaneType;
-import com.ivantha.ts.model.*;
+import com.ivantha.ts.common.Session;
+import com.ivantha.ts.model.RoadMap;
+import com.ivantha.ts.model.Vehicle;
 import com.ivantha.ts.util.Draw;
 import com.jfoenix.controls.JFXSlider;
 import com.jfoenix.controls.JFXToggleButton;
@@ -21,7 +22,6 @@ import java.util.*;
 
 import static com.ivantha.ts.common.Global.REFRESH_INTERVAL;
 import static com.ivantha.ts.common.Global.ROAD_RADIUS;
-import static com.ivantha.ts.constant.LaneType.*;
 import static com.ivantha.ts.model.TrafficLight.TrafficLightState.*;
 import static java.lang.Math.PI;
 
@@ -129,31 +129,20 @@ public class DashboardController implements Initializable {
     private Timer mainTimer;
     private TimerTask mainTimerTask;
 
-    private RoadMap roadMap;
-    private Road nRoad;
-    private Road eRoad;
-    private Road sRoad;
-    private Road wRoad;
-    private Intersection intersection;
-    private HashMap<Integer, Lane> nIntRoad;
-    private HashMap<Integer, Lane> eIntRoad;
-    private HashMap<Integer, Lane> sIntRoad;
-    private HashMap<Integer, Lane> wIntRoad;
-
     private boolean isStarted = false;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Draw.drawMap(roadMap, backgroundCanvasAnchorPane);
+        Draw.drawMap(Session.getRoadMap(), backgroundCanvasAnchorPane);
 
-        vehicleDensitySlider.valueProperty().bindBidirectional(Global.VEHICLE_DENSITY);
-        averageGapSlider.valueProperty().bindBidirectional(Global.AVERAGE_GAP);
-        averageSpeedSlider.valueProperty().bindBidirectional(Global.AVERAGE_SPEED);
+        vehicleDensitySlider.valueProperty().bindBidirectional(Session.vehicleDensityProperty());
+        averageGapSlider.valueProperty().bindBidirectional(Session.averageGapProperty());
+        averageSpeedSlider.valueProperty().bindBidirectional(Session.averageSpeedProperty());
 
         reset();
 
         uiUpdater = new Timeline(new KeyFrame(Duration.millis(REFRESH_INTERVAL), event1 -> {
-            Platform.runLater(() -> Draw.refreshMap(roadMap, canvasAnchorPane));
+            Platform.runLater(() -> Draw.refreshMap(Session.getRoadMap(), canvasAnchorPane));
         }));
         uiUpdater.setCycleCount(Timeline.INDEFINITE);
 
@@ -178,47 +167,58 @@ public class DashboardController implements Initializable {
 
         resetButton.setOnAction(event -> reset());
 
-        northToggleButton.setOnAction(event -> roadMap.setNorthEnabled(northToggleButton.isSelected()));
-        eastToggleButton.setOnAction(event -> roadMap.setEastEnabled(eastToggleButton.isSelected()));
-        southToggleButton.setOnAction(event -> roadMap.setSouthEnabled(southToggleButton.isSelected()));
-        westToggleButton.setOnAction(event -> roadMap.setWestEnabled(westToggleButton.isSelected()));
+        northToggleButton.selectedProperty().bindBidirectional(Session.getRoadMap().northEnabledProperty());
+        eastToggleButton.selectedProperty().bindBidirectional(Session.getRoadMap().eastEnabledProperty());
+        southToggleButton.selectedProperty().bindBidirectional(Session.getRoadMap().southEnabledProperty());
+        westToggleButton.selectedProperty().bindBidirectional(Session.getRoadMap().westEnabledProperty());
 
-        n1RedRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(1).getLane(1).getTrafficLight().setState(RED));
-        n1OrangeRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(1).getLane(1).getTrafficLight().setState(ORANGE));
-        n1GreenRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(1).getLane(1).getTrafficLight().setState(GREEN));
-        n2RedRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(1).getLane(2).getTrafficLight().setState(RED));
-        n2OrangeRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(1).getLane(2).getTrafficLight().setState(ORANGE));
-        n2GreenRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(1).getLane(2).getTrafficLight().setState(GREEN));
-        n3RedRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(1).getLane(3).getTrafficLight().setState(RED));
-        n3OrangeRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(1).getLane(3).getTrafficLight().setState(ORANGE));
-        n3GreenRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(1).getLane(3).getTrafficLight().setState(GREEN));
-        e1RedRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(2).getLane(1).getTrafficLight().setState(RED));
-        e1OrangeRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(2).getLane(1).getTrafficLight().setState(ORANGE));
-        e1GreenRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(2).getLane(1).getTrafficLight().setState(GREEN));
-        e2RedRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(2).getLane(2).getTrafficLight().setState(RED));
-        e2OrangeRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(2).getLane(2).getTrafficLight().setState(ORANGE));
-        e2GreenRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(2).getLane(2).getTrafficLight().setState(GREEN));
-        e3RedRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(2).getLane(3).getTrafficLight().setState(RED));
-        e3OrangeRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(2).getLane(3).getTrafficLight().setState(ORANGE));
-        e3GreenRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(2).getLane(3).getTrafficLight().setState(GREEN));
-        s1RedRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(3).getLane(1).getTrafficLight().setState(RED));
-        s1OrangeRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(3).getLane(1).getTrafficLight().setState(ORANGE));
-        s1GreenRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(3).getLane(1).getTrafficLight().setState(GREEN));
-        s2RedRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(3).getLane(2).getTrafficLight().setState(RED));
-        s2OrangeRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(3).getLane(2).getTrafficLight().setState(ORANGE));
-        s2GreenRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(3).getLane(2).getTrafficLight().setState(GREEN));
-        s3RedRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(3).getLane(3).getTrafficLight().setState(RED));
-        s3OrangeRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(3).getLane(3).getTrafficLight().setState(ORANGE));
-        s3GreenRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(3).getLane(3).getTrafficLight().setState(GREEN));
-        w1RedRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(4).getLane(1).getTrafficLight().setState(RED));
-        w1OrangeRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(4).getLane(1).getTrafficLight().setState(ORANGE));
-        w1GreenRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(4).getLane(1).getTrafficLight().setState(GREEN));
-        w2RedRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(4).getLane(2).getTrafficLight().setState(RED));
-        w2OrangeRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(4).getLane(2).getTrafficLight().setState(ORANGE));
-        w2GreenRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(4).getLane(2).getTrafficLight().setState(GREEN));
-        w3RedRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(4).getLane(3).getTrafficLight().setState(RED));
-        w3OrangeRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(4).getLane(3).getTrafficLight().setState(ORANGE));
-        w3GreenRadioButton.setOnAction(event -> roadMap.getJunction().getRoad(4).getLane(3).getTrafficLight().setState(GREEN));
+        n1RedRadioButton.setOnAction(event -> Session.getNorthLane1TrafficLight().setState(RED));
+        n1OrangeRadioButton.setOnAction(event -> Session.getNorthLane1TrafficLight().setState(ORANGE));
+        n1GreenRadioButton.setOnAction(event -> Session.getNorthLane1TrafficLight().setState(GREEN));
+
+        n2RedRadioButton.setOnAction(event -> Session.getNorthLane2TrafficLight().setState(RED));
+        n2OrangeRadioButton.setOnAction(event -> Session.getNorthLane2TrafficLight().setState(ORANGE));
+        n2GreenRadioButton.setOnAction(event -> Session.getNorthLane2TrafficLight().setState(GREEN));
+
+        n3RedRadioButton.setOnAction(event -> Session.getNorthLane3TrafficLight().setState(RED));
+        n3OrangeRadioButton.setOnAction(event -> Session.getNorthLane3TrafficLight().setState(ORANGE));
+        n3GreenRadioButton.setOnAction(event -> Session.getNorthLane3TrafficLight().setState(GREEN));
+
+        e1RedRadioButton.setOnAction(event -> Session.getEastLane1TrafficLight().setState(RED));
+        e1OrangeRadioButton.setOnAction(event -> Session.getEastLane1TrafficLight().setState(ORANGE));
+        e1GreenRadioButton.setOnAction(event -> Session.getEastLane1TrafficLight().setState(GREEN));
+
+        e2RedRadioButton.setOnAction(event -> Session.getEastLane2TrafficLight().setState(RED));
+        e2OrangeRadioButton.setOnAction(event -> Session.getEastLane2TrafficLight().setState(ORANGE));
+        e2GreenRadioButton.setOnAction(event -> Session.getEastLane2TrafficLight().setState(GREEN));
+
+        e3RedRadioButton.setOnAction(event -> Session.getEastLane3TrafficLight().setState(RED));
+        e3OrangeRadioButton.setOnAction(event -> Session.getEastLane3TrafficLight().setState(ORANGE));
+        e3GreenRadioButton.setOnAction(event -> Session.getEastLane3TrafficLight().setState(GREEN));
+
+        s1RedRadioButton.setOnAction(event -> Session.getSouthLane1TrafficLight().setState(RED));
+        s1OrangeRadioButton.setOnAction(event -> Session.getSouthLane1TrafficLight().setState(ORANGE));
+        s1GreenRadioButton.setOnAction(event -> Session.getSouthLane1TrafficLight().setState(GREEN));
+
+        s2RedRadioButton.setOnAction(event -> Session.getSouthLane2TrafficLight().setState(RED));
+        s2OrangeRadioButton.setOnAction(event -> Session.getSouthLane2TrafficLight().setState(ORANGE));
+        s2GreenRadioButton.setOnAction(event -> Session.getSouthLane2TrafficLight().setState(GREEN));
+
+        s3RedRadioButton.setOnAction(event -> Session.getSouthLane3TrafficLight().setState(RED));
+        s3OrangeRadioButton.setOnAction(event -> Session.getSouthLane3TrafficLight().setState(ORANGE));
+        s3GreenRadioButton.setOnAction(event -> Session.getSouthLane3TrafficLight().setState(GREEN));
+
+        w1RedRadioButton.setOnAction(event -> Session.getWestLane1TrafficLight().setState(RED));
+        w1OrangeRadioButton.setOnAction(event -> Session.getWestLane1TrafficLight().setState(ORANGE));
+        w1GreenRadioButton.setOnAction(event -> Session.getWestLane1TrafficLight().setState(GREEN));
+
+        w2RedRadioButton.setOnAction(event -> Session.getWestLane2TrafficLight().setState(RED));
+        w2OrangeRadioButton.setOnAction(event -> Session.getWestLane2TrafficLight().setState(ORANGE));
+        w2GreenRadioButton.setOnAction(event -> Session.getWestLane2TrafficLight().setState(GREEN));
+
+        w3RedRadioButton.setOnAction(event -> Session.getWestLane3TrafficLight().setState(RED));
+        w3OrangeRadioButton.setOnAction(event -> Session.getWestLane3TrafficLight().setState(ORANGE));
+        w3GreenRadioButton.setOnAction(event -> Session.getWestLane3TrafficLight().setState(GREEN));
     }
 
     private void stop() {
@@ -230,19 +230,7 @@ public class DashboardController implements Initializable {
     }
 
     private void reset() {
-        roadMap = new RoadMap();
-
-        nRoad = roadMap.getJunction().getRoad(1);
-        eRoad = roadMap.getJunction().getRoad(2);
-        sRoad = roadMap.getJunction().getRoad(3);
-        wRoad = roadMap.getJunction().getRoad(4);
-
-        intersection = roadMap.getJunction().getIntersection();
-
-        nIntRoad = intersection.getNorthIntRoad();
-        eIntRoad = intersection.getEastIntRoad();
-        sIntRoad = intersection.getSouthIntRoad();
-        wIntRoad = intersection.getWestIntRoad();
+        Session.setRoadMap(new RoadMap());
 
         northToggleButton.setSelected(false);
         eastToggleButton.setSelected(false);
@@ -253,46 +241,46 @@ public class DashboardController implements Initializable {
     class CustomerTimerTask extends TimerTask {
         @Override
         public void run() {
-            roadMap.populateRoadMap();
+            Session.getRoadMap().populateRoadMap();
 
-            moveInLaneVehicles(nRoad.getLane(1).getVehicleArrayList());
-            moveInLaneVehicles(nRoad.getLane(2).getVehicleArrayList());
-            moveInLaneVehicles(nRoad.getLane(3).getVehicleArrayList());
-            moveInLaneVehicles(eRoad.getLane(1).getVehicleArrayList());
-            moveInLaneVehicles(eRoad.getLane(2).getVehicleArrayList());
-            moveInLaneVehicles(eRoad.getLane(3).getVehicleArrayList());
-            moveInLaneVehicles(sRoad.getLane(1).getVehicleArrayList());
-            moveInLaneVehicles(sRoad.getLane(2).getVehicleArrayList());
-            moveInLaneVehicles(sRoad.getLane(3).getVehicleArrayList());
-            moveInLaneVehicles(wRoad.getLane(1).getVehicleArrayList());
-            moveInLaneVehicles(wRoad.getLane(2).getVehicleArrayList());
-            moveInLaneVehicles(wRoad.getLane(3).getVehicleArrayList());
+            moveInLaneVehicles(Session.getnRoad().getLane(1).getVehicleArrayList());
+            moveInLaneVehicles(Session.getnRoad().getLane(2).getVehicleArrayList());
+            moveInLaneVehicles(Session.getnRoad().getLane(3).getVehicleArrayList());
+            moveInLaneVehicles(Session.geteRoad().getLane(1).getVehicleArrayList());
+            moveInLaneVehicles(Session.geteRoad().getLane(2).getVehicleArrayList());
+            moveInLaneVehicles(Session.geteRoad().getLane(3).getVehicleArrayList());
+            moveInLaneVehicles(Session.getsRoad().getLane(1).getVehicleArrayList());
+            moveInLaneVehicles(Session.getsRoad().getLane(2).getVehicleArrayList());
+            moveInLaneVehicles(Session.getsRoad().getLane(3).getVehicleArrayList());
+            moveInLaneVehicles(Session.getwRoad().getLane(1).getVehicleArrayList());
+            moveInLaneVehicles(Session.getwRoad().getLane(2).getVehicleArrayList());
+            moveInLaneVehicles(Session.getwRoad().getLane(3).getVehicleArrayList());
 
-            moveOutLaneVehicles(nRoad.getLane(6).getVehicleArrayList());
-            moveOutLaneVehicles(nRoad.getLane(5).getVehicleArrayList());
-            moveOutLaneVehicles(nRoad.getLane(4).getVehicleArrayList());
-            moveOutLaneVehicles(eRoad.getLane(6).getVehicleArrayList());
-            moveOutLaneVehicles(eRoad.getLane(5).getVehicleArrayList());
-            moveOutLaneVehicles(eRoad.getLane(4).getVehicleArrayList());
-            moveOutLaneVehicles(sRoad.getLane(6).getVehicleArrayList());
-            moveOutLaneVehicles(sRoad.getLane(5).getVehicleArrayList());
-            moveOutLaneVehicles(sRoad.getLane(4).getVehicleArrayList());
-            moveOutLaneVehicles(wRoad.getLane(6).getVehicleArrayList());
-            moveOutLaneVehicles(wRoad.getLane(5).getVehicleArrayList());
-            moveOutLaneVehicles(wRoad.getLane(4).getVehicleArrayList());
+            moveOutLaneVehicles(Session.getnRoad().getLane(6).getVehicleArrayList());
+            moveOutLaneVehicles(Session.getnRoad().getLane(5).getVehicleArrayList());
+            moveOutLaneVehicles(Session.getnRoad().getLane(4).getVehicleArrayList());
+            moveOutLaneVehicles(Session.geteRoad().getLane(6).getVehicleArrayList());
+            moveOutLaneVehicles(Session.geteRoad().getLane(5).getVehicleArrayList());
+            moveOutLaneVehicles(Session.geteRoad().getLane(4).getVehicleArrayList());
+            moveOutLaneVehicles(Session.getsRoad().getLane(6).getVehicleArrayList());
+            moveOutLaneVehicles(Session.getsRoad().getLane(5).getVehicleArrayList());
+            moveOutLaneVehicles(Session.getsRoad().getLane(4).getVehicleArrayList());
+            moveOutLaneVehicles(Session.getwRoad().getLane(6).getVehicleArrayList());
+            moveOutLaneVehicles(Session.getwRoad().getLane(5).getVehicleArrayList());
+            moveOutLaneVehicles(Session.getwRoad().getLane(4).getVehicleArrayList());
 
-            moveIntersectionVehiclesSmallArc(nIntRoad.get(7).getVehicleArrayList());
-            moveIntersectionVehiclesStraight(nIntRoad.get(8).getVehicleArrayList());
-            moveIntersectionVehiclesLargeArc(nIntRoad.get(9).getVehicleArrayList());
-            moveIntersectionVehiclesSmallArc(eIntRoad.get(7).getVehicleArrayList());
-            moveIntersectionVehiclesStraight(eIntRoad.get(8).getVehicleArrayList());
-            moveIntersectionVehiclesLargeArc(eIntRoad.get(9).getVehicleArrayList());
-            moveIntersectionVehiclesSmallArc(sIntRoad.get(7).getVehicleArrayList());
-            moveIntersectionVehiclesStraight(sIntRoad.get(8).getVehicleArrayList());
-            moveIntersectionVehiclesLargeArc(sIntRoad.get(9).getVehicleArrayList());
-            moveIntersectionVehiclesSmallArc(wIntRoad.get(7).getVehicleArrayList());
-            moveIntersectionVehiclesStraight(wIntRoad.get(8).getVehicleArrayList());
-            moveIntersectionVehiclesLargeArc(wIntRoad.get(9).getVehicleArrayList());
+            moveIntersectionVehiclesSmallArc(Session.getnIntRoad().get(7).getVehicleArrayList());
+            moveIntersectionVehiclesStraight(Session.getnIntRoad().get(8).getVehicleArrayList());
+            moveIntersectionVehiclesLargeArc(Session.getnIntRoad().get(9).getVehicleArrayList());
+            moveIntersectionVehiclesSmallArc(Session.geteIntRoad().get(7).getVehicleArrayList());
+            moveIntersectionVehiclesStraight(Session.geteIntRoad().get(8).getVehicleArrayList());
+            moveIntersectionVehiclesLargeArc(Session.geteIntRoad().get(9).getVehicleArrayList());
+            moveIntersectionVehiclesSmallArc(Session.getsIntRoad().get(7).getVehicleArrayList());
+            moveIntersectionVehiclesStraight(Session.getsIntRoad().get(8).getVehicleArrayList());
+            moveIntersectionVehiclesLargeArc(Session.getsIntRoad().get(9).getVehicleArrayList());
+            moveIntersectionVehiclesSmallArc(Session.getwIntRoad().get(7).getVehicleArrayList());
+            moveIntersectionVehiclesStraight(Session.getwIntRoad().get(8).getVehicleArrayList());
+            moveIntersectionVehiclesLargeArc(Session.getwIntRoad().get(9).getVehicleArrayList());
         }
 
         public void moveInLaneVehicles(ArrayList<Vehicle> vehicles) {
@@ -303,11 +291,11 @@ public class DashboardController implements Initializable {
                     Vehicle v = vehicleIterator.next();
 
                     if (v.getTrajectory().getLocation() >= Global.ROAD_LENGTH) {
-                        boolean trafficLightGreen = roadMap.getJunction().getRoad(v.getTrajectory().origin).getLane(v.getTrajectory().startLaneId).getTrafficLight().getState() == GREEN;
-                        boolean spaceAvalable = intersection.getIntLane(v.getTrajectory().origin, 6 + v.getTrajectory().destinationDiff).isSapceAvailable(v);
+                        boolean trafficLightGreen = Session.getJunction().getRoad(v.getTrajectory().origin).getLane(v.getTrajectory().startLaneId).getTrafficLight().getState() == GREEN;
+                        boolean spaceAvalable = Session.getIntersection().getIntLane(v.getTrajectory().origin, 6 + v.getTrajectory().destinationDiff).isSapceAvailable(v);
                         if (trafficLightGreen && spaceAvalable) {
                             vehicleIterator.remove();
-                            intersection.appendVehicleToIntLane(v, v.getTrajectory().origin, 6 + v.getTrajectory().destinationDiff);
+                            Session.getIntersection().appendVehicleToIntLane(v, v.getTrajectory().origin, 6 + v.getTrajectory().destinationDiff);
 
                             for (int i = 0; i < vehicles.size(); i++) {
                                 vehicles.get(i).getTrajectory().setLaneIndex(i);
@@ -350,9 +338,9 @@ public class DashboardController implements Initializable {
                     double laneWidth = ROAD_RADIUS / 6;
                     double thetaRadSmall = v.getTrajectory().getLocation() / (laneWidth + v.getLength() / 2);
                     if (thetaRadSmall >= PI / 2) {
-                        if (roadMap.getJunction().getRoad(v.getTrajectory().destination).getLane(3 + v.getTrajectory().destinationDiff).isSapceAvailable(v)) {
+                        if (Session.getJunction().getRoad(v.getTrajectory().destination).getLane(3 + v.getTrajectory().destinationDiff).isSapceAvailable(v)) {
                             vehicleIterator.remove();
-                            roadMap.getJunction().getRoad(v.getTrajectory().destination).appendVehicleToOutLane(v, 6);
+                            Session.getJunction().getRoad(v.getTrajectory().destination).appendVehicleToOutLane(v, 6);
 
                             for (int i = 0; i < vehicles.size(); i++) {
                                 vehicles.get(i).getTrajectory().setLaneIndex(i);
@@ -373,9 +361,9 @@ public class DashboardController implements Initializable {
                     Vehicle v = vehicleIterator.next();
 
                     if (v.getTrajectory().getLocation() >= ROAD_RADIUS * 2 + v.getLength()) {
-                        if (roadMap.getJunction().getRoad(v.getTrajectory().destination).getLane(3 + v.getTrajectory().destinationDiff).isSapceAvailable(v)) {
+                        if (Session.getJunction().getRoad(v.getTrajectory().destination).getLane(3 + v.getTrajectory().destinationDiff).isSapceAvailable(v)) {
                             vehicleIterator.remove();
-                            roadMap.getJunction().getRoad(v.getTrajectory().destination).appendVehicleToOutLane(v, 5);
+                            Session.getJunction().getRoad(v.getTrajectory().destination).appendVehicleToOutLane(v, 5);
 
                             for (int i = 0; i < vehicles.size(); i++) {
                                 vehicles.get(i).getTrajectory().setLaneIndex(i);
@@ -398,9 +386,9 @@ public class DashboardController implements Initializable {
                     double laneWidth = ROAD_RADIUS / 6;
                     double thetaRadLarge = v.getTrajectory().getLocation() / (ROAD_RADIUS + laneWidth + v.getLength() / 2);
                     if (thetaRadLarge >= PI / 2) {
-                        if (roadMap.getJunction().getRoad(v.getTrajectory().destination).getLane(3 + v.getTrajectory().destinationDiff).isSapceAvailable(v)) {
+                        if (Session.getJunction().getRoad(v.getTrajectory().destination).getLane(3 + v.getTrajectory().destinationDiff).isSapceAvailable(v)) {
                             vehicleIterator.remove();
-                            roadMap.getJunction().getRoad(v.getTrajectory().destination).appendVehicleToOutLane(v, 4);
+                            Session.getJunction().getRoad(v.getTrajectory().destination).appendVehicleToOutLane(v, 4);
 
                             for (int i = 0; i < vehicles.size(); i++) {
                                 vehicles.get(i).getTrajectory().setLaneIndex(i);

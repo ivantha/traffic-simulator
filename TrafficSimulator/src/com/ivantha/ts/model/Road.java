@@ -1,9 +1,9 @@
 package com.ivantha.ts.model;
 
+import com.ivantha.ts.common.Session;
+
 import java.util.HashMap;
 
-import static com.ivantha.ts.common.Global.AVERAGE_GAP;
-import static com.ivantha.ts.common.Global.VEHICLE_DENSITY;
 
 public class Road {
     private final int roadId;
@@ -31,7 +31,7 @@ public class Road {
 
     public void populateRoad() {
         if (laneHashMap.get(1).getVehicleArrayList().size() + laneHashMap.get(2).getVehicleArrayList().size() +
-                laneHashMap.get(3).getVehicleArrayList().size() < VEHICLE_DENSITY.get()) {
+                laneHashMap.get(3).getVehicleArrayList().size() < Session.getVehicleDensity()) {
             generateInVehicle();
         }
     }
@@ -55,7 +55,7 @@ public class Road {
     private void appendVehicleToInLane(Vehicle vehicle, Lane lane) {
         if (lane.getVehicleArrayList().size() > 0) {
             Vehicle frontVehicle = lane.getVehicleArrayList().get(lane.getVehicleArrayList().size() - 1);
-            if (vehicle.getTrajectory().getLocation() < frontVehicle.getTrajectory().getLocation() - frontVehicle.getLength() - AVERAGE_GAP.get()) {
+            if (vehicle.getTrajectory().getLocation() < frontVehicle.getTrajectory().getLocation() - frontVehicle.getLength() - Session.getAverageGap()) {
                 vehicle.getTrajectory().setLocation(vehicle.getLength());
                 vehicle.setVelocity(0.0);
                 lane.addVehicleToQueue(vehicle);

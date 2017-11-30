@@ -2,7 +2,7 @@ package com.ivantha.ts.service;
 
 import com.ivantha.ts.model.Vehicle;
 
-import static com.ivantha.ts.common.Global.VEHICLE_HASH_MAP;
+import static com.ivantha.ts.common.Session.VEHICLE_HASH_MAP;
 import static java.lang.Double.isInfinite;
 import static java.lang.Double.isNaN;
 
