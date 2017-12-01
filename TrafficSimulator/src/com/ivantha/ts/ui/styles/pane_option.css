@@ -43,11 +43,11 @@
 }
 
 #worldTab:hover {
-    -fx-background-image: url("../icons/world_white.png");
+    /*-fx-background-image: url("../icons/world_white.png");*/
 }
 
 #worldTab:selected {
-    -fx-background-image: url("../icons/world_white.png");
+    /*-fx-background-image: url("../icons/world_white.png");*/
 }
 
 #trafficTab {

@@ -22,7 +22,7 @@ import java.util.*;
 
 import static com.ivantha.ts.common.Global.REFRESH_INTERVAL;
 import static com.ivantha.ts.common.Global.ROAD_RADIUS;
-import static com.ivantha.ts.model.TrafficLight.TrafficLightState.*;
+import static com.ivantha.ts.model.TrafficLight.State.*;
 import static java.lang.Math.PI;
 
 public class DashboardController implements Initializable {
@@ -172,53 +172,53 @@ public class DashboardController implements Initializable {
         southToggleButton.selectedProperty().bindBidirectional(Session.getRoadMap().southEnabledProperty());
         westToggleButton.selectedProperty().bindBidirectional(Session.getRoadMap().westEnabledProperty());
 
-        n1RedRadioButton.setOnAction(event -> Session.getNorthLane1TrafficLight().setState(RED));
-        n1OrangeRadioButton.setOnAction(event -> Session.getNorthLane1TrafficLight().setState(ORANGE));
-        n1GreenRadioButton.setOnAction(event -> Session.getNorthLane1TrafficLight().setState(GREEN));
+        n1RedRadioButton.selectedProperty().bindBidirectional(Session.getNorthLane1TrafficLight().redProperty());
+        n1OrangeRadioButton.selectedProperty().bindBidirectional(Session.getNorthLane1TrafficLight().orangeProperty());
+        n1GreenRadioButton.selectedProperty().bindBidirectional(Session.getNorthLane1TrafficLight().greenProperty());
 
-        n2RedRadioButton.setOnAction(event -> Session.getNorthLane2TrafficLight().setState(RED));
-        n2OrangeRadioButton.setOnAction(event -> Session.getNorthLane2TrafficLight().setState(ORANGE));
-        n2GreenRadioButton.setOnAction(event -> Session.getNorthLane2TrafficLight().setState(GREEN));
+        n2RedRadioButton.selectedProperty().bindBidirectional(Session.getNorthLane1TrafficLight().redProperty());
+        n2OrangeRadioButton.selectedProperty().bindBidirectional(Session.getNorthLane1TrafficLight().orangeProperty());
+        n2GreenRadioButton.selectedProperty().bindBidirectional(Session.getNorthLane1TrafficLight().greenProperty());
 
-        n3RedRadioButton.setOnAction(event -> Session.getNorthLane3TrafficLight().setState(RED));
-        n3OrangeRadioButton.setOnAction(event -> Session.getNorthLane3TrafficLight().setState(ORANGE));
-        n3GreenRadioButton.setOnAction(event -> Session.getNorthLane3TrafficLight().setState(GREEN));
+        n3RedRadioButton.selectedProperty().bindBidirectional(Session.getNorthLane1TrafficLight().redProperty());
+        n3OrangeRadioButton.selectedProperty().bindBidirectional(Session.getNorthLane1TrafficLight().orangeProperty());
+        n3GreenRadioButton.selectedProperty().bindBidirectional(Session.getNorthLane1TrafficLight().greenProperty());
 
-        e1RedRadioButton.setOnAction(event -> Session.getEastLane1TrafficLight().setState(RED));
-        e1OrangeRadioButton.setOnAction(event -> Session.getEastLane1TrafficLight().setState(ORANGE));
-        e1GreenRadioButton.setOnAction(event -> Session.getEastLane1TrafficLight().setState(GREEN));
+        e1RedRadioButton.selectedProperty().bindBidirectional(Session.getNorthLane1TrafficLight().redProperty());
+        e1OrangeRadioButton.selectedProperty().bindBidirectional(Session.getNorthLane1TrafficLight().orangeProperty());
+        e1GreenRadioButton.selectedProperty().bindBidirectional(Session.getNorthLane1TrafficLight().greenProperty());
 
-        e2RedRadioButton.setOnAction(event -> Session.getEastLane2TrafficLight().setState(RED));
-        e2OrangeRadioButton.setOnAction(event -> Session.getEastLane2TrafficLight().setState(ORANGE));
-        e2GreenRadioButton.setOnAction(event -> Session.getEastLane2TrafficLight().setState(GREEN));
+        e2RedRadioButton.selectedProperty().bindBidirectional(Session.getNorthLane1TrafficLight().redProperty());
+        e2OrangeRadioButton.selectedProperty().bindBidirectional(Session.getNorthLane1TrafficLight().orangeProperty());
+        e2GreenRadioButton.selectedProperty().bindBidirectional(Session.getNorthLane1TrafficLight().greenProperty());
 
-        e3RedRadioButton.setOnAction(event -> Session.getEastLane3TrafficLight().setState(RED));
-        e3OrangeRadioButton.setOnAction(event -> Session.getEastLane3TrafficLight().setState(ORANGE));
-        e3GreenRadioButton.setOnAction(event -> Session.getEastLane3TrafficLight().setState(GREEN));
+        e3RedRadioButton.selectedProperty().bindBidirectional(Session.getNorthLane1TrafficLight().redProperty());
+        e3OrangeRadioButton.selectedProperty().bindBidirectional(Session.getNorthLane1TrafficLight().orangeProperty());
+        e3GreenRadioButton.selectedProperty().bindBidirectional(Session.getNorthLane1TrafficLight().greenProperty());
 
-        s1RedRadioButton.setOnAction(event -> Session.getSouthLane1TrafficLight().setState(RED));
-        s1OrangeRadioButton.setOnAction(event -> Session.getSouthLane1TrafficLight().setState(ORANGE));
-        s1GreenRadioButton.setOnAction(event -> Session.getSouthLane1TrafficLight().setState(GREEN));
+        s1RedRadioButton.selectedProperty().bindBidirectional(Session.getNorthLane1TrafficLight().redProperty());
+        s1OrangeRadioButton.selectedProperty().bindBidirectional(Session.getNorthLane1TrafficLight().orangeProperty());
+        s1GreenRadioButton.selectedProperty().bindBidirectional(Session.getNorthLane1TrafficLight().greenProperty());
 
-        s2RedRadioButton.setOnAction(event -> Session.getSouthLane2TrafficLight().setState(RED));
-        s2OrangeRadioButton.setOnAction(event -> Session.getSouthLane2TrafficLight().setState(ORANGE));
-        s2GreenRadioButton.setOnAction(event -> Session.getSouthLane2TrafficLight().setState(GREEN));
+        s2RedRadioButton.selectedProperty().bindBidirectional(Session.getNorthLane1TrafficLight().redProperty());
+        s2OrangeRadioButton.selectedProperty().bindBidirectional(Session.getNorthLane1TrafficLight().orangeProperty());
+        s2GreenRadioButton.selectedProperty().bindBidirectional(Session.getNorthLane1TrafficLight().greenProperty());
 
-        s3RedRadioButton.setOnAction(event -> Session.getSouthLane3TrafficLight().setState(RED));
-        s3OrangeRadioButton.setOnAction(event -> Session.getSouthLane3TrafficLight().setState(ORANGE));
-        s3GreenRadioButton.setOnAction(event -> Session.getSouthLane3TrafficLight().setState(GREEN));
+        s3RedRadioButton.selectedProperty().bindBidirectional(Session.getNorthLane1TrafficLight().redProperty());
+        s3OrangeRadioButton.selectedProperty().bindBidirectional(Session.getNorthLane1TrafficLight().orangeProperty());
+        s3GreenRadioButton.selectedProperty().bindBidirectional(Session.getNorthLane1TrafficLight().greenProperty());
 
-        w1RedRadioButton.setOnAction(event -> Session.getWestLane1TrafficLight().setState(RED));
-        w1OrangeRadioButton.setOnAction(event -> Session.getWestLane1TrafficLight().setState(ORANGE));
-        w1GreenRadioButton.setOnAction(event -> Session.getWestLane1TrafficLight().setState(GREEN));
+        w1RedRadioButton.selectedProperty().bindBidirectional(Session.getNorthLane1TrafficLight().redProperty());
+        w1OrangeRadioButton.selectedProperty().bindBidirectional(Session.getNorthLane1TrafficLight().orangeProperty());
+        w1GreenRadioButton.selectedProperty().bindBidirectional(Session.getNorthLane1TrafficLight().greenProperty());
 
-        w2RedRadioButton.setOnAction(event -> Session.getWestLane2TrafficLight().setState(RED));
-        w2OrangeRadioButton.setOnAction(event -> Session.getWestLane2TrafficLight().setState(ORANGE));
-        w2GreenRadioButton.setOnAction(event -> Session.getWestLane2TrafficLight().setState(GREEN));
+        w2RedRadioButton.selectedProperty().bindBidirectional(Session.getNorthLane1TrafficLight().redProperty());
+        w2OrangeRadioButton.selectedProperty().bindBidirectional(Session.getNorthLane1TrafficLight().orangeProperty());
+        w2GreenRadioButton.selectedProperty().bindBidirectional(Session.getNorthLane1TrafficLight().greenProperty());
 
-        w3RedRadioButton.setOnAction(event -> Session.getWestLane3TrafficLight().setState(RED));
-        w3OrangeRadioButton.setOnAction(event -> Session.getWestLane3TrafficLight().setState(ORANGE));
-        w3GreenRadioButton.setOnAction(event -> Session.getWestLane3TrafficLight().setState(GREEN));
+        w3RedRadioButton.selectedProperty().bindBidirectional(Session.getNorthLane1TrafficLight().redProperty());
+        w3OrangeRadioButton.selectedProperty().bindBidirectional(Session.getNorthLane1TrafficLight().orangeProperty());
+        w3GreenRadioButton.selectedProperty().bindBidirectional(Session.getNorthLane1TrafficLight().greenProperty());
     }
 
     private void stop() {
