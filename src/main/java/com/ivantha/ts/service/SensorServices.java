@@ -1,10 +1,34 @@
 package com.ivantha.ts.service;
 
+import com.ivantha.ts.common.Global;
+import com.ivantha.ts.common.Session;
+import com.ivantha.ts.model.Vehicle;
+
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class SensorServices {
     public static ArrayList<Boolean> getN1InTraffic() {
-        return new ArrayList<>();
+        ArrayList<Boolean> result = new ArrayList<>();
+        Iterator<Vehicle> vehicleIterator = Session.getnRoad().getLane(1).getVehicleArrayList().iterator();
+        for (int i = 0; i < 10; i++){
+            if(vehicleIterator.hasNext()){
+                Vehicle vehicle = vehicleIterator.next();
+                int position = 10 - (int)(Global.ROAD_LENGTH / vehicle.getTrajectory().getLocation());
+                if(position == i){
+
+                }else if(position > i){
+
+                }else{
+                    System.out.println("This is not supposed to happen");
+                    System.exit(1);
+                }
+            }else{
+                result.add(false);
+            }
+        }
+
+        return result;
     }
 
     public static ArrayList<Boolean> getN2InTraffic() {
