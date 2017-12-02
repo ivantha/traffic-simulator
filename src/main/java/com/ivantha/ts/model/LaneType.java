@@ -1,4 +1,4 @@
-package com.ivantha.ts.constant;
+package com.ivantha.ts.model;
 
 public enum LaneType {
     IN_LANE,

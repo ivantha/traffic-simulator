@@ -4,11 +4,11 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 
 public class TrafficLight {
-    private State state = State.RED;
+    private State state = State.GREEN;
 
-    private BooleanProperty red = new SimpleBooleanProperty(true);
+    private BooleanProperty red = new SimpleBooleanProperty(false);
     private BooleanProperty orange = new SimpleBooleanProperty(false);
-    private BooleanProperty green = new SimpleBooleanProperty(false);
+    private BooleanProperty green = new SimpleBooleanProperty(true);
 
     public TrafficLight() {
         red.addListener((observable, oldValue, newValue) -> {

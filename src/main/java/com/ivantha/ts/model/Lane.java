@@ -1,7 +1,7 @@
 package com.ivantha.ts.model;
 
+import com.ivantha.ts.common.Global;
 import com.ivantha.ts.common.Session;
-import com.ivantha.ts.constant.LaneType;
 
 import java.util.ArrayList;
 
@@ -14,6 +14,8 @@ public class Lane {
 
     private final ArrayList<Vehicle> vehicles = new ArrayList<>();
     private final TrafficLight trafficLight = new TrafficLight();
+
+    private boolean[] sensorArray = new boolean[Global.SCPL];
 
     public Lane(int laneId) {
         this.laneId = laneId;
@@ -53,21 +55,23 @@ public class Lane {
     public int getLaneId() {
         return laneId;
     }
-
     public LaneType getLaneType() {
         return laneType;
     }
-
     public double getLength() {
         return length;
     }
-
     public ArrayList<Vehicle> getVehicleArrayList() {
         return vehicles;
     }
-
     public TrafficLight getTrafficLight() {
         return trafficLight;
+    }
+    public boolean[] getSensorArray() {
+        return sensorArray;
+    }
+    public void resetSensorArray() {
+        this.sensorArray = new boolean[Global.SCPL];
     }
 
     public void addVehicleToQueue(Vehicle vehicle) {

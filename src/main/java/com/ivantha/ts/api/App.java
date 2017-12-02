@@ -14,7 +14,7 @@ public class App extends Application{
     @Override
     public void start(final Stage stage) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("../ui/view/dashboard.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/view/dashboard.fxml"));
             Scene scene = new Scene(root);
             scene.setOnKeyReleased(event -> {
                 if (event.getCode() == KeyCode.ESCAPE) {

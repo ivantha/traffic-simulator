@@ -16,7 +16,7 @@ public class AppFunction {
         try {
             this.stage = stage;
 
-            Parent root = FXMLLoader.load(getClass().getResource("../ui/view/dashboard.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("../../../../../resources/view/dashboard.fxml"));
             Scene scene = new Scene(root);
             scene.setOnKeyReleased(event -> {
                 if (event.getCode() == KeyCode.ESCAPE) {

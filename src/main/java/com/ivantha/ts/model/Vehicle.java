@@ -2,7 +2,7 @@ package com.ivantha.ts.model;
 
 import com.ivantha.ts.common.Global;
 import com.ivantha.ts.common.Session;
-import com.ivantha.ts.util.Common;
+import com.ivantha.ts.service.VehicleServices;
 import javafx.scene.paint.Color;
 
 import java.time.LocalTime;
@@ -20,7 +20,7 @@ public class Vehicle {
 
     private final Trajectory trajectory;
 
-    private Color color = Common.getRandomVehicleColor();
+    private Color color = VehicleServices.getRandomVehicleColor();
 
     private double velocity = 0;
 
@@ -172,23 +172,18 @@ public class Vehicle {
         public double getLocation() {
             return location;
         }
-
         public void setLocation(double location) {
             this.location = location;
         }
-
         public int getLaneIndex() {
             return laneIndex;
         }
-
         public void setLaneIndex(int laneIndex) {
             this.laneIndex = laneIndex;
         }
-
         public Lane getLane() {
             return lane;
         }
-
         public void setLane(Lane lane) {
             this.lane = lane;
         }
