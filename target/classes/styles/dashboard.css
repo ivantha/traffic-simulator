@@ -1,0 +1,16 @@
+@import "pane_drawing.css";
+@import "pane_option.css";
+@import "pane_status.css";
+
+.controlButton {
+    -fx-pref-width: 200px;
+    -fx-pref-height: 30px;
+    -fx-background-color: #1565C0;
+    -fx-background-radius: 0px;
+
+    -fx-text-fill: #c8c8c8;
+}
+
+.controlButton:hover {
+    -fx-text-fill: white;
+}

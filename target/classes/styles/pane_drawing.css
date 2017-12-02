@@ -1,0 +1,19 @@
+#backgroundCanvasAnchorPane {
+    -fx-background-color: rgba(102, 163, 29, 0.84);
+    -fx-background-color: #e0e0e0;
+}
+
+.roadSurface {
+    -fx-fill: #2e3436;
+}
+
+.midLine {
+    -fx-stroke-width: 2;
+    -fx-stroke: #dbdbd9;
+}
+
+.markLine {
+    -fx-stroke-width: 1;
+    -fx-stroke: #dbdbd9;
+    -fx-stroke-dash-array: 10 10 10 10;
+}
