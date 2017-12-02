@@ -29,20 +29,4 @@ public class App extends Application{
             e.printStackTrace();
         }
     }
-
-//    public ArrayList<Boolean> getNorthTraffic() {
-//
-//    }
-//
-//    public ArrayList<Boolean> getEastTraffic() {
-//
-//    }
-//
-//    public ArrayList<Boolean> getSouthTraffic() {
-//`
-//    }
-//
-//    public ArrayList<Boolean> getWestTraffic() {
-//
-//    }
 }
