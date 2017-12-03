@@ -1,9 +1,13 @@
 package com.ivantha.ts.service;
 
+import com.ivantha.ts.common.Session;
 import com.ivantha.ts.model.RoadMap;
+import com.ivantha.ts.model.TrafficLight;
 import com.ivantha.ts.model.Vehicle;
 import javafx.scene.Group;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polyline;
 import javafx.scene.shape.Rectangle;
@@ -14,7 +18,7 @@ import java.util.Iterator;
 import static com.ivantha.ts.common.Global.*;
 import static java.lang.Math.PI;
 
-public class MapServices {
+public class UIServices {
 
     public static void drawMap(RoadMap roadMap, AnchorPane canvas) {
         Group g = new Group();
@@ -454,6 +458,22 @@ public class MapServices {
                     thetaRad * 180 / PI,
                     ROAD_LENGTH - vehicle.getLength() / 2, CANVAS_RADIUS + ROAD_RADIUS + vehicle.getLength() / 2);
         }
+
+        drawTrafficLight(canvas, CANVAS_RADIUS + (ROAD_RADIUS / 6 * 5), ROAD_LENGTH - (1.5 * TL_RADIUS), Session.getNorthLane1TrafficLight().getState());
+        drawTrafficLight(canvas, CANVAS_RADIUS + (ROAD_RADIUS / 6 * 3), ROAD_LENGTH - (1.5 * TL_RADIUS), Session.getNorthLane2TrafficLight().getState());
+        drawTrafficLight(canvas, CANVAS_RADIUS + (ROAD_RADIUS / 6 * 1), ROAD_LENGTH - (1.5 * TL_RADIUS), Session.getNorthLane3TrafficLight().getState());
+
+        drawTrafficLight(canvas, CANVAS_RADIUS + ROAD_RADIUS + (1.5 * TL_RADIUS), CANVAS_RADIUS + (ROAD_RADIUS / 6 * 5), Session.getEastLane1TrafficLight().getState());
+        drawTrafficLight(canvas, CANVAS_RADIUS + ROAD_RADIUS + (1.5 * TL_RADIUS), CANVAS_RADIUS + (ROAD_RADIUS / 6 * 3), Session.getEastLane1TrafficLight().getState());
+        drawTrafficLight(canvas, CANVAS_RADIUS + ROAD_RADIUS + (1.5 * TL_RADIUS), CANVAS_RADIUS + (ROAD_RADIUS / 6 * 1), Session.getEastLane1TrafficLight().getState());
+
+        drawTrafficLight(canvas, CANVAS_RADIUS - (ROAD_RADIUS / 6 * 5), CANVAS_RADIUS + ROAD_RADIUS + (1.5 * TL_RADIUS), Session.getSouthLane1TrafficLight().getState());
+        drawTrafficLight(canvas, CANVAS_RADIUS - (ROAD_RADIUS / 6 * 3), CANVAS_RADIUS + ROAD_RADIUS + (1.5 * TL_RADIUS), Session.getSouthLane2TrafficLight().getState());
+        drawTrafficLight(canvas, CANVAS_RADIUS - (ROAD_RADIUS / 6 * 1), CANVAS_RADIUS + ROAD_RADIUS + (1.5 * TL_RADIUS), Session.getSouthLane3TrafficLight().getState());
+
+        drawTrafficLight(canvas, ROAD_LENGTH - (1.5 * TL_RADIUS), CANVAS_RADIUS - (ROAD_RADIUS / 6 * 5), Session.getEastLane1TrafficLight().getState());
+        drawTrafficLight(canvas, ROAD_LENGTH - (1.5 * TL_RADIUS), CANVAS_RADIUS - (ROAD_RADIUS / 6 * 3), Session.getEastLane1TrafficLight().getState());
+        drawTrafficLight(canvas, ROAD_LENGTH - (1.5 * TL_RADIUS), CANVAS_RADIUS - (ROAD_RADIUS / 6 * 1), Session.getEastLane1TrafficLight().getState());
     }
 
     private static void drawVehicleOnLane(AnchorPane canvas, Vehicle vehicle, double rectHeight, double rectWidth, double rectX, double rectY) {
@@ -495,5 +515,28 @@ public class MapServices {
         rect.setY(startY);
 
         canvas.getChildren().add(rect);
+    }
+
+    public static void drawTrafficLight(AnchorPane canvas, double midX, double midY, TrafficLight.State state){
+        Circle circle = new Circle();
+
+        circle.setRadius(TL_RADIUS);
+
+        switch (state){
+            case RED:
+                circle.setFill(Color.web("#ef5350"));
+                break;
+            case ORANGE:
+                circle.setFill(Color.web("#FFA726"));
+                break;
+            case GREEN:
+                circle.setFill(Color.web("#66BB6A"));
+                break;
+        }
+
+        circle.setCenterX(midX);
+        circle.setCenterY(midY);
+
+        canvas.getChildren().add(circle);
     }
 }

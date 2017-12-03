@@ -9,4 +9,6 @@ public class Global {
 
     public static final int SCPL = 10;                                          // Sensor count per lane
     public static final double DPS = ROAD_LENGTH / SCPL;                        // Distance per sensor
+
+    public static final int TL_RADIUS = 4;
 }

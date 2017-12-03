@@ -5,7 +5,6 @@
 /Users/ivantha/Git/road-traffic-simulator/src/main/java/com/ivantha/ts/model/Lane.java
 /Users/ivantha/Git/road-traffic-simulator/src/main/java/com/ivantha/ts/model/RoadMap.java
 /Users/ivantha/Git/road-traffic-simulator/src/main/java/com/ivantha/ts/service/SensorServices.java
-/Users/ivantha/Git/road-traffic-simulator/src/main/java/com/ivantha/ts/service/MapServices.java
 /Users/ivantha/Git/road-traffic-simulator/src/main/java/com/ivantha/ts/util/CustomTimerTask.java
 /Users/ivantha/Git/road-traffic-simulator/src/main/java/com/ivantha/ts/api/MapFunction.java
 /Users/ivantha/Git/road-traffic-simulator/src/main/java/com/ivantha/ts/common/Global.java
@@ -22,3 +21,4 @@
 /Users/ivantha/Git/road-traffic-simulator/src/main/java/com/ivantha/ts/model/Vehicle.java
 /Users/ivantha/Git/road-traffic-simulator/src/main/java/com/ivantha/ts/api/TrafficLightFunction.java
 /Users/ivantha/Git/road-traffic-simulator/src/main/java/com/ivantha/ts/model/LaneType.java
+/Users/ivantha/Git/road-traffic-simulator/src/main/java/com/ivantha/ts/service/UIServices.java

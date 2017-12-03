@@ -1,19 +1,13 @@
 package com.ivantha.ts.controller;
 
-import com.ivantha.ts.common.Global;
 import com.ivantha.ts.common.Session;
-import com.ivantha.ts.model.Lane;
-import com.ivantha.ts.model.RoadMap;
-import com.ivantha.ts.model.Vehicle;
 import com.ivantha.ts.service.AppServices;
-import com.ivantha.ts.service.MapServices;
+import com.ivantha.ts.service.UIServices;
 import com.jfoenix.controls.JFXSlider;
 import com.jfoenix.controls.JFXToggleButton;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -25,9 +19,6 @@ import java.net.URL;
 import java.util.*;
 
 import static com.ivantha.ts.common.Global.REFRESH_INTERVAL;
-import static com.ivantha.ts.common.Global.ROAD_RADIUS;
-import static com.ivantha.ts.model.TrafficLight.State.*;
-import static java.lang.Math.PI;
 
 public class DashboardController implements Initializable {
     @FXML
@@ -131,7 +122,7 @@ public class DashboardController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        MapServices.drawMap(Session.getRoadMap(), backgroundCanvasAnchorPane);
+        UIServices.drawMap(Session.getRoadMap(), backgroundCanvasAnchorPane);
 
         vehicleDensitySlider.valueProperty().bindBidirectional(Session.vehicleDensityProperty());
         averageGapSlider.valueProperty().bindBidirectional(Session.averageGapProperty());
@@ -140,7 +131,7 @@ public class DashboardController implements Initializable {
         AppServices.resetTraffic();
 
         Session.setUiUpdater(new Timeline(new KeyFrame(Duration.millis(REFRESH_INTERVAL), event1 -> {
-            Platform.runLater(() -> MapServices.refreshMap(Session.getRoadMap(), canvasAnchorPane));
+            Platform.runLater(() -> UIServices.refreshMap(Session.getRoadMap(), canvasAnchorPane));
         })));
         Session.getUiUpdater().setCycleCount(Timeline.INDEFINITE);
 
