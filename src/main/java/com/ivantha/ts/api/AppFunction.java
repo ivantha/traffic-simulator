@@ -1,5 +1,6 @@
 package com.ivantha.ts.api;
 
+import com.ivantha.ts.service.AppServices;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -34,5 +35,17 @@ public class AppFunction {
 
     public void stop() {
         stage.close();
+    }
+
+    public static void startTraffic(){
+        AppServices.startTraffic();
+    }
+
+    public static void stopTraffic(){
+        AppServices.stopTraffic();
+    }
+
+    public static void resetTraffic(){
+        AppServices.resetTraffic();
     }
 }

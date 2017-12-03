@@ -1,4 +1,4 @@
-package com.ivantha.ts.api;
+package com.ivantha.ts.main;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

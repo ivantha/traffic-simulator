@@ -23,7 +23,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.ivantha.ts.api.App</mainClass>
+                            <mainClass>com.ivantha.ts.main.App</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

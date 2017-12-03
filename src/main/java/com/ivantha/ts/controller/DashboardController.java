@@ -5,12 +5,15 @@ import com.ivantha.ts.common.Session;
 import com.ivantha.ts.model.Lane;
 import com.ivantha.ts.model.RoadMap;
 import com.ivantha.ts.model.Vehicle;
+import com.ivantha.ts.service.AppServices;
 import com.ivantha.ts.service.MapServices;
 import com.jfoenix.controls.JFXSlider;
 import com.jfoenix.controls.JFXToggleButton;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -126,12 +129,6 @@ public class DashboardController implements Initializable {
     @FXML
     private RadioButton w3GreenRadioButton;
 
-    private Timeline uiUpdater;
-    private Timer mainTimer;
-    private TimerTask mainTimerTask;
-
-    private boolean isStarted = false;
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         MapServices.drawMap(Session.getRoadMap(), backgroundCanvasAnchorPane);
@@ -140,33 +137,24 @@ public class DashboardController implements Initializable {
         averageGapSlider.valueProperty().bindBidirectional(Session.averageGapProperty());
         averageSpeedSlider.valueProperty().bindBidirectional(Session.averageSpeedProperty());
 
-        reset();
+        AppServices.resetTraffic();
 
-        uiUpdater = new Timeline(new KeyFrame(Duration.millis(REFRESH_INTERVAL), event1 -> {
+        Session.setUiUpdater(new Timeline(new KeyFrame(Duration.millis(REFRESH_INTERVAL), event1 -> {
             Platform.runLater(() -> MapServices.refreshMap(Session.getRoadMap(), canvasAnchorPane));
-        }));
-        uiUpdater.setCycleCount(Timeline.INDEFINITE);
+        })));
+        Session.getUiUpdater().setCycleCount(Timeline.INDEFINITE);
 
         startStopButton.setOnAction(event -> {
-            if (!isStarted) {
-                stop();
-
-                mainTimer = new Timer();
-                mainTimerTask = new CustomerTimerTask();
-                mainTimer.schedule(mainTimerTask, 0, REFRESH_INTERVAL);
-                uiUpdater.play();
-
-                isStarted = true;
+            if (!Session.isStarted()) {
+                AppServices.startTraffic();
                 startStopButton.setText("Stop");
             } else {
-                stop();
-
-                isStarted = false;
+                AppServices.stopTraffic();
                 startStopButton.setText("Start");
             }
         });
 
-        resetButton.setOnAction(event -> reset());
+        resetButton.setOnAction(event -> AppServices.resetTraffic());
 
         northToggleButton.selectedProperty().bindBidirectional(Session.getRoadMap().northEnabledProperty());
         eastToggleButton.selectedProperty().bindBidirectional(Session.getRoadMap().eastEnabledProperty());
@@ -220,209 +208,5 @@ public class DashboardController implements Initializable {
         w3RedRadioButton.selectedProperty().bindBidirectional(Session.getWestLane3TrafficLight().redProperty());
         w3OrangeRadioButton.selectedProperty().bindBidirectional(Session.getWestLane3TrafficLight().orangeProperty());
         w3GreenRadioButton.selectedProperty().bindBidirectional(Session.getWestLane3TrafficLight().greenProperty());
-    }
-
-    private void stop() {
-        if (null != mainTimer) {
-            mainTimer.cancel();
-            mainTimer.purge();
-        }
-        uiUpdater.stop();
-    }
-
-    private void reset() {
-        Session.setRoadMap(new RoadMap());
-
-        northToggleButton.setSelected(false);
-        eastToggleButton.setSelected(false);
-        southToggleButton.setSelected(false);
-        westToggleButton.setSelected(false);
-    }
-
-    class CustomerTimerTask extends TimerTask {
-        @Override
-        public void run() {
-            Session.getRoadMap().populateRoadMap();
-
-            moveInLaneVehicles(Session.getnRoad().getLane(1));
-            moveInLaneVehicles(Session.getnRoad().getLane(2));
-            moveInLaneVehicles(Session.getnRoad().getLane(3));
-            moveInLaneVehicles(Session.geteRoad().getLane(1));
-            moveInLaneVehicles(Session.geteRoad().getLane(2));
-            moveInLaneVehicles(Session.geteRoad().getLane(3));
-            moveInLaneVehicles(Session.getsRoad().getLane(1));
-            moveInLaneVehicles(Session.getsRoad().getLane(2));
-            moveInLaneVehicles(Session.getsRoad().getLane(3));
-            moveInLaneVehicles(Session.getwRoad().getLane(1));
-            moveInLaneVehicles(Session.getwRoad().getLane(2));
-            moveInLaneVehicles(Session.getwRoad().getLane(3));
-
-            moveOutLaneVehicles(Session.getnRoad().getLane(6));
-            moveOutLaneVehicles(Session.getnRoad().getLane(5));
-            moveOutLaneVehicles(Session.getnRoad().getLane(4));
-            moveOutLaneVehicles(Session.geteRoad().getLane(6));
-            moveOutLaneVehicles(Session.geteRoad().getLane(5));
-            moveOutLaneVehicles(Session.geteRoad().getLane(4));
-            moveOutLaneVehicles(Session.getsRoad().getLane(6));
-            moveOutLaneVehicles(Session.getsRoad().getLane(5));
-            moveOutLaneVehicles(Session.getsRoad().getLane(4));
-            moveOutLaneVehicles(Session.getwRoad().getLane(6));
-            moveOutLaneVehicles(Session.getwRoad().getLane(5));
-            moveOutLaneVehicles(Session.getwRoad().getLane(4));
-
-            moveIntersectionVehiclesSmallArc(Session.getnIntRoad().get(7));
-            moveIntersectionVehiclesStraight(Session.getnIntRoad().get(8));
-            moveIntersectionVehiclesLargeArc(Session.getnIntRoad().get(9));
-            moveIntersectionVehiclesSmallArc(Session.geteIntRoad().get(7));
-            moveIntersectionVehiclesStraight(Session.geteIntRoad().get(8));
-            moveIntersectionVehiclesLargeArc(Session.geteIntRoad().get(9));
-            moveIntersectionVehiclesSmallArc(Session.getsIntRoad().get(7));
-            moveIntersectionVehiclesStraight(Session.getsIntRoad().get(8));
-            moveIntersectionVehiclesLargeArc(Session.getsIntRoad().get(9));
-            moveIntersectionVehiclesSmallArc(Session.getwIntRoad().get(7));
-            moveIntersectionVehiclesStraight(Session.getwIntRoad().get(8));
-            moveIntersectionVehiclesLargeArc(Session.getwIntRoad().get(9));
-        }
-
-        public void moveInLaneVehicles(Lane lane) {
-            lane.resetSensorArray();
-            ArrayList<Vehicle> vehicles = lane.getVehicleArrayList();
-            synchronized (vehicles){
-                Iterator<Vehicle> vehicleIterator = vehicles.iterator();
-
-                while (vehicleIterator.hasNext()) {
-                    Vehicle v = vehicleIterator.next();
-
-                    if (v.getTrajectory().getLocation() >= Global.ROAD_LENGTH) {
-                        boolean trafficLightGreen = Session.getJunction().getRoad(v.getTrajectory().origin).getLane(v.getTrajectory().startLaneId).getTrafficLight().getState() == GREEN;
-                        boolean spaceAvalable = Session.getIntersection().getIntLane(v.getTrajectory().origin, 6 + v.getTrajectory().destinationDiff).isSapceAvailable(v);
-
-                        if (trafficLightGreen && spaceAvalable) {
-                            vehicleIterator.remove();
-                            Session.getIntersection().appendVehicleToIntLane(v, v.getTrajectory().origin, 6 + v.getTrajectory().destinationDiff);
-
-                            // Reset lane positions
-                            for (int i = 0; i < vehicles.size(); i++) {
-                                vehicles.get(i).getTrajectory().setLaneIndex(i);
-                            }
-                        }
-                    } else {
-                        v.move();
-
-                        // Check sensor positions
-                        if(v.getTrajectory().getLocation() % Global.DPS <= v.getLength()){
-                            lane.getSensorArray()[9 - ((int) (v.getTrajectory().getLocation() / Global.DPS) % 10)] = true;
-                        }
-                    }
-                }
-            }
-        }
-
-        public void moveOutLaneVehicles(Lane lane) {
-            lane.resetSensorArray();
-            ArrayList<Vehicle> vehicles = lane.getVehicleArrayList();
-            synchronized (vehicles){
-                Iterator<Vehicle> vehicleIterator = vehicles.iterator();
-
-                while (vehicleIterator.hasNext()) {
-                    Vehicle v = vehicleIterator.next();
-
-                    if (v.getTrajectory().getLocation() >= Global.ROAD_LENGTH) {
-                        vehicleIterator.remove();
-
-                        // Reset lane positions
-                        for (int i = 0; i < vehicles.size(); i++) {
-                            vehicles.get(i).getTrajectory().setLaneIndex(i);
-                        }
-                    } else {
-                        v.move();
-
-                        // Check sensor positions
-                        if(v.getTrajectory().getLocation() % Global.DPS <= v.getLength()){
-                            lane.getSensorArray()[(int) (v.getTrajectory().getLocation() / Global.DPS) % 10] = true;
-                        }
-                    }
-                }
-            }
-        }
-
-        public void moveIntersectionVehiclesSmallArc(Lane lane) {
-            ArrayList<Vehicle> vehicles = lane.getVehicleArrayList();
-            synchronized (vehicles){
-                Iterator<Vehicle> vehicleIterator = vehicles.iterator();
-
-                while (vehicleIterator.hasNext()) {
-                    Vehicle v = vehicleIterator.next();
-
-                    double laneWidth = ROAD_RADIUS / 6;
-                    double thetaRadSmall = v.getTrajectory().getLocation() / (laneWidth + v.getLength() / 2);
-                    if (thetaRadSmall >= PI / 2) {
-                        if (Session.getJunction().getRoad(v.getTrajectory().destination).getLane(3 + v.getTrajectory().destinationDiff).isSapceAvailable(v)) {
-                            vehicleIterator.remove();
-                            Session.getJunction().getRoad(v.getTrajectory().destination).appendVehicleToOutLane(v, 6);
-
-                            // Reset lane positions
-                            for (int i = 0; i < vehicles.size(); i++) {
-                                vehicles.get(i).getTrajectory().setLaneIndex(i);
-                            }
-                        }
-                    } else {
-                        v.move();
-                    }
-                }
-            }
-        }
-
-        public void moveIntersectionVehiclesStraight(Lane lane) {
-            ArrayList<Vehicle> vehicles = lane.getVehicleArrayList();
-            synchronized (vehicles){
-                Iterator<Vehicle> vehicleIterator = vehicles.iterator();
-
-                while (vehicleIterator.hasNext()) {
-                    Vehicle v = vehicleIterator.next();
-
-                    if (v.getTrajectory().getLocation() >= ROAD_RADIUS * 2 + v.getLength()) {
-                        if (Session.getJunction().getRoad(v.getTrajectory().destination).getLane(3 + v.getTrajectory().destinationDiff).isSapceAvailable(v)) {
-                            vehicleIterator.remove();
-                            Session.getJunction().getRoad(v.getTrajectory().destination).appendVehicleToOutLane(v, 5);
-
-                            // Reset lane positions
-                            for (int i = 0; i < vehicles.size(); i++) {
-                                vehicles.get(i).getTrajectory().setLaneIndex(i);
-                            }
-                        }
-                    } else {
-                        v.move();
-                    }
-                }
-            }
-        }
-
-        public void moveIntersectionVehiclesLargeArc(Lane lane) {
-            ArrayList<Vehicle> vehicles = lane.getVehicleArrayList();
-            synchronized (vehicles){
-                Iterator<Vehicle> vehicleIterator = vehicles.iterator();
-
-                while (vehicleIterator.hasNext()) {
-                    Vehicle v = vehicleIterator.next();
-
-                    double laneWidth = ROAD_RADIUS / 6;
-                    double thetaRadLarge = v.getTrajectory().getLocation() / (ROAD_RADIUS + laneWidth + v.getLength() / 2);
-                    if (thetaRadLarge >= PI / 2) {
-                        if (Session.getJunction().getRoad(v.getTrajectory().destination).getLane(3 + v.getTrajectory().destinationDiff).isSapceAvailable(v)) {
-                            vehicleIterator.remove();
-                            Session.getJunction().getRoad(v.getTrajectory().destination).appendVehicleToOutLane(v, 4);
-
-                            // Reset lane positions
-                            for (int i = 0; i < vehicles.size(); i++) {
-                                vehicles.get(i).getTrajectory().setLaneIndex(i);
-                            }
-                        }
-                    } else {
-                        v.move();
-                    }
-                }
-            }
-        }
     }
 }

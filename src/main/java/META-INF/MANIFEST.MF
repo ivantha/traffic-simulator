@@ -1,3 +1,3 @@
 Manifest-Version: 1.0
-Main-Class: com.ivantha.ts.api.App
+Main-Class: com.ivantha.ts.main.App
 
