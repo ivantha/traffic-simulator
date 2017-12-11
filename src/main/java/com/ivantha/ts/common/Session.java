@@ -14,7 +14,7 @@ public class Session {
 
     private static IntegerProperty vehicleDensity = new SimpleIntegerProperty(10);
     private static IntegerProperty averageGap = new SimpleIntegerProperty(5);
-    private static IntegerProperty averageSpeed = new SimpleIntegerProperty(5);
+    private static IntegerProperty averageSpeed = new SimpleIntegerProperty(8);
 
     private static RoadMap roadMap;
     private static Junction junction;
