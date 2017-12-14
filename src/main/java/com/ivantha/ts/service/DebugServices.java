@@ -7,6 +7,7 @@ import static java.lang.Double.isInfinite;
 import static java.lang.Double.isNaN;
 
 public class DebugServices {
+    // Vehicle debug information
     public static void showVehicleDebug(Vehicle vehicle, double speed, double freeRoadCoeff, double timeGap, double breakGap, double safeDistance, double busyRoadCoeff,
                                         double safeIntersectionDistance, double intersectionCoeff, double coeff, double maxSpeed) {
         System.out.println("________________________________________");

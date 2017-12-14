@@ -3,6 +3,7 @@ package com.ivantha.ts.model;
 import java.util.HashMap;
 
 public class Junction {
+    // Road list
     private final HashMap<Integer, Road> roadHashMap = new HashMap<>();
     private final Intersection intersection = new Intersection();
 

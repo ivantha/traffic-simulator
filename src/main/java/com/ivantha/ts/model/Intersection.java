@@ -3,6 +3,7 @@ package com.ivantha.ts.model;
 import java.util.HashMap;
 
 public class Intersection {
+    // Road list
     private final HashMap<Integer, Lane> northIntRoad = new HashMap<>();
     private final HashMap<Integer, Lane> eastIntRoad = new HashMap<>();
     private final HashMap<Integer, Lane> southIntRoad = new HashMap<>();

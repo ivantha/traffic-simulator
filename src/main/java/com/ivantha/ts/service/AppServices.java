@@ -9,6 +9,7 @@ import java.util.Timer;
 import static com.ivantha.ts.common.Global.REFRESH_INTERVAL;
 
 public class AppServices {
+    // Start traffic
     public static void startTraffic() {
         AppServices.stopTraffic();
 
@@ -20,6 +21,7 @@ public class AppServices {
         Session.setStarted(true);
     }
 
+    // Stop traffic
     public static void stopTraffic() {
         if (null != Session.getMainTimer()) {
             Session.getMainTimer().cancel();
@@ -30,6 +32,7 @@ public class AppServices {
         Session.setStarted(false);
     }
 
+    // Reset traffic
     public static void resetTraffic() {
         Session.setRoadMap(new RoadMap());
 

@@ -12,8 +12,8 @@ public class Lane {
     private final LaneType laneType;
     private final double length;
 
-    private final ArrayList<Vehicle> vehicles = new ArrayList<>();
-    private final TrafficLight trafficLight = new TrafficLight();
+    private final ArrayList<Vehicle> vehicles = new ArrayList<>();  // Vehicle queue
+    private final TrafficLight trafficLight = new TrafficLight();   // Traffic light model
 
     private boolean[] sensorArray = new boolean[Global.SCPL];
 
@@ -74,12 +74,14 @@ public class Lane {
         this.sensorArray = new boolean[Global.SCPL];
     }
 
+    // Add vehicle to lane
     public void addVehicleToQueue(Vehicle vehicle) {
         vehicles.add(vehicle);
         vehicle.getTrajectory().setLane(this);
         vehicle.getTrajectory().setLaneIndex(vehicles.size() - 1);
     }
 
+    // Check if space available on lane
     public boolean isSapceAvailable(Vehicle vehicle) {
         if (getVehicleArrayList().size() > 0) {
             Vehicle frontVehicle = getVehicleArrayList().get(getVehicleArrayList().size() - 1);

@@ -86,6 +86,7 @@ public class Vehicle {
         this.velocity = velocity;
     }
 
+    // Calcualte acceleration
     public double getAcceleration() {
         double distanceToNextCar;
         if (trajectory.isAtFront()) {
@@ -120,6 +121,7 @@ public class Vehicle {
         return maxAcceleration * coeff;
     }
 
+    // Speed difference
     public double getDeltaSpeed() {
         if (trajectory.isAtFront()) {
             return getVelocity();
@@ -128,6 +130,7 @@ public class Vehicle {
         }
     }
 
+    // Move the vehicle in oen time unit
     public void move() {
         double delta = 0.5;
         double acceleration = getAcceleration();
@@ -149,6 +152,7 @@ public class Vehicle {
         }
     }
 
+    // Path of the vehicle
     public class Trajectory {
         public final int origin;
         public final int destination;

@@ -11,6 +11,7 @@ import javafx.stage.StageStyle;
 import java.io.IOException;
 
 public class App extends Application{
+    // Start simulator
     @Override
     public void start(final Stage stage) {
         try {

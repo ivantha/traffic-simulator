@@ -36,6 +36,7 @@ public class Road {
         }
     }
 
+    // Generate vehicle in In-lanes
     public void generateInVehicle() {
         int origin = roadId;
         int destinationDiff = 1 + (int) ((Math.random() + 0.4) * 2);
@@ -52,6 +53,7 @@ public class Road {
         appendVehicleToInLane(vehicle, startLane);
     }
 
+    // Add vehicle to lane
     private void appendVehicleToInLane(Vehicle vehicle, Lane lane) {
         if (lane.getVehicleArrayList().size() > 0) {
             Vehicle frontVehicle = lane.getVehicleArrayList().get(lane.getVehicleArrayList().size() - 1);
@@ -67,6 +69,7 @@ public class Road {
         }
     }
 
+    // Add vehicles to remove queue
     public void appendVehicleToOutLane(Vehicle vehicle, int laneId) {
         vehicle.getTrajectory().setLocation(vehicle.getLength());
         laneHashMap.get(laneId).addVehicleToQueue(vehicle);

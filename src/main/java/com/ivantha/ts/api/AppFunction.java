@@ -13,6 +13,7 @@ import java.io.IOException;
 public class AppFunction {
     private Stage stage;
 
+    // Start the app
     public void start(Stage stage) {
         try {
             this.stage = stage;
@@ -33,18 +34,22 @@ public class AppFunction {
         }
     }
 
+    // Stop the simulator
     public void stop() {
         stage.close();
     }
 
+    // Start traffic
     public static void startTraffic(){
         AppServices.startTraffic();
     }
 
+    // Stop traffic
     public static void stopTraffic(){
         AppServices.stopTraffic();
     }
 
+    // Reset traffic
     public static void resetTraffic(){
         AppServices.resetTraffic();
     }

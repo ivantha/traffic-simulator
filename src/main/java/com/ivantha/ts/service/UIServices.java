@@ -20,6 +20,7 @@ import static java.lang.Math.PI;
 
 public class UIServices {
 
+    // Draw the map - Begining
     public static void drawMap(RoadMap roadMap, AnchorPane canvas) {
         Group g = new Group();
 
@@ -109,6 +110,7 @@ public class UIServices {
         canvas.getChildren().add(g);
     }
 
+    // Refersh map at intervals
     public synchronized static void refreshMap(RoadMap roadMap, AnchorPane canvas) {
         canvas.getChildren().clear();
 
@@ -476,6 +478,7 @@ public class UIServices {
         drawTrafficLight(canvas, ROAD_LENGTH - (1.5 * TL_RADIUS), CANVAS_RADIUS - (ROAD_RADIUS / 6 * 1), Session.getEastLane1TrafficLight().getState());
     }
 
+    // Draw straight lanes
     private static void drawVehicleOnLane(AnchorPane canvas, Vehicle vehicle, double rectHeight, double rectWidth, double rectX, double rectY) {
         Rectangle rect = new Rectangle();
         rect.setFill(vehicle.getColor());
@@ -489,6 +492,7 @@ public class UIServices {
         canvas.getChildren().add(rect);
     }
 
+    // Draw intersection - Arc
     public static void drawVehicleOnIntersection(AnchorPane canvas, Vehicle vehicle, double rectHeight, double rectWidth, double startX, double startY, double rotateAngle, double pivotX, double pivotY) {
         Rectangle rect = new Rectangle();
         rect.setFill(vehicle.getColor());
@@ -504,6 +508,7 @@ public class UIServices {
         canvas.getChildren().add(rect);
     }
 
+    // Draw intersection
     public static void drawVehicleOnIntersection(AnchorPane canvas, Vehicle vehicle, double rectHeight, double rectWidth, double startX, double startY) {
         Rectangle rect = new Rectangle();
         rect.setFill(vehicle.getColor());
@@ -517,6 +522,7 @@ public class UIServices {
         canvas.getChildren().add(rect);
     }
 
+    // Draw traffic lights
     public static void drawTrafficLight(AnchorPane canvas, double midX, double midY, TrafficLight.State state){
         Circle circle = new Circle();
 

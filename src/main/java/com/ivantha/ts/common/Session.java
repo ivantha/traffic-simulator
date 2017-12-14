@@ -16,6 +16,7 @@ public class Session {
     private static IntegerProperty averageGap = new SimpleIntegerProperty(5);
     private static IntegerProperty averageSpeed = new SimpleIntegerProperty(8);
 
+    // Road map and its associated variables
     private static RoadMap roadMap;
     private static Junction junction;
     private static Road nRoad;
@@ -171,6 +172,7 @@ public class Session {
         return westLane3TrafficLight;
     }
 
+    // Thread timing variables
     public static Timeline getUiUpdater() {
         return uiUpdater;
     }

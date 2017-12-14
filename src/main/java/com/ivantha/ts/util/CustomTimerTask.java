@@ -14,6 +14,7 @@ import static com.ivantha.ts.model.TrafficLight.State.GREEN;
 import static java.lang.Math.PI;
 
 public class CustomTimerTask extends TimerTask{
+    // Default run task
     @Override
     public void run() {
         Session.getRoadMap().populateRoadMap();
@@ -58,6 +59,7 @@ public class CustomTimerTask extends TimerTask{
         moveIntersectionVehiclesLargeArc(Session.getwIntRoad().get(9));
     }
 
+    // Move vehicles in lane
     public void moveInLaneVehicles(Lane lane) {
         lane.resetSensorArray();
         ArrayList<Vehicle> vehicles = lane.getVehicleArrayList();
@@ -92,6 +94,7 @@ public class CustomTimerTask extends TimerTask{
         }
     }
 
+    // Move out lane vehicles
     public void moveOutLaneVehicles(Lane lane) {
         lane.resetSensorArray();
         ArrayList<Vehicle> vehicles = lane.getVehicleArrayList();
@@ -120,6 +123,7 @@ public class CustomTimerTask extends TimerTask{
         }
     }
 
+    // Move intersection vehicles - Small curve
     public void moveIntersectionVehiclesSmallArc(Lane lane) {
         ArrayList<Vehicle> vehicles = lane.getVehicleArrayList();
         synchronized (vehicles){
@@ -147,6 +151,7 @@ public class CustomTimerTask extends TimerTask{
         }
     }
 
+    // Move intersection vehicles straight
     public void moveIntersectionVehiclesStraight(Lane lane) {
         ArrayList<Vehicle> vehicles = lane.getVehicleArrayList();
         synchronized (vehicles){
@@ -172,6 +177,7 @@ public class CustomTimerTask extends TimerTask{
         }
     }
 
+    // Move intersection vehicles - Large curve
     public void moveIntersectionVehiclesLargeArc(Lane lane) {
         ArrayList<Vehicle> vehicles = lane.getVehicleArrayList();
         synchronized (vehicles){

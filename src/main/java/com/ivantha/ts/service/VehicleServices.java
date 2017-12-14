@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class VehicleServices {
+    // return random vehicle color from a predefined list
     public static Color getRandomVehicleColor() {
         ArrayList<Color> colors = new ArrayList<>();
         colors.add(Color.web("#1976D2"));
