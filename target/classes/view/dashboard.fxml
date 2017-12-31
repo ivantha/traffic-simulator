@@ -16,15 +16,16 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" stylesheets="@../styles/dashboard.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ivantha.ts.controller.DashboardController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1600.0" stylesheets="@../styles/dashboard.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ivantha.ts.controller.DashboardController">
     <children>
-        <StackPane layoutX="400.0" prefHeight="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane prefHeight="800.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+        <StackPane layoutX="400.0" prefHeight="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="400.0" AnchorPane.topAnchor="0.0">
             <children>
                 <AnchorPane fx:id="backgroundCanvasAnchorPane" />
                 <AnchorPane fx:id="canvasAnchorPane" prefHeight="800.0" prefWidth="800.0" />
             </children>
         </StackPane>
-        <AnchorPane fx:id="optionsAnchorPane" layoutX="800.0" prefHeight="800.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <AnchorPane fx:id="optionsAnchorPane" layoutX="800.0" prefHeight="800.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="1200.0" AnchorPane.topAnchor="0.0">
             <children>
                 <HBox fx:id="controlHBox" alignment="CENTER" layoutY="771.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                     <children>
@@ -257,6 +258,11 @@
                                 </AnchorPane>
                             </content>
                         </Tab>
+                  <Tab fx:id="connectTab">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" styleClass="tabAnchorPane" />
+                    </content>
+                  </Tab>
                     </tabs>
                 </TabPane>
             </children>

@@ -1,12 +1,11 @@
 package com.ivantha.ts.service;
 
+import com.ivantha.ts.common.Global;
 import com.ivantha.ts.common.Session;
 import com.ivantha.ts.model.RoadMap;
 import com.ivantha.ts.util.CustomTimerTask;
 
 import java.util.Timer;
-
-import static com.ivantha.ts.common.Global.REFRESH_INTERVAL;
 
 public class AppServices {
     // Start traffic
@@ -15,7 +14,7 @@ public class AppServices {
 
         Session.setMainTimer(new Timer());
         Session.setMainTimerTask(new CustomTimerTask());
-        Session.getMainTimer().schedule(Session.getMainTimerTask(), 0, REFRESH_INTERVAL);
+        Session.getMainTimer().schedule(Session.getMainTimerTask(), 0, Global.BACKGROUND_REFRESH_INTERVAL);
         Session.getUiUpdater().play();
 
         Session.setStarted(true);

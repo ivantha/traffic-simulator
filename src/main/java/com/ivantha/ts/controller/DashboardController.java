@@ -1,5 +1,6 @@
 package com.ivantha.ts.controller;
 
+import com.ivantha.ts.common.Global;
 import com.ivantha.ts.common.Session;
 import com.ivantha.ts.service.AppServices;
 import com.ivantha.ts.service.UIServices;
@@ -17,8 +18,6 @@ import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.*;
-
-import static com.ivantha.ts.common.Global.REFRESH_INTERVAL;
 
 public class DashboardController implements Initializable {
     @FXML
@@ -132,7 +131,7 @@ public class DashboardController implements Initializable {
         AppServices.resetTraffic();
 
         // Update canvas
-        Session.setUiUpdater(new Timeline(new KeyFrame(Duration.millis(REFRESH_INTERVAL), event1 -> {
+        Session.setUiUpdater(new Timeline(new KeyFrame(Duration.millis(Global.CANVAS_REFRESH_INTERVAL),event1 -> {
             Platform.runLater(() -> UIServices.refreshMap(Session.getRoadMap(), canvasAnchorPane));
         })));
         Session.getUiUpdater().setCycleCount(Timeline.INDEFINITE);

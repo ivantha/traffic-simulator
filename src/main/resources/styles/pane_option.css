@@ -1,7 +1,6 @@
 @import "tab_world.css";
 @import "tab_traffic.css";
 @import "tab_connect.css";
-@import "tab_theme.css";
 
 #optionsAnchorPane {
 }
@@ -19,9 +18,9 @@
 }
 
 .tab-pane {
-    -fx-tab-min-width: 170px;
+    -fx-tab-min-width: 115px;
     -fx-tab-min-height: 30px;
-    -fx-tab-max-width: 170px;
+    -fx-tab-max-width: 115px;
     -fx-tab-max-height: 30px;
 
     -fx-focus-color: transparent;
@@ -60,6 +59,18 @@
 
 #trafficTab:selected {
     -fx-background-image: url("../icons/traffic_white.png");
+}
+
+#connectTab {
+    -fx-background-image: url("../icons/connect_black.png");
+}
+
+#connectTab:hover {
+    -fx-background-image: url("../icons/connect_white.png");
+}
+
+#connectTab:selected {
+    -fx-background-image: url("../icons/connect_white.png");
 }
 
 
