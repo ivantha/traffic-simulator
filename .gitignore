@@ -2,6 +2,6 @@
 workspace.xml
 target/generated-sources/
 target/test-classes/
-target/classes
-target/maven-status
-target/maven-archiver
+target/classes/
+target/maven-status/
+target/maven-archiver/
